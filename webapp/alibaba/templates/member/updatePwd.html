@@ -5,7 +5,7 @@
 <link  media="handheld" rel="alternate">
 <!-- end 云适配 -->
 <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-<title>绑定帐号-帐号设置-拉勾网-最专业的互联网招聘平台</title>
+<title>修改密码-拉勾网-最专业的互联网招聘平台</title>
 <meta content="23635710066417756375" property="qc:admins">
 <meta name="description" content="拉勾网是3W旗下的互联网领域垂直招聘网站,互联网职业机会尽在拉勾网">
 <meta name="keywords" content="拉勾,拉勾网,拉勾招聘,拉钩, 拉钩网 ,互联网招聘,拉勾互联网招聘, 移动互联网招聘, 垂直互联网招聘, 微信招聘, 微博招聘, 拉勾官网, 拉勾百科,跳槽, 高薪职位, 互联网圈子, IT招聘, 职场招聘, 猎头招聘,O2O招聘, LBS招聘, 社交招聘, 校园招聘, 校招,社会招聘,社招">
@@ -31,8 +31,7 @@ console.log(1);
 var youdao_conv_id = 271546; 
 </script> 
 <script src="/static/js/conv.js" type="text/javascript"></script>
-<script src="/static/js/ajaxCross.json" charset="UTF-8"></script>
-</head>
+<script src="/static/js/ajaxCross.json" charset="UTF-8"></script></head>
 <body>
 <div id="body">
 	<div id="header">
@@ -41,11 +40,11 @@ var youdao_conv_id = 271546;
     			<img width="229" height="43" alt="拉勾招聘-专注互联网招聘" src="/static/images/logo.png">
     		</a>
     		<ul id="navheader" class="reset">
-    			<li><a href="index.html">首页</a></li>
-    			<li><a href="companylist.html">公司</a></li>
+    			<li><a href="../index.html">首页</a></li>
+    			<li><a href="../companylist.html">公司</a></li>
     			<li><a target="_blank" href="h/toForum.html">论坛</a></li>
     				    			<li>
-	    				<a rel="nofollow" href="positions.html">简历管理</a>
+	    				<a rel="nofollow" href="h/corpResume/unHandleResumes.html">简历管理</a>
 	    					    			</li>
 	    							    			<li><a rel="nofollow" href="create.html">发布职位</a></li>
 	    		    		</ul>
@@ -55,12 +54,12 @@ var youdao_conv_id = 271546;
             		<span class="red dn" id="noticeDot-1"></span>
             		<i></i>
             	</dt>
-                                	<dd style="display: none;"><a href="positions.html">我发布的职位</a></dd>
-                	<dd style="display: none;"><a href="positions.html">我收到的简历</a></dd>
-                	<dd class="btm" style="display: none;"><a href="myhome.html">我的公司主页</a></dd>
-                	<dd style="display: none;"><a href="list.html">我要找工作</a></dd>
-                                                <dd style="display: none;"><a href="accountBind.html">帐号设置</a></dd>
-                                <dd class="logout" style="display: none;"><a rel="nofollow" href="login.html">退出</a></dd>
+                                	<dd><a href="positions.html">我发布的职位</a></dd>
+                	<dd><a href="positions.html">我收到的简历</a></dd>
+                	<dd class="btm"><a href="myhome.html">我的公司主页</a></dd>
+                	<dd><a href="../list.html">我要找工作</a></dd>
+                                                <dd><a href="accountBind.html">帐号设置</a></dd>
+                                <dd class="logout"><a rel="nofollow" href="login.html">退出</a></dd>
             </dl>
                                 </div>
     </div><!-- end #header -->
@@ -68,34 +67,45 @@ var youdao_conv_id = 271546;
         	<div class="user_bindSidebar">
     <dl id="user_sideBarmenu" class="user_sideBarmenu">
      	        <dt><h3>帐号设置</h3></dt>
-                <dd><a class="hover" href="accountBind.html">帐号绑定</a></dd>
-        <dd><a href="updatePwd.html">修改密码</a></dd>
+                <dd><a href="accountBind.html">帐号绑定</a></dd>
+        <dd><a class="hover" href="updatePwd.html">修改密码</a></dd>
             </dl>
 </div>
-<input type="hidden" id="hasSidebar" value="1">	<div class="user_bindContent">
+<input type="hidden" id="hasSidebar" value="1">	<div class="content user_modifyContent">
         <dl class="c_section">
             <dt>
-            <h2><em></em>帐号绑定</h2>
+            	<h2><em></em>修改密码</h2>
             </dt>
-            <dd id="pad">
-                <ul class="user_noModify">
-                    <li>当前登录帐号：<span>jason@qq.com</span> </li>
-                    <li>绑定后，你可以同时使用以下方式登录拉勾</li>
-                </ul>
-                <dl class="user_thirdLogin">
-                    <dt><img alt="qq" src="/static/images/qq.png"></dt>
-                                        	<dd>已绑定QQ帐号  <span>jason</span>
-                    	 	<a id="cancelBind" href="javascript:;">解除绑定</a>
-                    	 </dd>
-                	                </dl>
-				<dl class="user_thirdLogin">
-                    <dt><img alt="weibo" src="/static/images/weibo.png"></dt>
-                                        	<dd><a href="h/ologin/bind/sina.html">绑定新浪微博帐号</a></dd>
-                                    </dl>
-            </dd>
+            <dd>
+            	            	<form id="updatePswForm">
+            		<table class="savePassword">
+            			<tbody><tr>
+            				<td>登录邮箱</td>
+            				<td class="c7">jason@qq.com</td>
+            			</tr>
+            			<tr>
+            				<td class="label">当前密码</td>
+            				<td>
+            					<input type="password" maxlength="16" id="oldpassword" name="oldpassword" style="background-image: url(style/images/img/0CQnd2Jos49xUAAAAASUVORK5CYII=quot); background-repeat: no-repeat; background-attachment: scroll; background-position: right center;">
+            					<span id="updatePwd_beError" style="display:none;" class="error">
+            				</span></td>            				
+            			</tr>
+            			<tr>
+            				<td class="label">新密码</td>
+            				<td><input type="password" maxlength="16" id="newpassword" name="newpassword" style="background-image: url(style/images/img/a6y3y0Wx5kbFHvGuXzkgf0xhKnPzA4UTyaTB8Ph8AvcHi3fnsrZ7Wore02YViqVOrRXXPhfqP8j6MYlawoAAAAASUVORK5CYII=quot); background-repeat: no-repeat; background-attachment: scroll; background-position: right center;"></td>
+            			</tr>
+            			<tr>
+            				<td class="label">确认密码</td>
+            				<td><input type="password" maxlength="16" id="comfirmpassword" name="comfirmpassword" style="background-image: url(style/images/img/a6y3y0Wx5kbFHvGuXzkgf0xhKnPzA4UTyaTB8Ph8AvcHi3fnsrZ7Wore02YViqVOrRXXPhfqP8j6MYlawoAAAAASUVORK5CYII=quot); background-repeat: no-repeat; background-attachment: scroll; background-position: right center;"></td>
+            			</tr>
+            			<tr>
+            				<td>&nbsp;</td>
+            				<td><input type="submit" value="保 存"></td>
+            			</tr>
+            		</tbody></table>
+				</form>
+				            </dd>
         </dl>
-        <input type="hidden" value="" id="s">
-        <input type="hidden" value="" id="oauthid">
     </div>
 <!------------------------------------- 弹窗lightbox ----------------------------------------->
 <div style="display:none;">
@@ -260,12 +270,7 @@ var youdao_conv_id = 271546;
 	</div>
 	
 </div>
-<!------------------------------------- end -----------------------------------------> <script>
-$(function(){
-	
-	});
-</script>
-<script src="/static/js/setting.js"></script>
+<!------------------------------------- end -----------------------------------------> <script src="/static/js/setting.js"></script>
 			<div class="clear"></div>
 			<input type="hidden" value="" id="resubmitToken">
 	    	<a rel="nofollow" title="回到顶部" id="backtop"></a>

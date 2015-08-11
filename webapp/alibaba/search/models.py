@@ -15,15 +15,15 @@ class CategoryManager(models.Manager):
         return category
 
     def roots(self):
-        categories = self.model.objects.filter(parent__isnull=True)
+        categories = self.model.objects.filter(parent__isnull=True, enabled=True)
         return categories
 
     def chriden(self, pk):
-        categories = self.model.objects.filter(parent__pk=pk)
+        categories = self.model.objects.filter(parent__pk=pk, enabled=True)
         return categories
 
     def last_chriden(self, pk):
-        categories = self.model.objects.filter(parent__parent__pk=pk)
+        categories = self.model.objects.filter(parent__parent__pk=pk, enabled=True)
         return categories
 
 
@@ -80,9 +80,9 @@ class Category(models.Model):
         get_latest_by = "created"
         ordering = ("order", )
 
-    # @models.permalink
-    # def get_absolute_url(self):
-    #     return 'item_detail', None, {'object_id': self.id}
+    @models.permalink
+    def get_absolute_url(self):
+        return 'search_by_category', None, {'slug': self.slug}
 
     def chriden(self):
         categories = self.objects.chriden(self.pk)

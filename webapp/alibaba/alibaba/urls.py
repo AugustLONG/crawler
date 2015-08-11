@@ -26,6 +26,7 @@ admin.autodiscover()
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', HomePageView.as_view(), name='home'),
+    url(r'^(?P<slug>\w+)$', HomePageView.as_view(), name='search_by_category'),
 ]
 
 if settings.DEBUG:

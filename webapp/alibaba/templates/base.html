@@ -9,11 +9,11 @@
 <meta http-equiv="Cache-Control" content="no-siteapp" />
 <link rel="alternate" media="handheld"  />
 <!-- end 云适配 -->
-<title>人人搜索-最专业的互联网搜索平台</title>
-<meta content="人人搜索网是3W旗下的互联网领域垂直招聘网站,互联网职业机会尽在人人搜索网" name="description">
-<meta content="人人搜索,人人搜索网,人人搜索招聘,拉钩, 拉钩网 ,互联网招聘,人人搜索互联网招聘, 移动互联网招聘, 垂直互联网招聘, 微信招聘, 微博招聘, 人人搜索官网, 人人搜索百科,跳槽, 高薪职位, 互联网圈子, IT招聘, 职场招聘, 猎头招聘,O2O招聘, LBS招聘, 社交招聘, 校园招聘, 校招,社会招聘,社招" name="keywords">
+<title>{% block title %}月光吧搜索-最专业的互联网搜索平台{% endblock %}</title>
+<meta content="{% block description %}月光吧搜索网是中国互联网领域垂直搜索网站,互联网职业机会尽在月光吧搜索网{% endblock %}" name="description">
+<meta content="{% block keywords %}月光吧搜索,月光吧搜索网,月光吧搜索搜索,拉钩, 拉钩网 ,互联网搜索,月光吧搜索互联网搜索, 移动互联网搜索, 垂直互联网搜索, 微信搜索, 微博搜索, 月光吧搜索官网, 月光吧搜索百科,跳槽, 高薪职位, 互联网圈子, IT搜索, 职场搜索, 猎头搜索,O2O搜索, LBS搜索, 社交搜索, 校园搜索, 校招,社会搜索,社招{% endblock %}" name="keywords">
 <script type="text/javascript">
-var ctx = "{{ website_url }}";
+var ctx = "http://www.yueguangba.com";
 </script>
 <link rel="Shortcut Icon" href="/static/images/favicon.ico">
 <link rel="stylesheet" type="text/css" href="/static/css/style.css"/>
@@ -32,7 +32,7 @@ var ctx = "{{ website_url }}";
 	<div id="header">
     	<div class="wrapper">
     		<a href="index.html" class="logo">
-    			<img src="/static/images/logo.png" width="229" height="43" alt="人人搜索-专注互联网搜索" />
+    			<img src="/static/images/logo.png" width="229" height="43" alt="月光吧搜索-专注互联网搜索" />
     		</a>
     		<ul class="reset" id="navheader">
     			<li class="current"><a href="index.html">首页</a></li>
@@ -49,23 +49,28 @@ var ctx = "{{ website_url }}";
                                 </div>
     </div><!-- end #header -->
     <div id="container">
-
+    {% block container %}
+    
+    {% endblock %}
 	</div><!-- end #container -->
 </div><!-- end #body -->
 <div id="footer">
     <div class="wrapper">
         <a href="h/about.html" target="_blank" rel="nofollow">联系我们</a>
-        <a href="h/af/zhaopin.html" target="_blank">互联网公司导航</a>
-        <a href="http://e.weibo.com/lagou720" target="_blank" rel="nofollow">人人搜索微博</a>
-        <a class="footer_qr" href="javascript:void(0)" rel="nofollow">人人搜索微信<i></i></a>
-        <div class="copyright">&copy;2013-2014 Lagou <a target="_blank" href="http://www.miitbeian.gov.cn/state/outPortal/loginPortal.action">京ICP备14023790号-2</a></div>
+        <a href="h/af/zhaopin.html" target="_blank">互联网搜索导航</a>
+        <a href="http://weibo.com/yueguangba" target="_blank" rel="nofollow">月光吧微博</a>
+        <a class="footer_qr" href="javascript:void(0)" rel="nofollow">月光吧微信<i></i></a>
+        <div class="copyright">&copy;2013-2014 Lagou <a target="_blank" href="http://www.miitbeian.gov.cn/state/outPortal/loginPortal.action">暂无备案</a></div>
     </div>
 </div>
 
 <script type="text/javascript" src="/static/js/core.min.js"></script>
 <script type="text/javascript" src="/static/js/popup.min.js"></script>
+    {% block css %}
 
-<!-- <script src="style/js/wb.js" type="text/javascript" charset="utf-8"></script>
- -->
+    {% endblock %}
+    {% block script %}
+
+    {% endblock %}
 </body>
 </html>

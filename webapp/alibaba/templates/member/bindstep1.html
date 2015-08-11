@@ -40,13 +40,13 @@ var youdao_conv_id = 271546;
     			<img width="229" height="43" alt="拉勾招聘-专注互联网招聘" src="/static/images/logo.png">
     		</a>
     		<ul id="navheader" class="reset">
-    			<li><a href="index.html">首页</a></li>
+    			<li><a href="../index.html">首页</a></li>
     			<li class="current"><a href="h/c/companylist.html">公司</a></li>
     			<li><a target="_blank" href="h/toForum.html">论坛</a></li>
     				    			<li>
 	    				<a rel="nofollow" href="positions.html">简历管理</a>
 	    					    			</li>
-	    							    			<li><a rel="nofollow" href="create.html">发布职位</a></li>
+	    							    			<li><a rel="nofollow" href="../create.html">发布职位</a></li>
 	    		    		</ul>
         	        	<dl class="collapsible_menu">
             	<dt>
@@ -56,38 +56,64 @@ var youdao_conv_id = 271546;
             	</dt>
                                 	<dd><a href="positions.html">我发布的职位</a></dd>
                 	<dd><a href="positions.html">我收到的简历</a></dd>
-                	<dd class="btm"><a href="myhome.html">我的公司主页</a></dd>
-                	<dd><a href="list.html">我要找工作</a></dd>
+                	<dd class="btm"><a href="../myhome.html">我的公司主页</a></dd>
+                	<dd><a href="../list.html">我要找工作</a></dd>
                                                 <dd><a href="accountBind.html">帐号设置</a></dd>
                                 <dd class="logout"><a rel="nofollow" href="login.html">退出</a></dd>
             </dl>
                                 </div>
     </div><!-- end #header -->
     <div id="container">
-            <style>.ui-autocomplete{max-height:160px;overflow-y:scroll;}</style>
-    <div class="content_mid">
+            <div class="content_mid">
         <!--form-->  
             <dl class="c_section c_section_service">
                 <dt>
                     <h2><em></em>开通招聘服务</h2>
                 </dt>
                 <dd>
-                	<div class="os_step_2"></div>
-                	                    <form class="corp_form" id="companyNameForm">
-	                 	<input type="hidden" value="3a9b3124ee0a4adca922f2c9756d1ac1" id="resubmitToken">
-	                 	<h3><em class="redstar">*</em>公司全称  <span class="explain">（请输入与公司营业执照一致的公司全称，审核通过后不可更改）</span></h3> 
-	                   	<span role="status" aria-live="polite" class="ui-helper-hidden-accessible">测试公司</span><input type="text" value="" placeholder="请输入与公司营业执照一致的公司全称" name="companyName" id="companyName" class="valid ui-autocomplete-input" autocomplete="off">	
-	                   	<input type="submit" value="提 交" id="bindSubmit">
-	                   	<a class="goback" href="h/corpCenter/bindStep1.html?update=1">返回修改邮箱地址</a>
+                	<div class="os_step_1"></div>
+	                <form class="corp_form" id="bindForm">
+	                    <input type="hidden" value="a517d13d23f5432eab682688151c3673" id="resubmitToken">
+	                 	<h3><em class="redstar">*</em>联系电话 <span>（请填写真实有效的电话号码，方便系统校验使用）</span></h3>
+	                    <input type="text" value="" placeholder="请输入你的手机号码或座机号码" maxlength="49" name="tel" id="tel">	
+	                 	<h3><em class="redstar">*</em>接收简历邮箱 <span>（该邮箱为公司邮箱，审核通过后不可更改）</span></h3>
+	                    <input type="text" value="" placeholder="请输入你的公司邮箱作为接收简历邮箱" name="email" id="email">	
+	                    <span id="beError" style="display:none;" class="error"></span>
+	                    <input type="submit" value="下一步" id="bindSubmit">
                     </form>
-                                        <div class="contactus">如有问题，请致电：010-57286997或写信给：<a href="mailto:vivi@lagou.com">vivi@lagou.com</a>，我们会尽快为你解决。</div>
+                    <div class="contactus">
+	                    <table>
+	                    	<tbody><tr>
+	                    		<td colspan="2">常见问题：</td>
+	                    	</tr>
+	                    	<tr>
+	                    		<td valign="top">问：</td>
+	                    		<td>填写个人邮箱可以么？</td>
+	                    	</tr>
+	                    	<tr>
+	                    		<td valign="top">答：</td>
+	                    		<td>不可以。为了保证每个职位的真实性，拉勾网严格要求招聘方必须提供公司邮箱。（公司邮箱是指以你的公司网址为后缀的免费公司邮箱，例如拉勾网的公司邮箱后缀是@lagou.com）即使是初创公司也必须提供公司邮箱才允许开通招聘。</td>
+	                    	</tr>
+	                    	<tr>
+	                    		<td valign="top">问：</td>
+	                    		<td>公司没有公司邮箱怎么办？</td>
+	                    	</tr>
+	                    	<tr>
+	                    		<td valign="top">答：</td>
+	                    		<td>拉勾网推荐使用免费、稳定的腾讯企业邮箱（网址：<a href="http://exmail.qq.com">http://exmail.qq.com</a>），根据邮箱申请指南进行操作，很快就可以拥有以你的公司网址为后缀的免费公司邮箱。</td>
+	                    	</tr>
+	                    	<tr>
+	                    		<td colspan="2"><br>如有其它问题，请发送问题到<a href="mailto:vivi@lagou.com">vivi@lagou.com</a>，我们会尽快为你解决。</td>
+	                    	</tr>
+	                    </tbody></table>
+                    </div>
                 </dd>
             </dl>
        	</div>
-<div class="dn" id="loadingDiv" style="display: none;"><img width="32" height="32" src="/static/images/ajax-loader.gif"></div>
+
 <script src="/static/js/services.min.js" type="text/javascript"></script>
 			<div class="clear"></div>
-			<input type="hidden" value="3a9b3124ee0a4adca922f2c9756d1ac1" id="resubmitToken">
+			<input type="hidden" value="a517d13d23f5432eab682688151c3673" id="resubmitToken">
 	    	<a rel="nofollow" title="回到顶部" id="backtop"></a>
 	    </div><!-- end #container -->
 	</div><!-- end #body -->
@@ -107,4 +133,4 @@ var youdao_conv_id = 271546;
 <!--  -->
 
 
-<div id="cboxOverlay" style="display: none;"></div><div id="colorbox" class="" role="dialog" tabindex="-1" style="display: none;"><div id="cboxWrapper"><div><div id="cboxTopLeft" style="float: left;"></div><div id="cboxTopCenter" style="float: left;"></div><div id="cboxTopRight" style="float: left;"></div></div><div style="clear: left;"><div id="cboxMiddleLeft" style="float: left;"></div><div id="cboxContent" style="float: left;"><div id="cboxTitle" style="float: left;"></div><div id="cboxCurrent" style="float: left;"></div><button type="button" id="cboxPrevious"></button><button type="button" id="cboxNext"></button><button id="cboxSlideshow"></button><div id="cboxLoadingOverlay" style="float: left;"></div><div id="cboxLoadingGraphic" style="float: left;"></div></div><div id="cboxMiddleRight" style="float: left;"></div></div><div style="clear: left;"><div id="cboxBottomLeft" style="float: left;"></div><div id="cboxBottomCenter" style="float: left;"></div><div id="cboxBottomRight" style="float: left;"></div></div></div><div style="position: absolute; width: 9999px; visibility: hidden; display: none;"></div></div><ul class="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all" id="ui-id-1" tabindex="0" style="display: none; top: 356px; left: 377.5px; width: 590px;"><li class="ui-menu-item" role="presentation"><a id="ui-id-3" class="ui-corner-all" tabindex="-1">创建名为"测试公司"的新公司</a></li></ul></body></html>
+	<div id="cboxOverlay" style="display: none;"></div><div id="colorbox" class="" role="dialog" tabindex="-1" style="display: none;"><div id="cboxWrapper"><div><div id="cboxTopLeft" style="float: left;"></div><div id="cboxTopCenter" style="float: left;"></div><div id="cboxTopRight" style="float: left;"></div></div><div style="clear: left;"><div id="cboxMiddleLeft" style="float: left;"></div><div id="cboxContent" style="float: left;"><div id="cboxTitle" style="float: left;"></div><div id="cboxCurrent" style="float: left;"></div><button type="button" id="cboxPrevious"></button><button type="button" id="cboxNext"></button><button id="cboxSlideshow"></button><div id="cboxLoadingOverlay" style="float: left;"></div><div id="cboxLoadingGraphic" style="float: left;"></div></div><div id="cboxMiddleRight" style="float: left;"></div></div><div style="clear: left;"><div id="cboxBottomLeft" style="float: left;"></div><div id="cboxBottomCenter" style="float: left;"></div><div id="cboxBottomRight" style="float: left;"></div></div></div><div style="position: absolute; width: 9999px; visibility: hidden; display: none;"></div></div></body></html>
