@@ -1,4 +1,4 @@
-#coding=utf-8
+# coding=utf-8
 """
 Django settings for crawler project.
 
@@ -41,7 +41,7 @@ CACHES = {
         }
     }
 }
-AUTH_USER_MODEL='auth.User'
+AUTH_USER_MODEL = 'auth.User'
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
@@ -54,7 +54,7 @@ TEMPLATE_DEBUG = DEBUG
 
 MANAGERS = ADMINS
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["www.yueguangba.com"]
 
 
 # Application definition
@@ -97,7 +97,6 @@ WSGI_APPLICATION = 'alibaba.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -133,36 +132,37 @@ STATIC_URL = '/static/'
 # STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 STATICFILES_DIRS = (
-os.path.join(BASE_DIR, "static"),
+    os.path.join(BASE_DIR, "static"),
 )
 
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
-        }
-    },
-    'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
-        }
-    },
-    'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': True,
+if not LOGGING:
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'filters': {
+            'require_debug_false': {
+                '()': 'django.utils.log.RequireDebugFalse'
+            }
         },
+        'handlers': {
+            'mail_admins': {
+                'level': 'ERROR',
+                'filters': ['require_debug_false'],
+                'class': 'django.utils.log.AdminEmailHandler'
+            }
+        },
+        'loggers': {
+            'django.request': {
+                'handlers': ['mail_admins'],
+                'level': 'ERROR',
+                'propagate': True,
+            },
+        }
     }
-}
 
 HAYSTACK_CONNECTIONS = {
     'default': {
@@ -174,8 +174,8 @@ HAYSTACK_CONNECTIONS = {
 
 FIRST_DAY_OF_WEEK = 1
 
-
 from django_redis import get_redis_connection
+
 REDIS = get_redis_connection("default")
 
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
@@ -187,10 +187,6 @@ from django.contrib.messages import constants as message_constants
 
 MESSAGE_LEVEL = message_constants.DEBUG
 
-LOGIN_URL = "/member/login"
-LOGIN_REDIRECT_URL = "/member/"
-LOGOUT_URL = "/member/logout"
-
 FILE_UPLOAD_TEMP_DIR = "/tmp"
 EMAIL_TIMEOUT = 5
 
@@ -199,15 +195,25 @@ DATETIME_FORMAT = 'Y-m-d H:i'
 TIME_FORMAT = 'H:i'
 
 DJANGO_REDIS_IGNORE_EXCEPTIONS = True
-AUTHENTICATION_BACKENDS =('django.contrib.auth.backends.ModelBackend',)
+
+AUTHENTICATION_BACKENDS = (
+    'userena.backends.UserenaAuthenticationBackend',
+    'guardian.backends.ObjectPermissionBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
 INSTALLED_APPS = (
     'suit',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'guardian',
+    'userena',
+    'userena.contrib.umessages',
+    'accounts',
     'search',
     'scraper',
     'djcelery'
@@ -215,13 +221,15 @@ INSTALLED_APPS = (
 )
 
 MIDDLEWARE_CLASSES = (
-    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'userena.middleware.UserenaLocaleMiddleware',
     # 'django.middleware.security.SecurityMiddleware',
 )
 
@@ -237,6 +245,7 @@ SUIT_CONFIG = {
 }
 
 import djcelery
+
 djcelery.setup_loader()
 
 BROKER_HOST = "localhost"
@@ -252,5 +261,23 @@ MONGO_HOST = LOCAL_HOST
 MONGO_PORT = 27017
 
 import pymongo
+
 MONGO_CLIENT = pymongo.MongoClient(MONGO_HOST, MONGO_PORT)
+
+ANONYMOUS_USER_ID = -1
+
+SITE_ID = 1
+
+LOGIN_URL = '/accounts/%(username)s/'
+LOGIN_REDIRECT_URL = '/accounts/signin/'
+LOGOUT_URL = '/accounts/signout/'
+AUTH_PROFILE_MODULE = 'accounts.Profile'
+USERENA_DISABLE_PROFILE_LIST = True
+USERENA_MUGSHOT_SIZE = 100
+USERENA_FORBIDDEN_USERNAMES = "('signup', 'signout', 'signin', 'activate', 'me', 'password')"
+USERENA_DISABLE_SIGNUP = False
+USERENA_HIDE_EMAIL= False
+USERENA_HTML_EMAIL = True
+
+
 

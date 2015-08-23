@@ -72,7 +72,7 @@ class Category(models.Model):
     enabled = models.BooleanField(u"是否可用", default=True)
     order = models.SmallIntegerField(u"序号", default=0)
     hot = models.SmallIntegerField(u"热门", default=0)
-    tags = models.ManyToManyField(Tag, blank=True, null=True)
+    tags = models.ManyToManyField(Tag, blank=True)
     created = models.DateTimeField(u"创建时间", auto_now_add=True, editable=False)
     updated = models.DateTimeField(u"更新时间", auto_now=True, editable=False)
     objects = CategoryManager()

@@ -14,20 +14,26 @@ Including another URLconf
     1. Add an import:  from blog import urls as blog_urls
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
-from django.conf.urls import include, url
+from django.conf.urls import patterns, url, include
 from django.contrib import admin
 from django.conf import settings
 from alibaba.views import HomePageView
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-
+from django.conf.urls.static import static
 admin.autodiscover()
 
 
-urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
+urlpatterns = patterns(
+    (r'^admin/', include(admin.site.urls)),
     url(r'^$', HomePageView.as_view(), name='home'),
     url(r'^(?P<slug>\w+)$', HomePageView.as_view(), name='search_by_category'),
-]
+    (r'^messages/', include('userena.contrib.umessages.urls')),
+    (r'^accounts/', include('userena.urls')),
+    (r'^messages/', include('userena.contrib.umessages.urls')),
+    url(r'^$', 'profiles.views.promo', name='promo'),
+    (r'^i18n/', include('django.conf.urls.i18n')),
+)
 
 if settings.DEBUG:
     urlpatterns += staticfiles_urlpatterns()
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
