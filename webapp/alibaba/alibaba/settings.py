@@ -209,6 +209,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'search',
+    'scraper',
+    'djcelery'
 
 )
 
@@ -234,4 +236,21 @@ SUIT_CONFIG = {
     'LIST_PER_PAGE': 50
 }
 
+import djcelery
+djcelery.setup_loader()
+
+BROKER_HOST = "localhost"
+BROKER_PORT = 5672
+BROKER_BACKEND = "alibaba"
+BROKER_USER = "guest"
+BROKER_PASSWORD = "guest"
+BROKER_VHOST = "/"
+CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
+
+LOCAL_HOST = "192.168.234.139"
+MONGO_HOST = LOCAL_HOST
+MONGO_PORT = 27017
+
+import pymongo
+MONGO_CLIENT = pymongo.MongoClient(MONGO_HOST, MONGO_PORT)
 

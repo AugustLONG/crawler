@@ -38,6 +38,10 @@ class LinkManager(models.Manager):
         link.save()
         return link
 
+class TagManager(models.Manager):
+    def hot(self):
+        categories = self.model.objects.filter(enabled=True).order_by("-hot")
+        return categories
 
 class Tag(models.Model):
     name = models.CharField(u"名称", max_length=200)
@@ -46,6 +50,7 @@ class Tag(models.Model):
     hot = models.SmallIntegerField(u"热度", default=0)
     created = models.DateTimeField(u"创建时间", auto_now_add=True, editable=False)
     updated = models.DateTimeField(u"更新时间", auto_now=True, editable=False)
+    objects = TagManager()
 
     def __unicode__(self):
         return self.name
