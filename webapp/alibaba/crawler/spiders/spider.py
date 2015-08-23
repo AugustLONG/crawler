@@ -75,7 +75,7 @@ class Spider(BaseSpider):
             log_msg += "max_items_read " + str(self.conf['MAX_ITEMS_READ'])
         else:
             self.conf['MAX_ITEMS_READ'] = self.scraper.max_items_read
-        #max_items_save
+        # max_items_save
         if 'max_items_save' in kwargs:
             try:
                 self.conf['MAX_ITEMS_SAVE'] = int(kwargs['max_items_save'])
@@ -181,7 +181,6 @@ class Spider(BaseSpider):
                 msg += u'None'
             self.log(msg, logging.DEBUG)
 
-
     def _set_loader(self, response, xs, item):
         if not xs:
             self.from_detail_page = True
@@ -199,7 +198,6 @@ class Spider(BaseSpider):
                 self.loader = ItemLoader(item=item, selector=xs)
         self.loader.default_output_processor = TakeFirst()
         self.loader.log = self.log
-
 
     def start_requests(self):
         index = 0
