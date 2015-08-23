@@ -59,8 +59,8 @@
       <file leaf-file-name="spider.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/webapp/alibaba/crawler/spiders/spider.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.51693004" vertical-offset="3088" max-vertical-offset="6192">
-              <caret line="197" column="64" selection-start-line="197" selection-start-column="64" selection-end-line="197" selection-end-column="64" />
+            <state vertical-scroll-proportion="0.2731377" vertical-offset="3088" max-vertical-offset="6192">
+              <caret line="185" column="19" selection-start-line="185" selection-start-column="19" selection-end-line="185" selection-end-column="19" />
               <folding>
                 <element signature="e#15#65#0" expanded="true" />
               </folding>
@@ -1206,8 +1206,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/webapp/alibaba/crawler/spiders/spider.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.51693004" vertical-offset="3088" max-vertical-offset="6192">
-          <caret line="197" column="64" selection-start-line="197" selection-start-column="64" selection-end-line="197" selection-end-column="64" />
+        <state vertical-scroll-proportion="0.2731377" vertical-offset="3088" max-vertical-offset="6192">
+          <caret line="185" column="19" selection-start-line="185" selection-start-column="19" selection-end-line="185" selection-end-column="19" />
           <folding>
             <element signature="e#15#65#0" expanded="true" />
           </folding>
