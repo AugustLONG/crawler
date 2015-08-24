@@ -197,8 +197,15 @@ TIME_FORMAT = 'H:i'
 DJANGO_REDIS_IGNORE_EXCEPTIONS = True
 
 AUTHENTICATION_BACKENDS = (
+    'social_auth.backends.contrib.douban.DoubanBackend2',
+    'social_auth.backends.contrib.qq.QQBackend',
+    'social_auth.backends.contrib.weibo.WeiboBackend',
+    'social_auth.backends.contrib.renren.RenRenBackend',
+    'social_auth.backends.contrib.baidu.BaiduBackend',
+    'social_auth.backends.contrib.weixin.WeixinBackend',
     'userena.backends.UserenaAuthenticationBackend',
     'guardian.backends.ObjectPermissionBackend',
+    # 必须加，否则django默认用户登录不上
     'django.contrib.auth.backends.ModelBackend',
 )
 INSTALLED_APPS = (
@@ -210,6 +217,8 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'silk',
+    'social_auth',
     'guardian',
     'userena',
     'userena.contrib.umessages',
@@ -228,7 +237,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.common.CommonMiddleware',
+    'django.middleware.gzip.GZipMiddleware',
+    'silk.middleware.SilkyMiddleware',
     'userena.middleware.UserenaLocaleMiddleware',
     # 'django.middleware.security.SecurityMiddleware',
 )
@@ -237,6 +247,9 @@ from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
 
 TEMPLATE_CONTEXT_PROCESSORS = TCP + (
     'django.core.context_processors.request',
+    # login 在template中可以用 "{% url socialauth_begin 'douban-oauth2' %}"
+    'social_auth.context_processors.social_auth_by_type_backends',
+    'social_auth.context_processors.social_auth_login_redirect',
 )
 
 SUIT_CONFIG = {
@@ -279,5 +292,81 @@ USERENA_DISABLE_SIGNUP = False
 USERENA_HIDE_EMAIL= False
 USERENA_HTML_EMAIL = True
 
+# SILKY_PYTHON_PROFILER = True
+# SILKY_AUTHENTICATION = True  # User must login
+# SILKY_AUTHORISATION = True  # User must have permissions
+# SILKY_MAX_REQUEST_BODY_SIZE = -1  # Silk takes anything <0 as no limit
+# SILKY_MAX_RESPONSE_BODY_SIZE = 1024  # If response body>1024kb, ignore
+SILKY_META = True
+# SILKY_INTERCEPT_PERCENT = 50  # log only 50% of requests
+# def my_custom_logic(request):
+#     return 'record_requests' in request.session
+#
+# SILKY_INTERCEPT_FUNC = my_custom_logic # log only session has recording enabled.
+# SILKY_DYNAMIC_PROFILING = [{
+#     'module': 'path.to.module',
+#     'function': 'foo',
+#     # Line numbers are relative to the function as opposed to the file in which it resides
+#     'start_line': 1,
+#     'end_line': 2,
+#     'name': 'Slow Foo'
+# }]
+
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+
+SOCIAL_AUTH_PIPELINE = (
+    'social.pipeline.social_auth.social_details',
+    'social.pipeline.social_auth.social_uid',
+    'social.pipeline.social_auth.auth_allowed',
+
+    'social_auth.backends.pipeline.social.social_auth_user',
+    'social_auth.backends.pipeline.associate.associate_by_email',
+    'social_auth.backends.pipeline.misc.save_status_to_session',
+    'social_auth.backends.pipeline.user.create_user',
+    'social_auth.backends.pipeline.social.associate_user',
+    'social_auth.backends.pipeline.social.load_extra_data',
+    'social_auth.backends.pipeline.user.update_user_details',
+    'social_auth.backends.pipeline.misc.save_status_to_session',
+)
+
+SOCIAL_AUTH_DISCONNECT_PIPELINE = (
+    'social.pipeline.disconnect.allowed_to_disconnect',
+    'social.pipeline.disconnect.get_entries',
+    'social.pipeline.disconnect.revoke_tokens',
+    'social.pipeline.disconnect.disconnect'
+)
+SSOCIAL_AUTH_SANITIZE_REDIRECTS = False
+# LOGIN_REDIRECT_URL = 'http://www.yueguangba.com/'
+SOCIAL_AUTH_WEIBO_LOGIN_REDIRECT_URL = 'http://www.yueguangba.com/'
+SOCIAL_AUTH_LOGIN_URL = '/login-url/'
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/login-error/'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/logged-in/'
+SOCIAL_AUTH_NEW_USER_REDIRECT_URL = '/new-users-redirect-url/'
+SOCIAL_AUTH_NEW_ASSOCIATION_REDIRECT_URL = '/oauth/newassociation'
+SOCIAL_AUTH_BACKEND_ERROR_URL = '/new-error-url'
+SOCIAL_AUTH_AUTHENTICATION_SUCCESS_URL = '/oauth/authentication/success'
+
+SOCIAL_AUTH_WEIBO_KEY = '123592348'
+SOCIAL_AUTH_WEIBO_SECRET = 'aa8626a4396ab90366e51292baeaeb1e'
+
+SOCIAL_AUTH_QQ_KEY = '101145292'
+SOCIAL_AUTH_QQ_SECRET = '993fbbc3c7d9ed0b3a95b613c39f918d'
+SOCIAL_AUTH_QQ_FIELDS_STORED_IN_SESSION = ['auth过程中的附加参数']
+
+SOCIAL_AUTH_DOUBAN_OAUTH2_KEY = '0630fb0303a5947e1292f1090af0bd7a'
+SOCIAL_AUTH_DOUBAN_OAUTH2_SECRET = 'e92927cfa3cefe4f'
+
+SOCIAL_AUTH_WEIBO_AUTH_EXTRA_ARGUMENTS = {'forcelogin': 'true'}
+SOCIAL_AUTH_WEIBO_FIELDS_STORED_IN_SESSION = ['auth过程中的附加参数']
+
+SOCIAL_AUTH_RENREN_KEY = ''
+SOCIAL_AUTH_RENREN_SECRET = ''
+
+SOCIAL_AUTH_BAIDU_KEY = ''
+SOCIAL_AUTH_BAIDU_SECRET = ''
+
+SOCIAL_AUTH_WEIXIN_KEY = ''
+SOCIAL_AUTH_WEIXIN_SECRET = ''
+SOCIAL_AUTH_WEIXIN_SCOPE = ['snsapi_login',]
 
 

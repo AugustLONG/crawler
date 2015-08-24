@@ -23,16 +23,19 @@ from django.conf.urls.static import static
 admin.autodiscover()
 
 
-urlpatterns = patterns(
-    (r'^admin/', include(admin.site.urls)),
+urlpatterns = [
+    url(r'^wanglingling/', include(admin.site.urls)),
     url(r'^$', HomePageView.as_view(), name='home'),
-    url(r'^(?P<slug>\w+)$', HomePageView.as_view(), name='search_by_category'),
-    (r'^messages/', include('userena.contrib.umessages.urls')),
-    (r'^accounts/', include('userena.urls')),
-    (r'^messages/', include('userena.contrib.umessages.urls')),
-    url(r'^$', 'profiles.views.promo', name='promo'),
-    (r'^i18n/', include('django.conf.urls.i18n')),
-)
+    url(r'^category/(?P<slug>\w+)$', HomePageView.as_view(), name='search_by_category'),
+    url(r'^messages/', include('userena.contrib.umessages.urls')),
+    url(r'^accounts/', include('userena.urls')),
+    url(r'^i18n/', include('django.conf.urls.i18n')),
+
+]
+
+urlpatterns += patterns('', url(r'^silk/', include('silk.urls', namespace='silk')))
+
+urlpatterns += patterns('', url(r'', include('social_auth.urls')))
 
 if settings.DEBUG:
     urlpatterns += staticfiles_urlpatterns()

@@ -3,3 +3,5 @@
 ./manage.py clean_expired
 #This command shouldn’t be run as a cronjob. This is only for emergency situations when some permissions are not correctly set for users. For example when userena get’s implemented in an already existing project. Run by
 ./manage.py check_permissions
+#A management command will wipe out all logged data
+python manage.py silk_clear_request_log

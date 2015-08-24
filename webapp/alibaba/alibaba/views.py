@@ -59,3 +59,25 @@ class HomePageView(TemplateView):
             datas.append(result["_source"])
         context["results"]=datas
         return context
+
+@silk_profile(name='View Blog Post')
+def post(request, post_id):
+    p = Post.objects.get(pk=post_id)
+    return render_to_response('post.html', {
+        'post': p
+    })
+
+class MyView(View):
+    @silk_profile(name='View Blog Post')
+    def get(self, request):
+        p = Post.objects.get(pk=post_id)
+        return render_to_response('post.html', {
+            'post': p
+        })
+
+def post(request, post_id):
+    with silk_profile(name='View Blog Post #%d' % self.pk):
+        p = Post.objects.get(pk=post_id)
+        return render_to_response('post.html', {
+            'post': p
+        })

@@ -1,3 +1,4 @@
+{% load url from future %}
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -42,9 +43,9 @@ var ctx = "http://www.yueguangba.com";
 	    		<li ><a href="create.html" rel="nofollow">发布地址</a></li>
 	    	</ul>
         	 <ul class="loginTop">
-            	<li><a href="login.html" rel="nofollow">登录</a></li>
+            	<li><a href="{% url 'userena_signin' %}" rel="nofollow">登录</a></li>
             	<li>|</li>
-            	<li><a href="register.html" rel="nofollow">注册</a></li>
+            	<li><a href="{% url 'userena_signup' %}" rel="nofollow">注册</a></li>
             </ul>
                                 </div>
     </div><!-- end #header -->
@@ -60,6 +61,7 @@ var ctx = "http://www.yueguangba.com";
         <a href="h/af/zhaopin.html" target="_blank">互联网搜索导航</a>
         <a href="http://weibo.com/yueguangba" target="_blank" rel="nofollow">月光吧微博</a>
         <a class="footer_qr" href="javascript:void(0)" rel="nofollow">月光吧微信<i></i></a>
+        <div class="copyright">本站仅支持微信，微博，qq，人人，豆瓣，百度等登陆</div>
         <div class="copyright">&copy;2015-2016 Yueguangba <a target="_blank" href="http://www.miitbeian.gov.cn/state/outPortal/loginPortal.action">暂无备案</a></div>
     </div>
 </div>
