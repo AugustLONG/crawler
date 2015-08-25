@@ -25,5 +25,17 @@
     {% endfor %}
   </fieldset>
   <input type="submit" value="{% trans "Signup"%}" />
+ <button class='js-captcha-refresh'>更新</button>
 </form>
+ <script>
+ $('.js-captcha-refresh').click(function(){
+    $form = $(this).parents('form');
+
+    $.getJSON($(this).data('url'), {}, function(json) {
+        // This should update your captcha image src and captcha hidden input
+    });
+
+    return false;
+});
+ </script>
 {% endblock %}

@@ -20,6 +20,7 @@ from django.conf import settings
 from alibaba.views import HomePageView
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf.urls.static import static
+from accounts.forms import SignupFormExtra, AuthenticationFormExtra
 admin.autodiscover()
 
 
@@ -28,8 +29,12 @@ urlpatterns = [
     url(r'^$', HomePageView.as_view(), name='home'),
     url(r'^category/(?P<slug>\w+)$', HomePageView.as_view(), name='search_by_category'),
     url(r'^messages/', include('userena.contrib.umessages.urls')),
+    url(r'^accounts/signup/$','userena.views.signup',{'signup_form': SignupFormExtra}),
+    url(r'^accounts/signin/$','userena.views.signin',{'auth_form': AuthenticationFormExtra}),
     url(r'^accounts/', include('userena.urls')),
     url(r'^i18n/', include('django.conf.urls.i18n')),
+    url(r'^captcha/', include('captcha.urls')),
+
 
 ]
 

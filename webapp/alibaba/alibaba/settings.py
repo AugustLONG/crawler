@@ -180,8 +180,8 @@ REDIS = get_redis_connection("default")
 
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
-SESSION_COOKIE_DOMAIN = None
-SESSION_COOKIE_AGE = 1209600
+SESSION_COOKIE_DOMAIN = "www.yueguangba.com"
+SESSION_COOKIE_AGE = 86400
 
 from django.contrib.messages import constants as message_constants
 
@@ -225,6 +225,7 @@ INSTALLED_APPS = (
     'accounts',
     'search',
     'scraper',
+    "captcha",
     'djcelery'
 
 )
@@ -368,5 +369,9 @@ SOCIAL_AUTH_BAIDU_SECRET = ''
 SOCIAL_AUTH_WEIXIN_KEY = ''
 SOCIAL_AUTH_WEIXIN_SECRET = ''
 SOCIAL_AUTH_WEIXIN_SCOPE = ['snsapi_login',]
+
+CAPTCHA_LENGTH = 6
+CAPTCHA_DICTIONARY_MIN_LENGTH = CAPTCHA_DICTIONARY_MAX_LENGTH = 6
+CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.word_challenge'
 
 

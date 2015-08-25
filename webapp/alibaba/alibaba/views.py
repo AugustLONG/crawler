@@ -1,12 +1,12 @@
 # coding=utf-8
-from django.views.generic.base import TemplateView
+from django.views.generic.base import TemplateView, View
 from search.models import Category, Link, Tag
 from django.core.cache import cache
 import json
 from elasticsearch import Elasticsearch
 from django.conf import settings
 from dateutil.parser import parse as parse_date
-
+from silk.profiling.profiler import silk_profile
 
 class HomePageView(TemplateView):
     template_name = "index.html"

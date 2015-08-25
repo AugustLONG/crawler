@@ -26,7 +26,19 @@
     {% endfor %}
   </fieldset>
   <input type="submit" value="{% trans "Signin" %}" />
+ <button class='js-captcha-refresh'>更新</button>
   <p class="forgot-password"><a href="{% url 'userena_password_reset' %}" title="{% trans 'Forgot your password?' %}">{% trans "Forgot your password?" %}</a></p>
   {% if next %}<input type="hidden" name="next" value="{{ next }}" />{% endif %}
 </form>
+   <script>
+   $('.js-captcha-refresh').click(function(){
+    $form = $(this).parents('form');
+
+    $.getJSON($(this).data('url'), {}, function(json) {
+        // This should update your captcha image src and captcha hidden input
+    });
+
+    return false;
+});
+   </script>
 {% endblock %}
