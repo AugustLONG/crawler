@@ -6,9 +6,6 @@ from django.http import HttpResponse
 import json
 from accounts.forms import CaptchaForm
 
-def promo(request):
-    return render(request, 'accounts/promo.html')
-
 class AjaxExampleForm(CreateView):
     template_name = ''
     form_class = CaptchaForm

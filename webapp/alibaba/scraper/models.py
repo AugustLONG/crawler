@@ -1,6 +1,6 @@
 #coding=utf-8
 from django.db import models
-import datetime
+import datetime,yaml
 from django.db.models import Q
 from crawler.utils.item import DjangoItem
 from django.contrib.auth.models import User
@@ -63,7 +63,8 @@ class ScrapedObjAttr(models.Model):
         ('U', 'DETAIL_PAGE_URL'),
         ('I', 'IMAGE'),
     )
-    name = models.CharField(max_length=200)
+    name = models.CharField(u"字段",max_length=200)
+    title = models.CharField(u"名称",max_length=200,blank=True,null=True)
     obj_class = models.ForeignKey(ScrapedObjClass)
     attr_type = models.CharField(max_length=1, choices=ATTR_TYPE_CHOICES)
     id_field = models.BooleanField(default=False)
@@ -206,9 +207,8 @@ class ScraperElem(models.Model):
     reg_exp = models.CharField(max_length=200, blank=True)
     from_detail_page = models.BooleanField(default=False)
     processors = models.CharField(max_length=200, blank=True)
-    proc_ctxt = models.CharField(max_length=200, blank=True)
+    proc_ctxt = models.TextField(blank=True)
     mandatory = models.BooleanField(default=True)
-    scripts = models.TextField(u"脚本", blank=True, help_text=u"对xpach结果做二次处理")
     created = models.DateTimeField(u"创建时间", auto_now_add=True, editable=False)
     updated = models.DateTimeField(u"更新时间", auto_now=True, editable=False)
 
@@ -280,9 +280,9 @@ class Website(models.Model):
     name = models.CharField(u"名称", max_length=200)
     url = models.URLField(u"地址", db_index=True, unique=True)
     allow_domain = models.CharField(u"允许域名", max_length=200)
+    category = models.ForeignKey(Category, verbose_name=u"分类", blank=True)
     scraper = models.ForeignKey(Scraper, blank=True, null=True, on_delete=models.SET_NULL)
     scraper_runtime = models.ForeignKey(SchedulerRuntime, blank=True, null=True, on_delete=models.SET_NULL)
-    items = models.TextField(u"item，字典类型", help_text=u"格式[{'field':'','name'}]")
     enabled = models.BooleanField(u"是否可用", default=True)
     site = models.ForeignKey(Sites, verbose_name=u"站点")
     comments = models.TextField(u"介绍", blank=True)
@@ -298,14 +298,19 @@ class Website(models.Model):
         get_latest_by = "created"
 
     def items_list(self):
-        self.items = json.dumps([{"field":"title", "name":u"标题"},
-                                 {"field":"description", "name":u"描述"},
-                                 {"field":"url", "name":u"地址"},
-                                 {"field":"thumbnail", "name":u"图片"},
-                                 {"field":"website","name":u"","value":1},
-                                 {"field":"checker_runtime","name":u"","value":1},
-        ])
-        return json.loads(self.items)
+        # self.items = json.dumps({"title":u"标题",
+        #                          "description":u"描述",
+        #                          "url":u"地址",
+        #                          "thumbnail":u"图片",
+        #                          "website": u"",
+        #                          "checker_runtime": u""
+        #                          })
+        # return json.loads(self.items)
+        attrs = self.scraper.scraped_obj_class.scrapedobjattr_set.all()
+        items = {}
+        for attr in attrs:
+            items[attr.name] = attr.title
+        return items
 
 
 class GeneralModel(models.Model):

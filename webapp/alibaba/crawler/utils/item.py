@@ -108,6 +108,6 @@ class BaseItem(Item):
     def set_fields(self, items_fields):
         # self.fields = self.fields.copy()
         if items_fields:
-            for item in items_fields:
-                if item["field"] not in self.fields:
-                    self.fields[item["field"]] = Field()
+            for k in items_fields.iterkeys():
+                if k not in self.fields:
+                    self.fields[k] = Field()

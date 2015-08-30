@@ -32,7 +32,7 @@ class BaseSpider(Spider):
 
     request_kwargs = {}
 
-    command  = 'scrapy crawl SPIDERNAME -a id=REF_OBJECT_ID '
+    command = 'scrapy crawl SPIDERNAME -a id=REF_OBJECT_ID '
     command += '[-a do_action=(yes|no) -a run_type=(TASK|SHELL)'
     command += ' -a max_items_read={Int} -a max_items_save={Int}]'
     

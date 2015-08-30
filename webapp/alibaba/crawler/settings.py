@@ -26,17 +26,17 @@ SPIDER_MODULES = ['crawler.spiders', ]
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    'crawler.pipelines.DjangoImagesPipeline': 200,
+    'crawler.pipelines.AlibabaImagesPipeline': 200,
     'crawler.pipelines.ValidationPipeline': 400,
-    'crawler.pipelines.DjangoWriterPipeline': 800,
+    'crawler.pipelines.AlibabaMongoDBPipeline': 800,
     # 'crawler.pipelines.mongo.MongoPipeline': 900,
 }
 
 IMAGES_STORE = os.path.join(PROJECT_ROOT, '../static/upload/thumbnails')
 
 IMAGES_THUMBS = {
-    'medium': (50, 50),
-    'small': (25, 25),
+    'medium': (200, 200),
+    'small': (100, 100),
 }
 
 DSCRAPER_IMAGES_STORE_FORMAT = 'ALL'
@@ -46,17 +46,6 @@ DSCRAPER_LOG_LEVEL = 'INFO'
 DSCRAPER_LOG_LIMIT = 5
 
 # NEWSPIDER_MODULE = 'crawler.spiders'
-
-# Configure maximum concurrent requests performed by Scrapy (default: 16)
-#CONCURRENT_REQUESTS=32
-
-# Configure a delay for requests for the same website (default: 0)
-# See http://scrapy.readthedocs.org/en/latest/topics/settings.html#download-delay
-# See also autothrottle settings and docs
-#DOWNLOAD_DELAY=3
-# The download delay setting will honor only one of:
-#CONCURRENT_REQUESTS_PER_DOMAIN=16
-#CONCURRENT_REQUESTS_PER_IP=16
 
 # Disable cookies (enabled by default)
 # COOKIES_ENABLED=False
@@ -101,6 +90,17 @@ AUTOTHROTTLE_MAX_DELAY = 60
 # Enable showing throttling stats for every response received:
 AUTOTHROTTLE_DEBUG = False
 
+# Configure maximum concurrent requests performed by Scrapy (default: 16)
+#CONCURRENT_REQUESTS=32
+
+# Configure a delay for requests for the same website (default: 0)
+# See http://scrapy.readthedocs.org/en/latest/topics/settings.html#download-delay
+# See also autothrottle settings and docs
+#DOWNLOAD_DELAY=3
+# The download delay setting will honor only one of:
+#CONCURRENT_REQUESTS_PER_DOMAIN=16
+#CONCURRENT_REQUESTS_PER_IP=16
+
 # Enable and configure HTTP caching (disabled by default)
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
 #HTTPCACHE_ENABLED=True
@@ -109,7 +109,7 @@ AUTOTHROTTLE_DEBUG = False
 #HTTPCACHE_IGNORE_HTTP_CODES=[]
 #HTTPCACHE_STORAGE='scrapy.extensions.httpcache.FilesystemCacheStorage'
 
-LOG_LEVEL = 'ERROR'  # CRITICAL, ERROR, WARNING, INFO, DEBUG
+LOG_LEVEL = 'DEBUG'  # CRITICAL, ERROR, WARNING, INFO, DEBUG
 
 #LOG_STDOUT = False
 #LOG_FILE = "/var/log/scrapy_douban_movie.log"
@@ -151,4 +151,15 @@ PROXIES = [
 ]
 
 REDIS_UNIQUE_KEY="alibaba.item.unique_key"
+
+SEPARATOR = "#________#"
+
+MONGODB_URI = 'mongodb://192.168.234.139:27017'
+MONGODB_DATABASE = 'alibaba'
+MONGODB_COLLECTION = 'items'
+MONGODB_ADD_TIMESTAMP = True
+MONGODB_UNIQUE_KEY="url"
+# MONGODB_BUFFER_DATA = 10
+# MONGODB_REPLICA_SET = 'myReplicaSetName'
+# MONGODB_URI = 'mongodb://host1.example.com:27017,host2.example.com:27017,host3.example.com:27017'
 

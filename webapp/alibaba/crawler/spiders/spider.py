@@ -7,7 +7,7 @@ from jsonpath_rw.lexer import JsonPathLexerError
 from scrapy.selector import Selector
 from scrapy.http import Request, FormRequest
 from scrapy.loader import ItemLoader
-from scrapy.loader.processors import TakeFirst
+from scrapy.loader.processors import TakeFirst,Identity,Join
 from scrapy.exceptions import CloseSpider
 from crawler.utils.loader import JsonItemLoader
 from crawler.utils.scheduler import Scheduler
@@ -21,6 +21,7 @@ from django.conf import settings as djsettings
 mongodb = djsettings.MONGO_CLIENT
 redis = djsettings.REDIS
 redis_unique_key = settings.get("REDIS_UNIQUE_KEY")
+SEPARATOR = settings.get("SEPARATOR", "#________#")
 
 
 class Spider(BaseSpider):
@@ -34,7 +35,6 @@ class Spider(BaseSpider):
         self.scraper = self.ref_object.scraper
         self.scrape_url = self.ref_object.url
         self.scheduler_runtime = self.ref_object.scraper_runtime
-        self
         self.scraped_obj_class = UserWebsite
         self.items_list = self.ref_object.items_list()
         self.scraped_obj_item_class = BaseItem
@@ -87,8 +87,13 @@ class Spider(BaseSpider):
         else:
             self.conf['MAX_ITEMS_SAVE'] = self.scraper.max_items_save
 
+        self.conf["IMAGE_PATH"] = self.ref_object.site.slug + "/" + self.ref_object.category.slug
+        self.conf["SITE"] = self.ref_object.site.name
+        self.conf["WEBSITE_ID"] = self.ref_object.pk
+        self.conf["WEBSITE"] = self.ref_object.name
+        self.conf["CATEGORY"] = self.ref_object.category.name
+        self.conf["SCRAPER"] = self.scraper.name
         super(Spider, self)._set_config(log_msg, **kwargs)
-
 
     def _set_start_urls(self, scrape_url):
 
@@ -134,7 +139,6 @@ class Spider(BaseSpider):
             self.start_urls.append(scrape_url)
             self.pages = ["", ]
 
-
     def _set_loader_context(self, context_str):
         try:
             context_str = context_str.strip(', ')
@@ -144,9 +148,8 @@ class Spider(BaseSpider):
         except SyntaxError:
             self.log("Wrong context definition format: " + context_str, logging.ERROR)
 
-
     def _get_processors(self, procs_str):
-        procs = [TakeFirst(), processors.string_strip, ]
+        procs = [Join(SEPARATOR), processors.string_strip, ]
         if not procs_str:
             return procs
         procs_tmp = list(procs_str.split(','))
@@ -158,7 +161,6 @@ class Spider(BaseSpider):
                 self.log("Processor '%s' is not defined!" % p, logging.ERROR)
         procs = tuple(procs)
         return procs
-
 
     def _scrape_item_attr(self, scraper_elem):
         if (self.from_detail_page == scraper_elem.from_detail_page):
@@ -259,23 +261,19 @@ class Spider(BaseSpider):
         else:
             return item, False
 
-
     def parse_item(self, response, xs=None):
         object_item = self.scraped_obj_item_class()
         object_item.set_fields(self.items_list)
         self._set_loader(response, xs, object_item)
         if not self.from_detail_page:
             self.items_read_count += 1
-
         elems = self.scraper.get_scrape_elems()
-
         for elem in elems:
             self._scrape_item_attr(elem)
         item = self.loader.load_item()
         if self.from_detail_page:
             item, is_double = self._check_for_double_item(item)
         return item
-
 
     def parse(self, response):
         xs = Selector(response)
@@ -304,6 +302,7 @@ class Spider(BaseSpider):
             item_num = self.items_read_count + 1
             self.log("Starting to crawl item %s." % str(item_num), logging.INFO)
             item = self.parse_item(response, obj)
+            print obj
             if item:
                 only_main_page_idfs = True
                 idf_elems = self.scraper.get_id_field_elems()
@@ -325,8 +324,7 @@ class Spider(BaseSpider):
                 # generally no attributes scraped from detail page
                 cnt_sue_detail = self.scraper.get_standard_update_elems_from_detail_page().count()
                 cnt_detail_scrape = self.scraper.get_from_detail_page_scrape_elems().count()
-
-                if self.scraper.get_detail_page_url_elems().count() == 0 or \
+                if cnt_detail_scrape == 0 or \
                         (is_double and cnt_sue_detail == 0) or cnt_detail_scrape == 0:
                     yield item
                 else:

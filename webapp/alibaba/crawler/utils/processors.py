@@ -43,6 +43,15 @@ def static(text, loader_context):
     return static
 
 
+def dsl_script(text, loader_context):
+    script = loader_context.get('dsl_script', '')
+    try:
+       text = eval(script)
+    except:
+        exec(u"""%s"""%script)
+    return text
+
+
 def date(text, loader_context):
     cformat = loader_context.get('date')
     try:
