@@ -93,6 +93,7 @@ class Spider(BaseSpider):
         self.conf["WEBSITE"] = self.ref_object.name
         self.conf["CATEGORY"] = self.ref_object.category.name
         self.conf["SCRAPER"] = self.scraper.name
+        self.conf["COLLECTION"] = self.ref_object.site.slug + "_" + self.ref_object.category.slug
         super(Spider, self)._set_config(log_msg, **kwargs)
 
     def _set_start_urls(self, scrape_url):
@@ -302,7 +303,6 @@ class Spider(BaseSpider):
             item_num = self.items_read_count + 1
             self.log("Starting to crawl item %s." % str(item_num), logging.INFO)
             item = self.parse_item(response, obj)
-            print obj
             if item:
                 only_main_page_idfs = True
                 idf_elems = self.scraper.get_id_field_elems()

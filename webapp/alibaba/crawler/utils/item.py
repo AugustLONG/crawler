@@ -86,6 +86,13 @@ class BaseItem(Item):
     __metaclass__ = BaseItemMeta
 
     unique_key = Field()
+    site_name = Field()
+    website_id = Field()
+    website_name = Field()
+    category_name = Field()
+    scraper_pk = Field()
+    checker_runtime_pk = Field()
+    updated = Field()
 
     def __init__(self, *args, **kwargs):
         super(BaseItem, self).__init__(*args, **kwargs)
