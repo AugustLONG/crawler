@@ -7,7 +7,7 @@ from jsonpath_rw.lexer import JsonPathLexerError
 from scrapy.selector import Selector
 from scrapy.http import Request, FormRequest
 from scrapy.loader import ItemLoader
-from scrapy.loader.processors import TakeFirst,Identity,Join
+from scrapy.loader.processors import TakeFirst, Identity, Join
 from scrapy.exceptions import CloseSpider
 from crawler.utils.loader import JsonItemLoader
 from crawler.utils.scheduler import Scheduler
@@ -53,6 +53,7 @@ class Spider(BaseSpider):
         self._set_start_urls(self.scrape_url)
         self.scheduler = Scheduler(self.scraper.scraped_obj_class.scraper_scheduler_conf)
         self.from_detail_page = False
+        self.page_url_script = self.scraper.page_url_script
         self.loader = None
         self.items_read_count = 0
         self.items_save_count = 0
@@ -289,6 +290,17 @@ class Spider(BaseSpider):
             base_objects = [match.value for match in jsonpath_expr.find(json_resp)]
             if len(base_objects) > 0:
                 base_objects = base_objects[0]
+        elif self.scraper.content_type == "S" and self.page_url_script:
+            # exec self.page_url_script
+            import requests, re
+            from scrapy.http import HtmlResponse
+            content = requests.get(response.url).content
+            content = re.search(r'\{.*\]\}', content).group()
+            docs = ""
+            for item in json.loads(content)["items"]:
+                docs += item
+            response = HtmlResponse(url=response.url, body=docs, encoding="utf8")
+            base_objects = response.xpath(base_elem.x_path)
         else:
             base_objects = response.xpath(base_elem.x_path)
 

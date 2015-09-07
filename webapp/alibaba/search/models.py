@@ -118,3 +118,28 @@ class Link(models.Model):
 
     def get_absolute_url(self):
         return self.url
+
+from scraper.models import Scraper, Website
+class PageModule():
+    name = models.CharField(u"页面名称",max_length=200)
+    slug = models.SlugField(u"别名")
+    website=models.ForeignKey(Website)
+    scraper=models.ForeignKey(Scraper)
+    style = models.CharField(max_length=200)
+    js = models.CharField(max_length=200)
+    template = models.TextField(u"模板")
+    filter = models.TextField(u"查询方式")
+
+    created = models.DateTimeField(u"创建时间", auto_now_add=True, editable=False)
+    updated = models.DateTimeField(u"更新时间", auto_now=True, editable=False)
+
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = verbose_name = u"友情连接"
+        get_latest_by = "created"
+        ordering = ("order", )
+
+    def get_absolute_url(self):
+        return self.url

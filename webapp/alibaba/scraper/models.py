@@ -90,6 +90,7 @@ class Scraper(models.Model):
         ('H', 'HTML'),
         ('X', 'XML'),
         ('J', 'JSON'),
+        ('S', 'SCRIPT'),
     )
     REQUEST_TYPE_CHOICES = (
         ('R', 'Request'),
@@ -132,6 +133,7 @@ class Scraper(models.Model):
     pagination_append_str = models.CharField(max_length=200, blank=True, help_text="Syntax: /somepartofurl/{page}/moreurlstuff.html")
     pagination_page_replace = models.TextField(blank=True,
         help_text="RANGE_FUNCT: uses Python range funct., syntax: [start], stop[, step], FREE_LIST: 'Replace text 1', 'Some other text 2', 'Maybe a number 3', ...")
+    page_url_script = models.TextField(blank=True, verbose_name=u"列表页执行脚本")
     checker_type = models.CharField(max_length=1, choices=CHECKER_TYPE, default='N')
     checker_x_path = models.CharField(max_length=200, blank=True)
     checker_x_path_result = models.CharField(max_length=200, blank=True)
