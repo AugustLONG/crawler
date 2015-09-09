@@ -314,6 +314,9 @@ class Website(models.Model):
             items[attr.name] = attr.title
         return items
 
+    def mongodb_collection(self):
+        return self.site.slug + "_" + self.category.slug
+
 
 class GeneralModel(models.Model):
     title = models.CharField(max_length=200)

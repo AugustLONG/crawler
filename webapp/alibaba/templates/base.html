@@ -68,6 +68,13 @@ var ctx = "http://www.yueguangba.com";
 
 <script type="text/javascript" src="/static/js/core.min.js"></script>
 <script type="text/javascript" src="/static/js/popup.min.js"></script>
+{% for js in js_path %}
+    <script type="text/javascript" src="/static/module/{{ js }}"></script>
+{% endfor %}
+
+{% for style in style_path %}
+    <link rel="stylesheet" type="text/css" href="/static/module/{{ style }}"/>
+{% endfor %}
     {% block css %}
 
     {% endblock %}

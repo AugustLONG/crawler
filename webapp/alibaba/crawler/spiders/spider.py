@@ -94,7 +94,7 @@ class Spider(BaseSpider):
         self.conf["WEBSITE"] = self.ref_object.name
         self.conf["CATEGORY"] = self.ref_object.category.name
         self.conf["SCRAPER"] = self.scraper.name
-        self.conf["COLLECTION"] = self.ref_object.site.slug + "_" + self.ref_object.category.slug
+        self.conf["COLLECTION"] = self.ref_object.mongodb_collection()
         super(Spider, self)._set_config(log_msg, **kwargs)
 
     def _set_start_urls(self, scrape_url):
