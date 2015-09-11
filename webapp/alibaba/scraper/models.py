@@ -2,7 +2,6 @@
 from django.db import models
 import datetime,yaml
 from django.db.models import Q
-from crawler.utils.item import DjangoItem
 from django.contrib.auth.models import User
 import json
 
@@ -282,13 +281,12 @@ class Website(models.Model):
     name = models.CharField(u"名称", max_length=200)
     url = models.URLField(u"地址", db_index=True, unique=True)
     allow_domain = models.CharField(u"允许域名", max_length=200)
-    category = models.ForeignKey(Category, verbose_name=u"分类", blank=True)
+    category = models.ForeignKey(Category, verbose_name=u"分类", blank=True,default=True)
     scraper = models.ForeignKey(Scraper, blank=True, null=True, on_delete=models.SET_NULL)
     scraper_runtime = models.ForeignKey(SchedulerRuntime, blank=True, null=True, on_delete=models.SET_NULL)
     enabled = models.BooleanField(u"是否可用", default=True)
     site = models.ForeignKey(Sites, verbose_name=u"站点")
     comments = models.TextField(u"介绍", blank=True)
-    pipelines = models.ManyToManyField(Pipelines, blank=True)
     created = models.DateTimeField(u"创建时间", auto_now_add=True, editable=False)
     updated = models.DateTimeField(u"更新时间", auto_now=True, editable=False)
 
@@ -316,44 +314,6 @@ class Website(models.Model):
 
     def mongodb_collection(self):
         return self.site.slug + "_" + self.category.slug
-
-
-class GeneralModel(models.Model):
-    title = models.CharField(max_length=200)
-    description = models.TextField(blank=True)
-    url = models.URLField()
-    website = models.ForeignKey(Website)
-    thumbnail = models.CharField(max_length=200,blank=True)
-    checker_runtime = models.ForeignKey(SchedulerRuntime, blank=True, null=True, on_delete=models.SET_NULL)
-    created = models.DateTimeField(u"创建时间", auto_now_add=True, editable=False)
-    updated = models.DateTimeField(u"更新时间", auto_now=True, editable=False)
-
-    def __unicode__(self):
-        return self.title
-
-    class Meta:
-        verbose_name_plural = verbose_name = u"通用模型"
-
-
-class UserWebsite(models.Model):
-    website = models.ForeignKey(Website)
-    enabled = models.BooleanField(u"是否可用", default=True)
-    user = models.ForeignKey(User)
-    created = models.DateTimeField(u"创建时间", auto_now_add=True, editable=False)
-    updated = models.DateTimeField(u"更新时间", auto_now=True, editable=False)
-
-    def __unicode__(self):
-        return self.title
-
-    class Meta:
-        verbose_name_plural = verbose_name = u"自定义类型"
-
-    def items_dict(self):
-        return json.loads(self.items)
-
-
-class GeneralItem(DjangoItem):
-    django_model = GeneralModel
 
 
 class LogMarker(models.Model):

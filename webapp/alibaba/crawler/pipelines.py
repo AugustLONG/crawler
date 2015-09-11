@@ -328,7 +328,8 @@ class ValidationPipeline(object):
         #(no good way found to pass meta data to this point...)
         idf_elems = spider.scraper.get_id_field_elems()
         is_double = False
-        exist_objects = spider.scraped_obj_class.objects
+        # exist_objects = spider.scraped_obj_class.objects
+        exist_objects=[]
         for idf_elem in idf_elems:
             idf_name = idf_elem.scraped_obj_attr.name
             if idf_name in item and item[idf_name][0:6] == 'DOUBLE':
@@ -360,7 +361,8 @@ class ValidationPipeline(object):
             exist_objects=[]
             if len(standard_update_elems) > 0 and len(exist_objects) == 1:
                 exist_object = exist_objects[0]
-                dummy_object = spider.scraped_obj_class()
+                # dummy_object = spider.scraped_obj_class()
+                dummy_object=None
                 for elem in standard_update_elems:
                     attr_name = elem.scraped_obj_attr.name
                     if attr_name in item and hasattr(exist_object, attr_name):

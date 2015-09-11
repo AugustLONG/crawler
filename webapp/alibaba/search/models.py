@@ -122,14 +122,19 @@ class Link(models.Model):
 
 from scraper.models import Scraper, Website
 class PageModule(models.Model):
+    CHECKER_TYPE = (
+        ('L', 'LIST'),
+        ('D', 'DETAIL'),
+        ('I', 'INDEX'),
+    )
     name = models.CharField(u"页面名称", max_length=200)
     slug = models.SlugField(u"别名")
-    website=models.ForeignKey(Website)
-    scraper=models.ForeignKey(Scraper)
+    scraper = models.ForeignKey(Scraper)
     style = models.CharField(u"CSS样式地址", max_length=200)
     js = models.CharField(u"js地址", max_length=200)
+    page_type = models.CharField(max_length=1, choices=CHECKER_TYPE, default='L')
     template = models.TextField(u"模板", help_text=u"可以是地址或者内容")
-    filter = models.TextField(u"查询条件", help_text=u"地区、分类、tag、网站等组合查询")
+    filter = models.TextField(u"查询和显示条件", help_text=u"地区、分类、tag、网站等组合查询或者显示")
     enabled = models.BooleanField(u"是否可用", default=True)
     created = models.DateTimeField(u"创建时间", auto_now_add=True, editable=False)
     updated = models.DateTimeField(u"更新时间", auto_now=True, editable=False)
@@ -140,7 +145,6 @@ class PageModule(models.Model):
     class Meta:
         verbose_name_plural = verbose_name = u"友情连接"
         get_latest_by = "created"
-        ordering = ("order", )
 
     # @models.permalink
     def get_absolute_url(self):

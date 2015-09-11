@@ -50,8 +50,8 @@ from scraper.models import Website
 class UserWebSite(models.Model):
     name = models.CharField(u"名称", max_length=255)
     tag = models.CharField(u"标签", max_length=255, blank=True)
-    website = models.ForeignKey(Website)
-    user = models.ForeignKey(User)
+    website = models.ForeignKey(Website, related_name="user_website")
+    user = models.ForeignKey(User, related_name="website_user")
     created = models.DateTimeField(u"创建时间", auto_now_add=True, editable=False)
     updated = models.DateTimeField(u"更新时间", auto_now=True, editable=False)
 
@@ -67,7 +67,7 @@ class UserNoteBook(models.Model):
     name = models.CharField(u"笔记名称", max_length=255)
     parent = models.ForeignKey("self", blank=True)
     order = models.IntegerField(default=0)
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, related_name="notebook_user")
     created = models.DateTimeField(u"创建时间", auto_now_add=True, editable=False)
     updated = models.DateTimeField(u"更新时间", auto_now=True, editable=False)
 
@@ -82,8 +82,8 @@ class UserNote(models.Model):
     note = models.TextField(u"笔记内容")
     order = models.IntegerField(default=0)
     notebook = models.ForeignKey(UserNoteBook, verbose_name=u"笔记本")
-    website = models.ForeignKey(Website)
-    user = models.ForeignKey(User)
+    search_enable = models.BooleanField(u"是否加入搜索", default=True)
+    user = models.ForeignKey(User, related_name="note_user")
     created = models.DateTimeField(u"创建时间", auto_now_add=True, editable=False)
     updated = models.DateTimeField(u"更新时间", auto_now=True, editable=False)
 
@@ -93,6 +93,21 @@ class UserNote(models.Model):
     class Meta:
         verbose_name_plural = verbose_name = u"用户笔记"
         get_latest_by = "created"
+
+
+class UserSearch(models.Model):
+    word = models.CharField(u"搜素词", max_length=255, db_index=True)
+    user = models.ForeignKey(User, related_name="search_user")
+    created = models.DateTimeField(u"创建时间", auto_now_add=True, editable=False)
+    updated = models.DateTimeField(u"更新时间", auto_now=True, editable=False)
+
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = verbose_name = u"用户搜索关键词"
+        get_latest_by = "created"
+
 
 
 

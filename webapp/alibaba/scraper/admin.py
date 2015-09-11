@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 from django.forms.models import BaseInlineFormSet
 from django.utils.translation import ugettext_lazy as _
 from scraper.models import ScrapedObjClass, ScraperElem, SchedulerRuntime, ScrapedObjAttr, Scraper, Log, LogMarker, \
-    Pipelines, Sites, Website, GeneralModel, Category
+    Pipelines, Sites, Website, Category
 
 
 class ScrapedObjAttrFormSet(BaseInlineFormSet):
@@ -212,10 +212,6 @@ class LogAdmin(admin.ModelAdmin):
         return instance.date.strftime('%Y-%m-%d %H:%M')
 
 
-class GeneralModelAdmin(admin.ModelAdmin):
-    pass
-
-
 class Pipelinesdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'slug', 'enabled', 'conf')
 
@@ -241,4 +237,3 @@ admin.site.register(Scraper, ScraperAdmin)
 admin.site.register(SchedulerRuntime, SchedulerRuntimeAdmin)
 admin.site.register(LogMarker, LogMarkerAdmin)
 admin.site.register(Log, LogAdmin)
-admin.site.register(GeneralModel, GeneralModelAdmin)

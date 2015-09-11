@@ -1,6 +1,6 @@
 # coding=utf-8
 from crawler.spiders.base_spider import BaseSpider
-from scraper.models import Website, UserWebsite
+from scraper.models import Website
 import ast, json, logging
 from jsonpath_rw import jsonpath, parse
 from jsonpath_rw.lexer import JsonPathLexerError
@@ -35,7 +35,6 @@ class Spider(BaseSpider):
         self.scraper = self.ref_object.scraper
         self.scrape_url = self.ref_object.url
         self.scheduler_runtime = self.ref_object.scraper_runtime
-        self.scraped_obj_class = UserWebsite
         self.items_list = self.ref_object.items_list()
         self.scraped_obj_item_class = BaseItem
         super(Spider, self).__init__(self, *args, **kwargs)
