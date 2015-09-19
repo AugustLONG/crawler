@@ -374,4 +374,6 @@ CAPTCHA_LENGTH = 6
 CAPTCHA_DICTIONARY_MIN_LENGTH = CAPTCHA_DICTIONARY_MAX_LENGTH = 6
 CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.word_challenge'
 
+from elasticsearch import Elasticsearch
+ES = Elasticsearch(ES_HOST, timeout=5)
 

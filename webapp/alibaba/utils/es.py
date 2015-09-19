@@ -1,37 +1,55 @@
 #!/usr/bin/env python
 # coding=utf-8
 
-from elasticsearch import Elasticsearch
-
+from django.conf import settings
+from elasticsearch_dsl import Search, Q
 PAGE_SIZE = 10
 
+class Elasticsearch:
 
-def do_search(query, page):
-    es = Elasticsearch(['115.28.168.184:9200'], timeout=5)
+    def __init__(self):
+        self.es = settings.ES
 
-    page = int(page)
-    if page < 1:
-        page = 1
+    def search(self, index):
+        s = Search(using=self.es, index=index) \
+            .filter("term", category="search") \
+            .query("match", title="python")   \
+            .query(~Q("match", description="beta"))
 
-    search_res = es.search(index='zhidao', doc_type='ZDQuestionItem', body={
-    "query": {
-        "filtered": {
-            "query": {
-                "match": {
-                    "ask_title": query
+        s.aggs.bucket('per_tag', 'terms', field='tags') \
+        .metric('max_lines', 'max', field='lines')
+        response=s.execute()
+        for hit in response:
+            print(hit.meta.score, hit.title)
+
+        for tag in response.aggregations.per_tag.buckets:
+            print(tag.key, tag.max_lines.value)
+
+    def page_search(self,query, page):
+
+        page = int(page)
+        if page < 1:
+            page = 1
+
+        search_res = self.es.search(index='zhidao', doc_type='ZDQuestionItem', body={
+        "query": {
+            "filtered": {
+                "query": {
+                    "match": {
+                        "ask_title": query
+                    }
                 }
             }
+        },
+        "from": page,
+        "size": 10,
+        "highlight": {
+            "fields": {
+                "ask_title": {},
+                "content": {},
+                "answers": {}
+            }
         }
-    },
-    "from": page,
-    "size": 10,
-    "highlight": {
-        "fields": {
-            "ask_title": {},
-            "content": {},
-            "answers": {}
-        }
-    }
-})
-    results = search_res["hits"]
-    return results
+    })
+        results = search_res["hits"]
+        return results

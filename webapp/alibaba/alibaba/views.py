@@ -3,11 +3,10 @@ from django.views.generic.base import TemplateView, View
 from search.models import Category, Link, Tag
 from django.core.cache import cache
 import json
-from elasticsearch import Elasticsearch
 from django.conf import settings
 from dateutil.parser import parse as parse_date
 from silk.profiling.profiler import silk_profile
-
+client = settings.ES
 class HomePageView(TemplateView):
     template_name = "index.html"
     category_key = "all_category_list"
@@ -16,7 +15,7 @@ class HomePageView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(HomePageView, self).get_context_data(**kwargs)
         categories = cache.get(self.category_key, [])
-        if not categories:
+        if  not categories:
             for category in Category.objects.roots():
                 categories_dict = {"name": category.name, "url": category.get_absolute_url(), "children": [], "hot": []}
                 for children in Category.objects.chriden(category.pk):
@@ -31,6 +30,8 @@ class HomePageView(TemplateView):
             cache.set(self.category_key, json.dumps(categories), self.category_key_ttl)
         else:
             categories = json.loads(categories)
+
+        print categories
         context['categories'] = categories
 
         links = Link.objects.all()
@@ -39,8 +40,7 @@ class HomePageView(TemplateView):
         tags = Tag.objects.hot()[:10]
         context['tags'] = tags
 
-        es = Elasticsearch(settings.ES_HOST)
-        results = es.search(
+        results = client.search(
             index="tuangou",
             doc_type="nuomi",
             body={

@@ -163,3 +163,11 @@ MONGODB_UNIQUE_KEY="url"
 # MONGODB_REPLICA_SET = 'myReplicaSetName'
 # MONGODB_URI = 'mongodb://host1.example.com:27017,host2.example.com:27017,host3.example.com:27017'
 
+ELASTICSEARCH_SERVER = '192.168.234.139' # If not 'localhost' prepend 'http://'
+ELASTICSEARCH_PORT = 9200 # If port 80 leave blank
+ELASTICSEARCH_USERNAME = ''
+ELASTICSEARCH_PASSWORD = ''
+ELASTICSEARCH_INDEX = 'scrapy'
+ELASTICSEARCH_TYPE = 'items'
+ELASTICSEARCH_UNIQ_KEY = 'url'
+
