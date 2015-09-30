@@ -25,8 +25,9 @@ admin.autodiscover()
 
 urlpatterns = [
     url(r'^wanglingling/', include(admin.site.urls)),
-    url(r'^$', HomePageView.as_view(), name='home'),
-    url(r'^category/(?P<slug>\w+)$', HomePageView.as_view(), name='search_by_category'),
+    url(r'^$', HomePageView.as_view(), name='alibaba_home'),
+    url(r'^search/',include('search.urls')),
+    url(r'^category/(?P<slug>\w+)$', HomePageView.as_view(), name='alibaba_search_by_category'),
     url(r'^messages/', include('userena.contrib.umessages.urls')),
     url(r'^accounts/', include('userena.urls')),
     url(r'^i18n/', include('django.conf.urls.i18n')),

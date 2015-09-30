@@ -27,18 +27,27 @@
 				</div>
             {% endfor %}
 			</div>
-			<a class="subscribe" href="/subscribe.html" target="_blank">订阅职位</a>
+			<a class="subscribe" href="/subscribe.html" target="_blank">订阅搜索</a>
 		</div>
         <div class="content">	
 	        <div id="search_box">
-                <form id="searchForm" name="searchForm" action="list.html" method="get">
+                <form id="searchForm" name="searchForm" action="{% url 'alibaba_search_list' kd='all' %}" method="get">
                     <ul id="searchType">
-                        <li data-searchtype="1" class="type_selected">职位</li>
-                        <li data-searchtype="4">公司</li>
+                        <li data-searchtype="1" class="type_selected">文章</li>
+                        <li data-searchtype="2">影音</li>
+                        <li data-searchtype="3">文档</li>
+                        <li data-searchtype="4">教育</li>
+                        <li data-searchtype="5">购物</li>
+                        <li data-searchtype="6">商家</li>
+                        <li data-searchtype="7">问答</li>
+                        <li data-searchtype="8">旅游</li>
+                        <li data-searchtype="9">分类</li>
+                        <li data-searchtype="10">行业</li>
+                        <li data-searchtype="11">网站</li>
                     </ul>
                     <div class="searchtype_arrow"></div>
-                    <input type="text" id="search_input" name = "kd"  tabindex="1" value=""  placeholder="请输入职位名称，如：产品经理"  />
-                    <input type="hidden" name="spc" id="spcInput" value=""/>
+                    <input type="text" id="search_input" name = "kd"  tabindex="1" value=""  placeholder="请输入关键词，如：团购"  />
+                    <input type="hidden" name="spc" id="spcInput" value="1"/>
                     <input type="hidden" name="pl" id="plInput" value=""/>
                     <input type="hidden" name="gj" id="gjInput" value=""/>
                     <input type="hidden" name="xl" id="xlInput" value=""/>
@@ -181,26 +190,26 @@
                     <li class="clearfix">
                         <div class="hot_pos_l">
                             <div class="mb10">
-                                <a href="h/jobs/147822.html" target="_blank">{{ result.title }}</a>
+                                <a href="h/jobs/147822.html" title="{{ result.title }}" target="_blank">{{ result.title }}</a>
                                 &nbsp;
-                                <span class="c9">[北京]</span>
+                                <span class="c9">[{{ result.city }}]</span>
                             </div>
-                            <span><em class="c7">月薪： </em>15k-20k</span>
-                            <span><em class="c7">经验：</em> 3-5年</span>
-                            <span><em class="c7">最低学历： </em>本科</span>
+                            <span><em class="c7">价格： </em>{{ result.value }}</span>
+                            <span><em class="c7">分类：</em>{{ result.firstCategory }}</span>
+                            <span><em class="c7">标签：</em>{{ result.secondCategory }}</span>
                             <br />
-                            <span><em class="c7">职位诱惑：</em>发展前景</span>
+                            <span><em class="c7">地址：</em>{{ result.address }}</span>
                             <br />
                             <span>1天前发布</span>
-                            <!-- <a  class="wb">分享到微博</a> -->
+{#                            <a  class="wb">分享</a>#}
                         </div>
                         <div class="hot_pos_r">
-                            <div class="mb10 recompany"><a href="h/c/399.html" target="_blank">{{ result.businessTitle }}</a></div>
-                            <span><em class="c7">领域：</em> 移动互联网</span>
-                             <span><em class="c7">创始人：</em>陈桦</span>
-                             <br />
-                            <span><em class="c7">阶段：</em> 初创型(天使轮)</span>
-                            <span><em class="c7">规模：</em>少于15人</span>
+                            <div class="mb10 recompany"><a href="h/c/399.html" title="{{ result.shops.0.name }}" target="_blank">{{ result.shops.0.name }}</a></div>
+                            <span><em class="c7">地区： </em>{{ result.shops.0.area }}</span>
+                            <span><em class="c7">电话：</em>{{ result.shops.0.tel }}</span>
+                            <br />
+                            <span><em class="c7">店铺： </em>{{ result.shops.0.name }}</span>
+                            <span><em class="c7">地址： </em>{{ result.shops.0.addr }}</span>
                             <ul class="companyTags reset">
                                 <li>移动互联网</li>
                                 <li>五险一金</li>
@@ -304,7 +313,4 @@
 <script type="text/javascript" src="/static/js/Chart.min.js"></script>
 <script type="text/javascript" src="/static/js/home.min.js"></script>
 <script type="text/javascript" src="/static/js/count.js"></script>
-<div class="clear"></div>
-<input type="hidden" id="resubmitToken" value="" />
-<a id="backtop" title="回到顶部" rel="nofollow"></a>
 {% endblock %}

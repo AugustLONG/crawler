@@ -163,7 +163,7 @@ class Category(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-        return 'search_by_category', None, {'slug': self.slug}
+        return 'alibaba_search_by_category', None, {'slug': self.slug}
 
     def chriden(self):
         categories = self.objects.chriden(self.pk)
