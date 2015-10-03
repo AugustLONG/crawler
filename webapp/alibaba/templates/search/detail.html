@@ -1,203 +1,146 @@
-﻿<!DOCTYPE HTML>
-<html xmlns:wb="http://open.weibo.com/wb">
-<head>
-<script id="allmobilize" charset="utf-8" src="/static/js/allmobilize.min.js"></script>
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-<link rel="alternate" media="handheld"  />
-<!-- end 云适配 -->
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>内容运营-立方网-拉勾网-最专业的互联网招聘平台</title>
-<meta property="qc:admins" content="23635710066417756375" />
-<meta content="内容运营 武汉 本科 3-5年 全职 运营 大家都来了 你还在等什么！！ 立方网 北京立方网信息技术有限公司 立方网努力尝试把许多人对互联网的需求从现有的娱乐、资讯和交流平台进一步引导到文化与生活伴侣的方面. 拉勾网-最专业的互联网招聘平台" name="description">
-<meta content="内容运营 武汉 本科 3-5年 全职 运营 大家都来了 你还在等什么！！ 立方网 北京立方网信息技术有限公司 立方网努力尝试把许多人对互联网的需求从现有的娱乐、资讯和交流平台进一步引导到文化与生活伴侣的方面. 拉勾网-最专业的互联网招聘平台" name="keywords">
-<meta name="baidu-site-verification" content="QIQ6KC1oZ6" />
+﻿{% extends "base.html" %}
+{% block title %}{{ kd }}{{ city }}-搜索-{% endblock %}
+{% block description %}{{ kd }}招聘  全国地区招聘 紫色医疗招聘{{ kd }},月薪:10k-20k,要求:本科及以上学历,3-5年工作经验。职位诱惑：借移动医疗大势享受坐直升飞机的职场发展 公司规模:15-50人移动互联网 ,健康医疗类公司招聘信息汇总  最新最热门互联网行业招聘信息，尽在拉勾网"{% endblock %}
+{% block keywords %}{{ kd }}招聘,全国地区{{ kd }}招聘,紫色医疗招聘{{ kd }},移动互联网 类公司招聘信息汇总,健康医疗类公司招聘信息汇总,拉勾招聘,拉勾网,互联网招聘{% endblock %}
+{% block container %}
+<div class="clearfix">
+    <div class="content_l">
+        <dl class="job_detail">
+            <dt>
+                <h1 title="内容运营">
+                    <em></em>
+                    <div>立方网运营部招聘</div>
+                    内容运营
+                </h1>
+                <a class="inline jd_collection" href="#loginPop" title="登录"></a>
+            </dt>
+            <dd class="job_request">
+                <span class="red">4k-6k</span>
+                <span>武汉</span>
+                <span>经验3-5年 </span>
+                <span> 本科及以上</span>
+                <span>全职</span><br />
+                  职位诱惑 : 大家都来了 你还在等什么！！
+                <div>发布时间：3天前发布</div>
+            </dd>
+            <dd class="job_bt">
+                <h3 class="description">职位描述</h3>
+                <p>岗位职责： <br />1、参与管理和维护立方网，保证网络社区健康、有序地运转，负责网站信息安全； <br />2、强化团队建设，提高团队工作效率，做好领导与员工直接沟通的桥梁； <br />3、制定和完善客服体系规章制度,培训新人。</p>
+                <p>&nbsp;岗位要求： <br />1、2年以上互联网行业客服主管工作经验，本科及以上学历； <br />2、良好的沟通和协调能力、人际交往能力和语言表达能力； <br />3、较强的责任心和执行力，富有工作热情和团队协作能力。</p>
+            </dd>
 
-<!-- <div class="web_root"  style="display:none">h</div> -->
-<script type="text/javascript">
-var ctx = "h";
-console.log(1);
-</script>
-<link rel="Shortcut Icon" href="h/images/favicon.ico">
-<link rel="stylesheet" type="text/css" href="/static/css/style.css"/>
-<link rel="stylesheet" type="text/css" href="/static/css/external.min.css"/>
-<link rel="stylesheet" type="text/css" href="/static/css/popup.css"/>
-<script src="/static/js/jquery.1.10.1.min.js" type="text/javascript"></script>
-<script type="text/javascript" src="/static/js/jquery.lib.min.js"></script>
-<script src="/static/js/ajaxfileupload.js" type="text/javascript"></script>
-<script src="/static/js/jquery-hbzx.js" type="text/javascript"></script>
-<!--[if lte IE 8]>
-    <script type="text/javascript" src="/static/js/excanvas.js"></script>
-    <![endif]-->
-<script type="text/javascript">
-var youdao_conv_id = 271546; 
-</script> 
-<script type="text/javascript" src="/static/js/conv.js"></script>
-</head>
-<body>
-<div id="body">
-	<div id="header">
-    	<div class="wrapper">
-    		<a href="index.html" class="logo">
-    			<img src="/static/images/logo.png" width="229" height="43" alt="拉勾招聘-专注互联网招聘" />
-    		</a>
-    		<ul class="reset" id="navheader">
-    			<li ><a href="index.html">首页</a></li>
-    			<li ><a href="companylist.html" >公司</a></li>
-    			<li ><a href="h/toForum.html" target="_blank">论坛</a></li>
-    				    			<li ><a href="jianli.html" rel="nofollow">我的简历</a></li>
-	    							    			<li ><a href="create.html" rel="nofollow">发布职位</a></li>
-	    		    		</ul>
-        	            <ul class="loginTop">
-            	<li><a href="login.html" rel="nofollow">登录</a></li> 
-            	<li>|</li>
-            	<li><a href="register.html" rel="nofollow">注册</a></li>
-            </ul>
-                                </div>
-    </div><!-- end #header -->
-    <div id="container">
-                <div class="clearfix">
-            <div class="content_l">
-            	                <dl class="job_detail">
-                    <dt>
-                        <h1 title="内容运营">
-                            <em></em>
-                                                        	<div>立方网运营部招聘</div>
-                           	                           	内容运营
-                        </h1>
-                        
-                                               	
-                       	                       	<a class="inline jd_collection" href="#loginPop" title="登录">
-                       		                       	</a>
-                       	                    </dt>
-                    <dd class="job_request">
-                    	<span class="red">4k-6k</span>
-                       	<span>武汉</span> 
-                       	<span>经验3-5年 </span>
-                       	<span> 本科及以上</span> 
-                       	<span>全职</span><br />
-                      	  职位诱惑 : 大家都来了 你还在等什么！！
-                      	<div>发布时间：3天前发布</div>
-                    </dd>
-                    <dd class="job_bt">
-                        <h3 class="description">职位描述</h3>
-                        <p>岗位职责： <br />1、参与管理和维护立方网，保证网络社区健康、有序地运转，负责网站信息安全； <br />2、强化团队建设，提高团队工作效率，做好领导与员工直接沟通的桥梁； <br />3、制定和完善客服体系规章制度,培训新人。</p>
-<p>&nbsp;岗位要求： <br />1、2年以上互联网行业客服主管工作经验，本科及以上学历； <br />2、良好的沟通和协调能力、人际交往能力和语言表达能力； <br />3、较强的责任心和执行力，富有工作热情和团队协作能力。</p>
-                    </dd>
-                     
-                                        	<dd class="unresume">
-	                        <div>
-	                        	你在拉勾还没有简历呢，你可以<a href="login.html" target="_blank" title="完善在线简历">完善在线简历</a>，也可<a class="inline" href="#loginPop" title="登录">上传附件简历</a>直接投递
-	                       	</div>
-	                    </dd>
-                                                            <div class="saoma saoma_btm">
-                      	<div class="dropdown_menu">
-							<div class="drop_l">
-								<img src="/static/images/job_qr_btm.png" width="131" height="131" />
-															</div>
-							<div class="drop_r">
-								<div class="drop_title"></div>
-								<p>
-									想知道HR在看简历嘛？<br />
-          							想在微信中收到面试通知？<br />
-          							<span><< 扫一扫，给你解决</span>
-								</p>
-							</div>
-						</div>
+            <dd class="unresume">
+                <div>
+                    你在拉勾还没有简历呢，你可以<a href="login.html" target="_blank" title="完善在线简历">完善在线简历</a>，也可<a class="inline" href="#loginPop" title="登录">上传附件简历</a>直接投递
+                </div>
+            </dd>
+            <div class="saoma saoma_btm">
+                <div class="dropdown_menu">
+                    <div class="drop_l">
+                        <img src="/static/images/job_qr_btm.png" width="131" height="131" />
                     </div>
-                                        <dd>
-                                        	                    			                        	<a href="#loginPop" title="登录" class="inline btn fr btn_apply">投个简历</a>
-	                        	                   		                	                </dd>
-                </dl>
-                                <div id="weibolist"></div>
-            </div>	
-            <div class="content_r">
-                <dl class="job_company">
-                    <dt>
-                    	<a href="h/c/683.html" target="_blank">
-                            <img class="b2" src="/static/images/ff80808140ac5ed90140b953972e0215.png" width="80" height="80" alt="北京立方网信息技术有限公司" />
-                            <div>
-                                <h2 class="fl">
-                                	                                  		立方网
-                                  	                                  	
-                                  	                                    	<img src="/static/images/valid.png" width="15" height="19" alt="拉勾认证企业" />
-                                    	<span class="dn">拉勾认证企业</span>
-                                                                        
-                                </h2>
-                            </div>
-                        </a>
-                    </dt>
-                    <dd>
-                    	<ul class="c_feature reset">
-                        	<li><span>领域</span> 移动互联网,游戏</li>
-                        	<li><span>规模</span> 50-150人</li>
-                        	<li>
-                        		<span>主页</span> 
-                        		           							<a href="http://L99.com" target="_blank" title="http://L99.com" rel="nofollow">http://L99.com</a>
-           						                        	</li>
-                        </ul>
-                        
-                        <h4>发展阶段</h4>
-                        <ul class="c_feature reset">
-                        	<li><span>目前阶段</span> A轮</li>
-                        	                        	<li><span>投资机构</span> IDG(A轮)，腾讯(A轮)</li>
-                        	                        </ul>
-                        
-                        <!--	                    	<h4>公司产品</h4>
-	                        <ul class="c_feature reset">
-	                        		                        		<li><span>在哪</span></li>
-	                        		                        		<li><span>立方网</span></li>
-	                        		                        		<li><span>立方飞鸽</span></li>
-	                        		                        </ul>
-                                                
-                       	<h4>公司标签</h4>
-                        <ul class="company_tags reset" id="hasLabels">
-                        	                            	<li><span>专业主厨</span></li>
-                                                        	<li><span>帅哥多</span></li>
-                                                        	<li><span>扁平管理</span></li>
-                                                        	<li><span>弹性工作</span></li>
-                                                        	<li><span>岗位晋升</span></li>
-                                                        	<li><span>领导好</span></li>
-                                                       <li class="link"><a>编辑</a></li>
-                        </ul>
-                        <div class="clear"></div>
-                        <div id="addLabel" class="addLabel dn">
-                            <input type="text" class="fl" id="label" name="label" placeholder="添加自定义标签" />	
-                            <input type="submit" id="add" value="贴上" />
-                        </div> -->
-                       	
-                       	                       	<h4>工作地址</h4>
-                       	<div>武汉市武昌区螃蟹岬凤凰大厦A1-1301</div>
-                       	<div id="smallmap"></div>
-                       	<a href="javascript:;" id="mapPreview">查看完整地图</a>
-                       	                    </dd>
-                </dl>
-                                <a href="h/subject/s_zhouyou.html?utm_source=BD__lagou&utm_medium=&utm_campaign=zhouyou" target="_blank" class="eventAd">
-                  <img src="/static/images/zhouyou.jpg" width="280" height="135" />
-                </a>
+                    <div class="drop_r">
+                        <div class="drop_title"></div>
+                        <p>
+                            想知道HR在看简历嘛？<br />
+                            想在微信中收到面试通知？<br />
+                            <span><< 扫一扫，给你解决</span>
+                        </p>
+                    </div>
+                </div>
             </div>
-       	</div>                    
-      <input type="hidden" value="" name="userid" id="userid" />
-      <input type="hidden" value="" name="type" id="resend_type" />
-      <input type="hidden" value="140204"  id="jobid" />
-      <input type="hidden" value="683"  id="companyid" />
-      <input type="hidden" value="" id="positionLng" />
-      <input type="hidden" value="" id="positionLat" />
-	
-		<div id="loginToolBar">
-		<div>
-			<em></em>
-			<img src="/static/images/footbar_logo.png" width="138" height="45" />
-			<span class="companycount"></span>
-			<span class="positioncount"></span>
-			<a href="#loginPop" class="bar_login inline" title="登录"><i></i></a>
-			<div class="right">
-				<a href="register.html?from=jobs_footerbar" onclick="_hmt.push(['_trackEvent', 'button', 'click', 'register'])" class="bar_register" id="bar_register" target="_blank"><i></i></a>
-			</div>
-			<input type="hidden" id="cc" value="16064" />
-			<input type="hidden" id="cp" value="96931" />
-		</div>
-	</div>
-		<div id="tipOverlay" ></div>
+            <dd>
+            <a href="#loginPop" title="登录" class="inline btn fr btn_apply">投个简历</a>
+            </dd>
+        </dl>
+        <div id="weibolist"></div>
+    </div>
+    <div class="content_r">
+        <dl class="job_company">
+            <dt>
+                <a href="h/c/683.html" target="_blank">
+                    <img class="b2" src="/static/images/ff80808140ac5ed90140b953972e0215.png" width="80" height="80" alt="北京立方网信息技术有限公司" />
+                    <div>
+                        <h2 class="fl">
+                            立方网
+                            <img src="/static/images/valid.png" width="15" height="19" alt="拉勾认证企业" />
+                            <span class="dn">拉勾认证企业</span>
+                        </h2>
+                    </div>
+                </a>
+            </dt>
+            <dd>
+                <ul class="c_feature reset">
+                    <li><span>领域</span> 移动互联网,游戏</li>
+                    <li><span>规模</span> 50-150人</li>
+                    <li>
+                        <span>主页</span>
+                        <a href="http://L99.com" target="_blank" title="http://L99.com" rel="nofollow">http://L99.com</a>
+                    </li>
+                </ul>
+
+                <h4>发展阶段</h4>
+                <ul class="c_feature reset">
+                    <li><span>目前阶段</span> A轮</li>
+                    <li><span>投资机构</span> IDG(A轮)，腾讯(A轮)</li>
+                </ul>
+
+                <h4>公司产品</h4>
+                    <ul class="c_feature reset">
+                        <li><span>在哪</span></li>
+                        <li><span>立方网</span></li>
+                        <li><span>立方飞鸽</span></li>
+                    </ul>
+
+                <h4>公司标签</h4>
+                <ul class="company_tags reset" id="hasLabels">
+                    <li><span>专业主厨</span></li>
+                    <li><span>帅哥多</span></li>
+                    <li><span>扁平管理</span></li>
+                    <li><span>弹性工作</span></li>
+                    <li><span>岗位晋升</span></li>
+                    <li><span>领导好</span></li>
+                    <li class="link"><a>编辑</a></li>
+                </ul>
+                <div class="clear"></div>
+                <div id="addLabel" class="addLabel dn">
+                    <input type="text" class="fl" id="label" name="label" placeholder="添加自定义标签" />
+                    <input type="submit" id="add" value="贴上" />
+                </div>
+
+                <h4>工作地址</h4>
+                <div>武汉市武昌区螃蟹岬凤凰大厦A1-1301</div>
+                <div id="smallmap"></div>
+                <a href="javascript:;" id="mapPreview">查看完整地图</a>
+            </dd>
+        </dl>
+        <a href="h/subject/s_zhouyou.html?utm_source=BD__lagou&utm_medium=&utm_campaign=zhouyou" target="_blank" class="eventAd">
+            <img src="/static/images/zhouyou.jpg" width="280" height="135" />
+        </a>
+    </div>
+</div>
+<input type="hidden" value="" name="userid" id="userid" />
+<input type="hidden" value="" name="type" id="resend_type" />
+<input type="hidden" value="140204"  id="jobid" />
+<input type="hidden" value="683"  id="companyid" />
+<input type="hidden" value="" id="positionLng" />
+<input type="hidden" value="" id="positionLat" />
+
+<div id="loginToolBar">
+    <div>
+        <em></em>
+        <img src="/static/images/footbar_logo.png" width="138" height="45" />
+        <span class="companycount"></span>
+        <span class="positioncount"></span>
+        <a href="#loginPop" class="bar_login inline" title="登录"><i></i></a>
+        <div class="right">
+            <a href="register.html?from=jobs_footerbar" onclick="_hmt.push(['_trackEvent', 'button', 'click', 'register'])" class="bar_register" id="bar_register" target="_blank"><i></i></a>
+        </div>
+        <input type="hidden" id="cc" value="16064" />
+        <input type="hidden" id="cp" value="96931" />
+    </div>
+</div>
+<div id="tipOverlay" ></div>
 <!-------------------------------------弹窗lightbox  ----------------------------------------->
 <div style="display:none;">
 	<!-- 设置默认投递简历 -->
@@ -712,25 +655,4 @@ $(function(){
 	
 		});
 </script>
-			<div class="clear"></div>
-			<input type="hidden" id="resubmitToken" value="6e1925fdbe7142468f154abd1d33f5a8" />
-	    	<a id="backtop" title="回到顶部" rel="nofollow"></a>
-	    </div><!-- end #container -->
-	</div><!-- end #body -->
-	<div id="footer">
-		<div class="wrapper">
-			<a href="h/about.html" target="_blank" rel="nofollow">联系我们</a>
-		    <a href="h/af/zhaopin.html" target="_blank">互联网公司导航</a>
-		    <a href="http://e.weibo.com/lagou720" target="_blank" rel="nofollow">拉勾微博</a>
-		    <a class="footer_qr" href="javascript:void(0)" rel="nofollow">拉勾微信<i></i></a>
-			<div class="copyright">&copy;2013-2014 Lagou <a target="_blank" href="http://www.miitbeian.gov.cn/state/outPortal/loginPortal.action">京ICP备14023790号-2</a></div>
-		</div>
-	</div>
-
-<script type="text/javascript" src="/static/js/core.min.js"></script>
-<script type="text/javascript" src="/static/js/popup.min.js"></script>
-
-<!--  -->
-
-</body>
-</html>
+{% endblock %}

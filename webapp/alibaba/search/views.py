@@ -41,7 +41,7 @@ def search_list(request, kd=None):
     response = search.execute()
     # print search.count()
     tags = {"cities": [], "websites": []}
-    # print response
+
     # for hit in response:
     #     print dir(hit.meta) # ['doc_type', u'id', u'index', u'score', u'sort']
     #     print dir(hit)
@@ -70,11 +70,13 @@ def search_list(request, kd=None):
     return render(request, 'search/list.html', ct)
 
 
-def search_detail(request, website_slug, category_slug, pk):
+def search_detail(request, website_slug, pk):
     """
     结果的详情页面
     """
-    result = settings.MONGO_CLIENT.find_one({"_id":ObjectId(pk)})
+    search = Search(using=es, index="tuangou", doc_type="meituan").query("match", _id=pk)
+    result = search.execute()[0]
+    print result
     return render(request, 'search/detail.html', {'result': result})
 
 
