@@ -1,0 +1,14 @@
+---
+# Handlers for MongoDB
+
+- name: restart mongo
+  command: docker restart mongo
+
+- name: start mongo
+  command: docker start mongo
+
+- name: stop mongo
+  command: docker stop mongo
+
+- name: run mongo
+  command: docker run --name mongo -v /opt/mongo:/data/db -p 27017:27017 -d mongo
