@@ -1,0 +1,14 @@
+---
+# Handlers for Nginx
+
+- name: restart nginx
+  command: docker restart nginx
+
+- name: start nginx
+  command: docker start nginx
+
+- name: stop nginx
+  command: docker stop nginx
+
+- name: run nginx
+  command: docker run -v -p -d  nginx nginx

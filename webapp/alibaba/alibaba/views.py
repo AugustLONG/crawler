@@ -6,7 +6,9 @@ import json
 from django.conf import settings
 from dateutil.parser import parse as parse_date
 from silk.profiling.profiler import silk_profile
-client = settings.ES
+es = settings.ES
+from elasticsearch_dsl import Search, Q
+
 class HomePageView(TemplateView):
     template_name = "index.html"
     category_key = "all_category_list"
@@ -40,24 +42,8 @@ class HomePageView(TemplateView):
         tags = Tag.objects.hot()[:10]
         context['tags'] = tags
 
-        results = client.search(
-            index="tuangou",
-            doc_type="nuomi",
-            body={
-                "size": 50,
-                "sort": [
-                    {
-                        "@timestamp": {
-                            "order": "desc",
-                            "ignore_unmapped": True
-                        }
-                    }
-                ]
-            })
-        datas =[]
-        for result in results['hits']['hits']:
-            datas.append(result["_source"])
-        context["results"]=datas
+        search = Search(using=es, index="tuangou", doc_type="meituan").sort('-@timestamp')[0:50]
+        context["results"] = search.execute()
         return context
 
 @silk_profile(name='View Blog Post')

@@ -41,6 +41,7 @@ CACHES = {
         }
     }
 }
+
 AUTH_USER_MODEL = 'auth.User'
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
@@ -56,6 +57,19 @@ MANAGERS = ADMINS
 
 ALLOWED_HOSTS = ["www.yueguangba.com"]
 
+MIDDLEWARE_CLASSES = (
+    'django.middleware.common.CommonMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.gzip.GZipMiddleware',
+    'silk.middleware.SilkyMiddleware',
+    'userena.middleware.UserenaLocaleMiddleware',
+    # 'django.middleware.security.SecurityMiddleware',
+)
 
 # Application definition
 
@@ -108,8 +122,6 @@ DATABASES = {
         'CHARSET': 'utf8'
     }
 }
-
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
@@ -174,10 +186,6 @@ HAYSTACK_CONNECTIONS = {
 
 FIRST_DAY_OF_WEEK = 1
 
-from django_redis import get_redis_connection
-
-REDIS = get_redis_connection("default")
-
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
 SESSION_COOKIE_DOMAIN = "www.yueguangba.com"
@@ -229,20 +237,6 @@ INSTALLED_APPS = (
     "captcha",
     'djcelery'
 
-)
-
-MIDDLEWARE_CLASSES = (
-    'django.middleware.common.CommonMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.gzip.GZipMiddleware',
-    'silk.middleware.SilkyMiddleware',
-    'userena.middleware.UserenaLocaleMiddleware',
-    # 'django.middleware.security.SecurityMiddleware',
 )
 
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
@@ -378,4 +372,6 @@ CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.word_challenge'
 from elasticsearch import Elasticsearch
 
 ES = Elasticsearch(ES_HOST, timeout=50)
+from django_redis import get_redis_connection
+REDIS = get_redis_connection("default")
 

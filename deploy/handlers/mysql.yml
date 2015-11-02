@@ -1,0 +1,14 @@
+---
+# Handlers for Mysql
+
+- name: restart mysql
+  command: docker restart mysql
+
+- name: start mysql
+  command: docker start mysql
+
+- name: stop mysql
+  command: docker stop mysql
+
+- name: run mysql
+  command: docker run --name mysql -v /opt/mysql:/var/lib/mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=3039762 -d mysql

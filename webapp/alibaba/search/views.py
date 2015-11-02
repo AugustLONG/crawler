@@ -11,6 +11,7 @@ from django.conf import settings
 from elasticsearch_dsl import Search, Q
 from bson.objectid import ObjectId
 
+
 PER_COUNT = 50
 PAGE_MAC_SIZE = 20
 BEFORE_RANGE_NUM = AFTER_RANGE_NUM = 10

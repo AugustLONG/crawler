@@ -1,7 +1,7 @@
-docker-ssh
+# docker-ssh
 A container from Ubuntu 12.04 with openssh-server preinstalled to be used as a base image. Inspired by docker-wordpress-nginx container by Eugene Ware.
 
-Installation
+# Installation
 
 $ git clone https://github.com/sullof/docker-sshd.git
 $ cd docker-sshd
@@ -9,7 +9,7 @@ Substitute the current authorized_keys file with your public key. If not, potent
 
 Usage
 
-Build the container:
+# Build the container:
 
 $ sudo docker build -t sullof/sshd .
 It's better if you change the tag using your Docker username.
