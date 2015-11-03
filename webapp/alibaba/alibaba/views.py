@@ -43,7 +43,10 @@ class HomePageView(TemplateView):
         context['tags'] = tags
 
         search = Search(using=es, index="tuangou", doc_type="meituan").sort('-@timestamp')[0:50]
-        context["results"] = search.execute()
+        try:
+            context["results"] = search.execute()
+        except:
+            context["results"] ={}
         return context
 
 @silk_profile(name='View Blog Post')

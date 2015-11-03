@@ -1,0 +1,4 @@
+docker run -d -v "$PWD/config":/usr/share/elasticsearch/config elasticsearch
+docker run -d -v "$PWD/esdata":/usr/share/elasticsearch/data elasticsearch
+docker run -d -v "$PWD/esdata":/usr/share/elasticsearch/plugins elasticsearch
+docker run -d -v "$PWD/esdata":/usr/share/elasticsearch/logs elasticsearch

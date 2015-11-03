@@ -10,6 +10,7 @@ from braces.views import LoginRequiredMixin
 from django.conf import settings
 from elasticsearch_dsl import Search, Q
 from bson.objectid import ObjectId
+import traceback
 
 
 PER_COUNT = 50
@@ -33,27 +34,33 @@ def search_list(request, kd=None):
     spc = request.GET.get("spc", "1")
     city = request.GET.get("city", u"全国")
     pn_count = (page - 1) * PER_COUNT
-    search = Search(using=es, index="tuangou", doc_type="meituan").query("match", title=kd).sort('-@timestamp')[
-             pn_count:pn_count + PER_COUNT]
-    # s..query(~Q("match", description="beta"))  # description字段不含 beta
-    search.aggs.bucket('per_city', 'terms', field='city')  # metric('max_lines', 'max', field='lines')
-    search.aggs.bucket('per_website', 'terms', field='website')
-    page_size = search.count() / PER_COUNT + 1
-    response = search.execute()
-    # print search.count()
     tags = {"cities": [], "websites": []}
+    page_size=1
+    try:
+        search = Search(using=es, index="tuangou", doc_type="meituan").query("match", title=kd).sort('-@timestamp')[
+                 pn_count:pn_count + PER_COUNT]
+        # s..query(~Q("match", description="beta"))  # description字段不含 beta
+        search.aggs.bucket('per_city', 'terms', field='city')  # metric('max_lines', 'max', field='lines')
+        search.aggs.bucket('per_website', 'terms', field='website')
+        page_size = search.count() / PER_COUNT + 1
+        response = search.execute()
+        # print search.count()
 
-    # for hit in response:
-    #     print dir(hit.meta) # ['doc_type', u'id', u'index', u'score', u'sort']
-    #     print dir(hit)
 
-    for tag in response.aggregations.per_city.buckets:
-        # print tag.key, tag.doc_count
-        tags["cities"].append((tag.key, tag.doc_count))
-        # print(tag.key, tag.sum_lines.value)
-    for tag in response.aggregations.per_website.buckets:
-        # print tag.key, tag.doc_count
-        tags["websites"].append((tag.key, tag.doc_count))
+        # for hit in response:
+        #     print dir(hit.meta) # ['doc_type', u'id', u'index', u'score', u'sort']
+        #     print dir(hit)
+
+        for tag in response.aggregations.per_city.buckets:
+            # print tag.key, tag.doc_count
+            tags["cities"].append((tag.key, tag.doc_count))
+            # print(tag.key, tag.sum_lines.value)
+        for tag in response.aggregations.per_website.buckets:
+            # print tag.key, tag.doc_count
+            tags["websites"].append((tag.key, tag.doc_count))
+    except:
+        exception=traceback.format_exc()
+        print exception
     host_search = [u"美食", u"酒店", u"机票", u"火车票", u"汽车票"]
     if page_size > PAGE_MAC_SIZE:
         page_size = PAGE_MAC_SIZE
