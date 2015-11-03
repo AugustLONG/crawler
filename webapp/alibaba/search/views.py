@@ -67,7 +67,6 @@ def search_list(request, kd=None):
         "host_search": host_search,
 
     })
-
     return render(request, 'search/list.html', ct)
 
 

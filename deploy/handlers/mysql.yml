@@ -11,4 +11,4 @@
   command: docker stop mysql
 
 - name: run mysql
-  command: docker run --name mysql -v /opt/mysql:/var/lib/mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=3039762 -d mysql
+  command: docker run --name mysql -v /mnt/sda1/opt/mysql:/var/lib/mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=3039762 -d mysql
