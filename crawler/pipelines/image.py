@@ -1,21 +1,28 @@
 
+import sys,os
+from scrapy.conf import settings
+reload(sys)
+sys.setdefaultencoding('utf-8')
 from scrapy.contrib.pipeline.images import ImagesPipeline
 from scrapy.exceptions import DropItem
 from scrapy.http import Request
-
+import logging as log
+import hashlib, ntpath
+from upyun import UpYun
 
 class UpYunStore(object):
     APP_NAME = None
     USERNAME = None
     PASSWORD = None
     TMP_PATH = None
+
     def __init__(self, uri):
         assert uri.startswith('http://')
         self.upyun = UpYun(self.APP_NAME, self.USERNAME, self.PASSWORD)
         self.prefix = '/' + uri.split('/')[-1]
 
     def stat_image(self, key, info):
-        image_info = self.upyun.getFileInfo(self.prefix+'/'+key)
+        image_info = self.upyun.getinfo(self.prefix+'/'+key)
         last_modified = int(image_info['date'])
         checksum = image_info['size']
         return {'last_modified': last_modified, 'checksum': checksum}
@@ -24,12 +31,9 @@ class UpYunStore(object):
         tmp_path = os.path.join(self.TMP_PATH, 'tmp.jpg')
         image.save(tmp_path)
         data = open(tmp_path, 'rb')
-        self.upyun.setContentMD5(md5file(data))
-        # fiel secret
-        self.upyun.setFileSecret('')
-        result = self.upyun.writeFile(self.prefix+'/'+key, data, True)
+        result = self.upyun.put(self.prefix+'/'+key, data, True)
         if not result:
-            log.msg("Image: Upload image to Upyun Failed! %s" % (self.prefix+key))
+            log.info("Image: Upload image to Upyun Failed! %s" % (self.prefix+key))
 
 class GetimagesprojectPipeline(ImagesPipeline):
     ImagesPipeline.STORE_SCHEMES['http'] = UpYunStore
@@ -42,21 +46,21 @@ class GetimagesprojectPipeline(ImagesPipeline):
     def get_media_requests(self, item, info):
         print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
         for image_url in item['image_urls']:
-                yield scrapy.Request(image_url, meta={'pid': item['pid']})
+            yield Request(image_url, meta={'pid': item['pid']})
 
     def get_images(self, response, request, info):
         for key, image, buf in super(GetimagesprojectPipeline, self).get_images(response, request, info):
-                key = self.set_filename(response)
-        yield key, image, buf
+            key = self.set_filename(response)
+            yield key, image, buf
 
-     def item_completed(self, results, item, info):
-            image_paths = [x['path'] for ok, x in results if ok]
-            if not image_paths:
-                raise DropItem("Item contains no images")
-            item['image_paths'] = image_paths
-            return item
+    def item_completed(self, results, item, info):
+        image_paths = [x['path'] for ok, x in results if ok]
+        if not image_paths:
+            raise DropItem("Item contains no images")
+        item['image_paths'] = image_paths
+        return item
 
-     @classmethod
+    @classmethod
     def from_settings(cls, settings):
         upyun = cls.STORE_SCHEMES['http']
         upyun.APP_NAME = settings['UPYUN_APP_NAME']
@@ -64,8 +68,7 @@ class GetimagesprojectPipeline(ImagesPipeline):
         upyun.PASSWORD = settings['UPYUN_PASSWORD']
         upyun.TMP_PATH = settings['TMP_PATH']
         cls.URL_PREFIX = settings['IMAGES_STORE']
-        image_info = self.upyun.getFileInfo(self.prefix+'/'+key)
-        return super(CoverImagesPipeline, cls).from_settings(settings)
+        return super(GetimagesprojectPipeline, cls).from_settings(settings)
 
     @classmethod
     def from_settings(cls, settings):
@@ -91,4 +94,40 @@ class CoverImagesPipeline(ImagesPipeline):
         upyun.TMP_PATH = settings['TMP_PATH']
         cls.URL_PREFIX = settings['IMAGES_STORE']
         return super(CoverImagesPipeline, cls).from_settings(settings)
-        image_info = self.upyun.getFileInfo(self.prefix+'/'+key)
+
+
+class LocalImagesPipeline(ImagesPipeline):
+    def __init__(self, *args, **kwargs):
+        super(LocalImagesPipeline, self).__init__(*args, **kwargs)
+
+    def get_media_requests(self, item, info):
+        for url in item["urls"]:
+            yield Request(url)
+
+    def image_key(self, url):
+        image_guid = hashlib.sha1(url).hexdigest()
+        if self.conf["IMAGES_STORE_FORMAT"] == 'FLAT':
+            return '%s.jpg' % (image_guid)
+        elif self.conf["IMAGES_STORE_FORMAT"] == 'THUMBS':
+            return '%s/thumbs/%s/%s.jpg' % (self.conf["IMAGE_PATH"],self.THUMBS.iterkeys().next(), image_guid)
+        else:
+            return '%s/full/%s.jpg' % (self.conf["IMAGE_PATH"],image_guid)
+
+    def thumb_key(self, url, thumb_id):
+        image_guid = hashlib.sha1(url).hexdigest()
+        if self.conf["IMAGES_STORE_FORMAT"] == 'FLAT':
+            return '%s.jpg' % (image_guid)
+        else:
+            return '%s/thumbs/%s/%s.jpg' % (self.conf["IMAGE_PATH"],thumb_id, image_guid)
+
+    def item_completed(self, results, item, info):
+        img_elems = info.spider.scraper.get_image_elems()
+        for img_elem in img_elems:
+            img_attr_name = img_elem.scraped_obj_attr.name
+            for ok, x in results:
+                if ok:
+                    item[img_attr_name] = item[img_attr_name].replace(x['url'],ntpath.basename(x['path']))
+                    results_list = [x for ok, x in results if ok]
+            if len(results_list) == 0:
+                item[img_attr_name] = None
+        return item

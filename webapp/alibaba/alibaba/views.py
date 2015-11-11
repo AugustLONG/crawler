@@ -70,3 +70,4 @@ def post(request, post_id):
         return render_to_response('post.html', {
             'post': p
         })
+
