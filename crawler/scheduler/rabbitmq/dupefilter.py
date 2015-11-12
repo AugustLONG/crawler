@@ -1,20 +1,23 @@
+__author__ = 'roycehaynes'
+
+from scrapy.dupefilter import BaseDupeFilter
+
 import time
+import connection
 
-from scrapy.dupefilters import BaseDupeFilter
+from scrapy.dupefilter import BaseDupeFilter
 from scrapy.utils.request import request_fingerprint
-
-from . import connection
 
 
 class RFPDupeFilter(BaseDupeFilter):
-    """Redis-based request duplication filter"""
+    """RabbitMQ-based request duplication filter"""
 
     def __init__(self, server, key):
         """Initialize duplication filter
 
         Parameters
         ----------
-        server : Redis instance
+        server : RabbitMQ instance
         key : str
             Where to store fingerprints
         """
@@ -36,7 +39,13 @@ class RFPDupeFilter(BaseDupeFilter):
 
     def request_seen(self, request):
         fp = request_fingerprint(request)
-        added = self.server.sadd(self.key, fp)
+
+        added = self.server.basic_publish(
+            exchange='',
+            routing_key=self.key,
+            body=fp
+        )
+
         return not added
 
     def close(self, reason):
@@ -45,4 +54,5 @@ class RFPDupeFilter(BaseDupeFilter):
 
     def clear(self):
         """Clears fingerprints data"""
-        self.server.delete(self.key)
+        self.server.queue_purge(self.key)
+

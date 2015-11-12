@@ -1,6 +1,3 @@
-#!/usr/bin/python
-#-*-coding:utf-8-*-
-
 from scrapy.utils.reqser import request_to_dict, request_from_dict
 
 try:
@@ -14,7 +11,6 @@ class Base(object):
 
     def __init__(self, server, spider, key):
         """Initialize per-spider redis queue.
-
         Parameters:
             server -- redis connection
             spider -- spider instance
@@ -40,7 +36,7 @@ class Base(object):
         """Push a request"""
         raise NotImplementedError
 
-    def pop(self):
+    def pop(self, timeout=0):
         """Pop a request"""
         raise NotImplementedError
 
@@ -60,9 +56,14 @@ class SpiderQueue(Base):
         """Push a request"""
         self.server.lpush(self.key, self._encode_request(request))
 
-    def pop(self):
+    def pop(self, timeout=0):
         """Pop a request"""
-        data = self.server.rpop(self.key)
+        if timeout > 0:
+            data = self.server.brpop(self.key, timeout)
+            if isinstance(data, tuple):
+                data = data[1]
+        else:
+            data = self.server.rpop(self.key)
         if data:
             return self._decode_request(data)
 
@@ -77,11 +78,14 @@ class SpiderPriorityQueue(Base):
     def push(self, request):
         """Push a request"""
         data = self._encode_request(request)
-        pairs = {data:-request.priority}
+        pairs = {data: -request.priority}
         self.server.zadd(self.key, **pairs)
 
-    def pop(self):
-        """Pop a request"""
+    def pop(self, timeout=0):
+        """
+        Pop a request
+        timeout not support in this queue class
+        """
         # use atomic range/remove using multi/exec
         pipe = self.server.pipeline()
         pipe.multi()
@@ -102,9 +106,15 @@ class SpiderStack(Base):
         """Push a request"""
         self.server.lpush(self.key, self._encode_request(request))
 
-    def pop(self):
+    def pop(self, timeout=0):
         """Pop a request"""
-        data = self.server.lpop(self.key)
+        if timeout > 0:
+            data = self.server.blpop(self.key, timeout)
+            if isinstance(data, tuple):
+                data = data[1]
+        else:
+            data = self.server.lpop(self.key)
+
         if data:
             return self._decode_request(data)
 
