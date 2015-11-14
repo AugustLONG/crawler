@@ -196,6 +196,7 @@ DEFAULT_REQUEST_HEADERS = {
 # See http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
 #    'crawler.middlewares.MyCustomSpiderMiddleware': 543,
+# 'scrapy.contrib.spidermiddleware.depth.DepthMiddleware': None,
 #}
 
 # Enable or disable downloader middlewares
@@ -204,6 +205,8 @@ DOWNLOADER_MIDDLEWARES = {
     'crawler.middlewares.useragent.RandomUserAgent': 1,  #随机user agent
     #'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110, #代理需要用到
     #'crawler.middlewares.ProxyMiddleware': 100, #代理需要用到
+    # 'scrapy.contrib.downloadermiddleware.retry.RetryMiddleware' : None,
+    # 'crawler.middlewares.redis_retry.RedisRetryMiddleware': 510,
 }
 
 # Enable or disable extensions
@@ -222,6 +225,15 @@ AUTOTHROTTLE_START_DELAY = 5
 AUTOTHROTTLE_MAX_DELAY = 60
 # Enable showing throttling stats for every response received:
 AUTOTHROTTLE_DEBUG = False
+
+# Don't cleanup redis queues, allows to pause/resume crawls.
+SCHEDULER_PERSIST = True
+
+# how long we want the duplicate timeout queues to stick around in seconds
+DUPEFILTER_TIMEOUT = 60
+
+# how many times to retry getting an item from the queue before the spider is considered idle
+SCHEUDLER_ITEM_RETRIES = 3
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS=32
@@ -243,6 +255,15 @@ AUTOTHROTTLE_DEBUG = False
 #HTTPCACHE_STORAGE='scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 LOG_LEVEL = 'INFO'  # CRITICAL, ERROR, WARNING, INFO, DEBUG
+# Disable the built in logging in production
+LOG_ENABLED = False
+
+# Allow all return codes
+HTTPERROR_ALLOW_ALL = True
+
+RETRY_TIMES = 3
+
+DOWNLOAD_TIMEOUT = 10
 
 #LOG_STDOUT = False
 #LOG_FILE = "/var/log/scrapy_douban_movie.log"
@@ -296,10 +317,16 @@ MONGODB_UNIQUE_KEY="url"
 # MONGODB_REPLICA_SET = 'myReplicaSetName'
 # MONGODB_URI = 'mongodb://host1.example.com:27017,host2.example.com:27017,host3.example.com:27017'
 
-ELASTICSEARCH_SERVER = '192.168.234.139' # If not 'localhost' prepend 'http://'
+ELASTICSEARCH_SERVER = '127.0.0.1' # If not 'localhost' prepend 'http://'
 ELASTICSEARCH_PORT = 9200 # If port 80 leave blank
 ELASTICSEARCH_USERNAME = ''
 ELASTICSEARCH_PASSWORD = ''
 ELASTICSEARCH_INDEX = 'scrapy'
 ELASTICSEARCH_TYPE = 'items'
 ELASTICSEARCH_UNIQ_KEY = 'url'
+
+# Kafka server information
+KAFKA_HOSTS = ''
+KAFKA_TOPIC_PREFIX = 'demo'
+
+

@@ -7,7 +7,7 @@
 import os
 import sys
 
-from woaidu_crawler.utils import termcolors
+from crawler.utils import termcolors
 
 def supports_color():
     """
@@ -53,3 +53,5 @@ def no_style():
         def __getattr__(self, attr):
             return lambda x: x
     return dummy()
+
+

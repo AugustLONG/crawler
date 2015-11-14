@@ -14,12 +14,12 @@ from urlparse import urlparse
 from pprint import pprint
 from twisted.internet import defer
 from scrapy.http import Request
-from woaidu_crawler.utils import color
+from crawler.utils import color
 from scrapy.utils.misc import arg_to_iter
 from pymongo import MongoClient
 from twisted.internet.defer import Deferred, DeferredList
-from woaidu_crawler.utils.select_result import list_first_item
-from woaidu_crawler.pipelines.file import FilePipeline,FSFilesStore,FileException
+from crawler.utils.select_result import list_first_item
+from crawler.pipelines.file import FilePipeline,FSFilesStore,FileException
 from scrapy.exceptions import DropItem, NotConfigured
 
 class NofilesDrop(DropItem):

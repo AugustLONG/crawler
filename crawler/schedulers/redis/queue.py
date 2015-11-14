@@ -28,6 +28,20 @@ class Base(object):
         """Decode an request previously encoded"""
         return request_from_dict(pickle.loads(encoded_request), self.spider)
 
+    def _encode_item(self, item):
+        '''
+        Encode an item object
+
+        @requires: The object be serializable
+        '''
+        return pickle.dumps(item, protocol=-1)
+
+    def _decode_item(self, encoded_item):
+        '''
+        Decode an item previously encoded
+        '''
+        return pickle.loads(encoded_item)
+
     def __len__(self):
         """Return the length of the queue"""
         raise NotImplementedError
@@ -45,7 +59,7 @@ class Base(object):
         self.server.delete(self.key)
 
 
-class SpiderQueue(Base):
+class RedisQueue(Base):
     """Per-spider FIFO queue"""
 
     def __len__(self):
@@ -68,7 +82,7 @@ class SpiderQueue(Base):
             return self._decode_request(data)
 
 
-class SpiderPriorityQueue(Base):
+class RedisPriorityQueue(Base):
     """Per-spider priority queue abstraction using redis' sorted set"""
 
     def __len__(self):
@@ -95,7 +109,7 @@ class SpiderPriorityQueue(Base):
             return self._decode_request(results[0])
 
 
-class SpiderStack(Base):
+class RedisStack(Base):
     """Per-spider stack"""
 
     def __len__(self):
@@ -119,4 +133,4 @@ class SpiderStack(Base):
             return self._decode_request(data)
 
 
-__all__ = ['SpiderQueue', 'SpiderPriorityQueue', 'SpiderStack']
+__all__ = ['RedisQueue', 'RedisPriorityQueue', 'RedisStack']

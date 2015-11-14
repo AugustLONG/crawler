@@ -1,25 +1,51 @@
-from kazoo.client import KazooClient
-from samsa.cluster import Cluster
-zookeeper = KazooClient()
-zookeeper.start()
-cluster = Cluster(zookeeper)
-topic = cluster.topics['topicname']
-topic.publish('msg')
+import json
+import datetime as dt
+from kafka.client import KafkaClient
+from kafka.producer import SimpleProducer
 
+class KafkaPipeline(object):
 
-from kazoo.client import KazooClient
-from samsa.cluster import Cluster
-zookeeper = KazooClient()
-zookeeper.start()
-cluster = Cluster(zookeeper)
-topic = cluster.topics['topicname']
-consumer = topic.subscribe('groupname')
-for msg in consumer:
-    print msg
+    """Pushes serialized item to appropriate Kafka topics."""
 
+    def __init__(self, producer, topic_prefix, aKafka):
+        self.producer = producer
+        self.topic_prefix = topic_prefix
+        self.topic_list = []
+        self.kafka = aKafka
 
+    @classmethod
+    def from_settings(cls, settings):
+        kafka = KafkaClient(settings['KAFKA_HOSTS'])
+        producer = SimpleProducer(kafka)
+        topic_prefix = settings['KAFKA_TOPIC_PREFIX']
+        return cls(producer, topic_prefix, kafka)
 
+    @classmethod
+    def from_crawler(cls, crawler):
+        return cls.from_settings(crawler.settings)
 
-# consumer 必需在 producer 向 kafka 的 topic 里面提交数据后才能连接，否则会出错。
-# 在 Kafka 中一个 consumer 需要指定 groupname ， groue 中保存着 offset 等信息，新开启一个 group 会从 offset 0 的位置重新开始获取日志。
-# kafka 的配置参数中有个 partition ，默认是 1 ，这个会对数据进行分区，如果多个 consumer 想连接同个 group 就必需要增加 partition , partition 只能大于 consumer 的数量，否则多出来的 consumer 将无法获取到数据。
+    def process_item(self, item, spider):
+        datum = dict(item)
+        datum["timestamp"] = dt.datetime.utcnow().isoformat()
+        prefix = self.topic_prefix
+        appid_topic = "{prefix}.crawled_{appid}".format(prefix=prefix,
+                                                       appid=datum["appid"])
+        firehose_topic = "{prefix}.crawled_firehose".format(prefix=prefix)
+        try:
+            message = json.dumps(datum)
+        except:
+            message = 'json failed to parse'
+
+        self.checkTopic(appid_topic)
+        self.checkTopic(firehose_topic)
+
+        self.producer.send_messages(appid_topic, message)
+        self.producer.send_messages(firehose_topic, message)
+
+        return item
+
+    def checkTopic(self, topicName):
+        if topicName not in self.topic_list:
+            self.kafka.ensure_topic_exists(topicName)
+            self.topic_list.append(topicName)
+

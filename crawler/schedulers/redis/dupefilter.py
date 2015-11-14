@@ -9,7 +9,7 @@ from . import connection
 class RFPDupeFilter(BaseDupeFilter):
     """Redis-based request duplication filter"""
 
-    def __init__(self, server, key):
+    def __init__(self, server, key, timeout=7*24*3600):
         """Initialize duplication filter
 
         Parameters
@@ -17,9 +17,11 @@ class RFPDupeFilter(BaseDupeFilter):
         server : Redis instance
         key : str
             Where to store fingerprints
+        @param timeout: number of seconds a given key will remain once idle
         """
         self.server = server
         self.key = key
+        self.timeout = timeout
 
     @classmethod
     def from_settings(cls, settings):
@@ -36,6 +38,8 @@ class RFPDupeFilter(BaseDupeFilter):
 
     def request_seen(self, request):
         fp = request_fingerprint(request)
+        # added = self.server.sadd(self.key + ":" + c_id, fp)
+        # self.server.expire(self.key + ":" + c_id, self.timeout)
         added = self.server.sadd(self.key, fp)
         return not added
 

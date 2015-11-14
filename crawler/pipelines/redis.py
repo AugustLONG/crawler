@@ -1,7 +1,7 @@
 from scrapy.utils.serialize import ScrapyJSONEncoder
 from twisted.internet.threads import deferToThread
 
-from . import connection
+from crawler.schedulers.redis import connection
 
 
 class RedisPipeline(object):
