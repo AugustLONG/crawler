@@ -5,10 +5,11 @@
 
 from scrapy.item import Item, Field
 
+
 class hotelReview(Item):
-    # define the fields for your item here like:
-    # name = Field()
-    #hotel profile
+	# define the fields for your item here like:
+	# name = Field()
+	# hotel profile
 
 	hotel_name = Field()
 	e_name = Field()
@@ -23,7 +24,7 @@ class hotelReview(Item):
 	recomment = Field()
 	no_recomment = Field()
 
-	#review
+	# review
 	author = Field()
 	user_type = Field()
 	date = Field()
@@ -35,4 +36,3 @@ class hotelReview(Item):
 	clean = Field()
 	review = Field()
 	helpful = Field()
-	

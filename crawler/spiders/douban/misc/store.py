@@ -1,4 +1,4 @@
-#encoding: utf-8
+# encoding: utf-8
 import pymongo
 
 HOST = "127.0.0.1"

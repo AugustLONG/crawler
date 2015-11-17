@@ -7,46 +7,46 @@ from . import connection
 
 
 class RFPDupeFilter(BaseDupeFilter):
-    """Redis-based request duplication filter"""
+	"""Redis-based request duplication filter"""
 
-    def __init__(self, server, key, timeout=7*24*3600):
-        """Initialize duplication filter
+	def __init__(self, server, key, timeout=7 * 24 * 3600):
+		"""Initialize duplication filter
 
-        Parameters
-        ----------
-        server : Redis instance
-        key : str
-            Where to store fingerprints
-        @param timeout: number of seconds a given key will remain once idle
-        """
-        self.server = server
-        self.key = key
-        self.timeout = timeout
+		Parameters
+		----------
+		server : Redis instance
+		key : str
+			Where to store fingerprints
+		@param timeout: number of seconds a given key will remain once idle
+		"""
+		self.server = server
+		self.key = key
+		self.timeout = timeout
 
-    @classmethod
-    def from_settings(cls, settings):
-        server = connection.from_settings(settings)
-        # create one-time key. needed to support to use this
-        # class as standalone dupefilter with scrapy's default scheduler
-        # if scrapy passes spider on open() method this wouldn't be needed
-        key = "dupefilter:%s" % int(time.time())
-        return cls(server, key)
+	@classmethod
+	def from_settings(cls, settings):
+		server = connection.from_settings(settings)
+		# create one-time key. needed to support to use this
+		# class as standalone dupefilter with scrapy's default scheduler
+		# if scrapy passes spider on open() method this wouldn't be needed
+		key = "dupefilter:%s" % int(time.time())
+		return cls(server, key)
 
-    @classmethod
-    def from_crawler(cls, crawler):
-        return cls.from_settings(crawler.settings)
+	@classmethod
+	def from_crawler(cls, crawler):
+		return cls.from_settings(crawler.settings)
 
-    def request_seen(self, request):
-        fp = request_fingerprint(request)
-        # added = self.server.sadd(self.key + ":" + c_id, fp)
-        # self.server.expire(self.key + ":" + c_id, self.timeout)
-        added = self.server.sadd(self.key, fp)
-        return not added
+	def request_seen(self, request):
+		fp = request_fingerprint(request)
+		# added = self.server.sadd(self.key + ":" + c_id, fp)
+		# self.server.expire(self.key + ":" + c_id, self.timeout)
+		added = self.server.sadd(self.key, fp)
+		return not added
 
-    def close(self, reason):
-        """Delete data on close. Called by scrapy's scheduler"""
-        self.clear()
+	def close(self, reason):
+		"""Delete data on close. Called by scrapy's scheduler"""
+		self.clear()
 
-    def clear(self):
-        """Clears fingerprints data"""
-        self.server.delete(self.key)
+	def clear(self):
+		"""Clears fingerprints data"""
+		self.server.delete(self.key)

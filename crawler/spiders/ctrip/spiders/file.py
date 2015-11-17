@@ -67,10 +67,10 @@
 # 				#hotel profile
 
 # 				hotel_url = sel.xpath('/html/body/div/div/div/div[2]/a[1]/@href').extract()
-				
+
 # 				hotel_overview['url'] = 'http://hotels.ctrip.com' + str(hotel_url[0].split('_')[0])
 # 				hotel_overview['total_overall_rating'] = sel.xpath('/html/body/div/div/div/div[1]/div[1]/span[2]/span/text()').extract()[0].strip()
-				
+
 # 				hotel_overview['per_recomment'] = sel.xpath('/html/body/div/div/div/div[1]/div[1]/span[3]/span/text()').extract()[0].strip()
 # 				hotel_overview['for_biz'] = re.findall(r'\d+',sel.xpath('//*[@id="comment_statistics"]/a[1]/span/text()').extract()[0].strip())[0]
 # 				hotel_overview['for_friend'] = re.findall(r'\d+',sel.xpath('//*[@id="comment_statistics"]/a[2]/span/text()').extract()[0].strip())[0]
@@ -118,7 +118,7 @@
 # 						item['date'] = date[0].strip()
 # 						item['room_type'] = room_type[0].strip()
 # 						item['review_overall_rating'] = review_overall_rating[0].strip()
-	
+
 # 						item['location'] = re.findall(r'\d+', review_aspect_rating[0].strip().split(',')[0])[0]
 # 						item['facility'] = re.findall(r'\d+', review_aspect_rating[0].strip().split(',')[1])[0]
 # 						item['service'] = re.findall(r'\d+', review_aspect_rating[0].strip().split(',')[2])[0]		

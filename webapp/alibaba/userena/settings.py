@@ -3,8 +3,8 @@
 # Please consult the docs for more information about each setting.
 
 from django.conf import settings
-gettext = lambda s: s
 
+gettext = lambda s: s
 
 USERENA_SIGNIN_AFTER_SIGNUP = getattr(settings,
                                       'USERENA_SIGNIN_AFTER_SIGNUP',
@@ -35,8 +35,8 @@ USERENA_ACTIVATION_NOTIFY_DAYS = getattr(settings,
                                          5)
 
 USERENA_ACTIVATION_RETRY = getattr(settings,
-                                    'USERENA_ACTIVATION_RETRY',
-                                    False)
+                                   'USERENA_ACTIVATION_RETRY',
+                                   False)
 
 USERENA_ACTIVATED = getattr(settings,
                             'USERENA_ACTIVATED',
@@ -55,7 +55,6 @@ DEFAULT_USERENA_USE_HTTPS = False
 # NOTE: It is only for internal use. All those settings should be refactored to only defaults
 #       as specified in #452
 _USERENA_USE_HTTPS = getattr(settings, 'USERENA_USE_HTTPS', DEFAULT_USERENA_USE_HTTPS)
-
 
 USERENA_MUGSHOT_GRAVATAR = getattr(settings,
                                    'USERENA_MUGSHOT_GRAVATAR',
@@ -106,10 +105,10 @@ USERENA_WITHOUT_USERNAMES = getattr(settings,
                                     False)
 
 USERENA_PROFILE_DETAIL_TEMPLATE = getattr(
-    settings, 'USERENA_PROFILE_DETAIL_TEMPLATE', 'userena/profile_detail.html')
+	settings, 'USERENA_PROFILE_DETAIL_TEMPLATE', 'userena/profile_detail.html')
 
 USERENA_PROFILE_LIST_TEMPLATE = getattr(
-    settings, 'USERENA_PROFILE_LIST_TEMPLATE', 'userena/profile_list.html')
+	settings, 'USERENA_PROFILE_LIST_TEMPLATE', 'userena/profile_list.html')
 
 USERENA_HIDE_EMAIL = getattr(settings, 'USERENA_HIDE_EMAIL', False)
 

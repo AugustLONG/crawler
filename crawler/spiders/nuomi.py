@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
-import scrapy
 import logging
 from xml.dom import minidom
-from crawler.utils.xml import get_attrvalue,get_nodevalue,get_xmlnode
+
+import scrapy
+
+from crawler.utils.xml import get_attrvalue, get_nodevalue, get_xmlnode
 
 logger = logging.getLogger("NuomiSpider")
 import sys
@@ -15,62 +17,63 @@ cities = "aba, akesu, alashan, ali, altay, anji, ankang, anqing, anqiu, anshan, 
 cities = cities.split(",")
 city_chart = ["a"]
 
+
 class NuomiSpider(scrapy.Spider):
-    name = "nuomi"
-    allowed_domains = ["nuomi.com"]
-    start_urls = []
-    url = "http://api.nuomi.com/api/dailydeal?version=v1"
-    urlparam = ""
-    for city in cities:
-        city = city.strip()
-        if city[0] in city_chart:
-            urlparam += "&city=" + city
-        else:
-            start_urls.append(
-                'http://api.nuomi.com/api/dailydeal?version=v1' + urlparam
-            )
-            urlparam = "&city=" + city
-            city_chart.append(city[0])
+	name = "nuomi"
+	allowed_domains = ["nuomi.com"]
+	start_urls = []
+	url = "http://api.nuomi.com/api/dailydeal?version=v1"
+	urlparam = ""
+	for city in cities:
+		city = city.strip()
+		if city[0] in city_chart:
+			urlparam += "&city=" + city
+		else:
+			start_urls.append(
+				'http://api.nuomi.com/api/dailydeal?version=v1' + urlparam
+			)
+			urlparam = "&city=" + city
+			city_chart.append(city[0])
 
-    # def start_requests(self):
-    # for url in self.start_urls:
-    #         data = json.loads(response.body_as_unicode())
-    #         body = json.dumps({"url": url, "wait": 0.5})
-    #         headers = Headers({'Content-Type': 'application/json','User-Agent': user_agent})
-    #         request= scrapy.Request(RENDER_HTML_URL, self.parse, method="POST",
-    #                              body=body, headers=headers)
-    #        request.meta['item'] = item 抓取图片时可以动态传入
-    #          yield request
-    # def parse(self, response):
-    #
-    #         yield  response.meta['item']
+	# def start_requests(self):
+	# for url in self.start_urls:
+	#         data = json.loads(response.body_as_unicode())
+	#         body = json.dumps({"url": url, "wait": 0.5})
+	#         headers = Headers({'Content-Type': 'application/json','User-Agent': user_agent})
+	#         request= scrapy.Request(RENDER_HTML_URL, self.parse, method="POST",
+	#                              body=body, headers=headers)
+	#        request.meta['item'] = item 抓取图片时可以动态传入
+	#          yield request
+	# def parse(self, response):
+	#
+	#         yield  response.meta['item']
 
 
 
-    def parse(self, response):
-        dom = minidom.parseString(response.body)
-        root = dom.documentElement
-        roots = get_xmlnode(root, 'url')
-        for root in roots:
-            url = get_xmlnode(root, 'loc')[0].childNodes[0].nodeValue
-            item = {"site": "nuomi", "shops": [], "url": url, "apiType": "hao123"}
-            display_nodes = get_xmlnode(root, 'display')[0].childNodes
-            for display in display_nodes:
-                if display.nodeName == "#text":
-                    continue
-                elif display.nodeName == "shops":
-                    shop_nodes = get_xmlnode(display, 'shop')
-                    shop = {}
-                    for shop_node in shop_nodes:
-                        for node in shop_node.childNodes:
-                            if node.nodeName == "#text":
-                                continue
-                            elif node.childNodes:
-                                shop[node.nodeName] = node.childNodes[0].nodeValue  # wholeText
-                    item["shops"].append(shop)
-                elif display.childNodes:
-                    name = display.nodeName
-                    item[name] = display.childNodes[0].nodeValue  # wholeText
-                    if name == "identifier":
-                        item["id"] = item[name]
-            yield item
+	def parse(self, response):
+		dom = minidom.parseString(response.body)
+		root = dom.documentElement
+		roots = get_xmlnode(root, 'url')
+		for root in roots:
+			url = get_xmlnode(root, 'loc')[0].childNodes[0].nodeValue
+			item = {"site": "nuomi", "shops": [], "url": url, "apiType": "hao123"}
+			display_nodes = get_xmlnode(root, 'display')[0].childNodes
+			for display in display_nodes:
+				if display.nodeName == "#text":
+					continue
+				elif display.nodeName == "shops":
+					shop_nodes = get_xmlnode(display, 'shop')
+					shop = {}
+					for shop_node in shop_nodes:
+						for node in shop_node.childNodes:
+							if node.nodeName == "#text":
+								continue
+							elif node.childNodes:
+								shop[node.nodeName] = node.childNodes[0].nodeValue  # wholeText
+					item["shops"].append(shop)
+				elif display.childNodes:
+					name = display.nodeName
+					item[name] = display.childNodes[0].nodeValue  # wholeText
+					if name == "identifier":
+						item["id"] = item[name]
+			yield item
