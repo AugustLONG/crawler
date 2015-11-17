@@ -1,106 +1,112 @@
 # encoding: utf-8
-import scrapy
 from scrapy.contrib.linkextractors import LinkExtractor
 from scrapy.contrib.spiders import CrawlSpider, Rule
+import pymongo
 
+HOST = "127.0.0.1"
+PORT = 27017
+
+client = pymongo.MongoClient(HOST, PORT)
+
+doubanDB = client.douban
 
 class StackoverflowSpider(CrawlSpider):
-	name = "stackoverflow"
-	allowed_domains = ["stackoverflow.com", "stackexchange.com"]
-	start_urls = [
-		"http://api.stackexchange.com/docs/questions",
-	]
+    name = "stackoverflow"
+    allowed_domains = ["stackoverflow.com", "stackexchange.com"]
+    start_urls = [
+        "http://api.stackexchange.com/docs/questions",
+    ]
 
-	rules = (
-		# 问题详情
-		Rule(LinkExtractor(allow=r"^http://www\.stackoverflow\.com/questions/\d+/\w+"),
-		     callback="parse_questions",
-		     follow=True
-		     )
-	)
+    rules = (
+        # 问题详情
+        Rule(LinkExtractor(allow=r"^http://www\.stackoverflow\.com/questions/\d+/\w+"),
+             callback="parse_questions",
+             follow=True
+             )
+    )
 
-	def parse_users(self, response):
-		album_parser = AlbumParser(response)
-		item = dict(album_parser.item)
+    def parse_users(self, response):
+        album_parser = AlbumParser(response)
+        item = dict(album_parser.item)
 
-		if album_parser.next_page: return None
-		spec = dict(from_url=item["from_url"])
-		doubanDB.album.update(spec, {"$set": item}, upsert=True)
+        if album_parser.next_page: return None
+        spec = dict(from_url=item["from_url"])
+        doubanDB.album.update(spec, {"$set": item}, upsert=True)
 
-	def parse_questions(self, response):
-		single = SinglePhotoParser(response)
-		from_url = single.from_url
-		if from_url is None: return
-		doc = doubanDB.album.find_one({"from_url": from_url}, {"from_url": True})
+    def parse_questions(self, response):
+        single = SinglePhotoParser(response)
+        from_url = single.from_url
+        if from_url is None: return
+        doc = doubanDB.album.find_one({"from_url": from_url}, {"from_url": True})
 
-		item = dict(single.item)
-		if not doc:
-			new_item = {}
-			new_item["from_url"] = from_url
-			new_item["photos"] = item
-			doubanDB.album.save(new_item)
-		else:
-			spec = {"from_url": from_url}
-			doc = doubanDB.album.find_one({"photos.large_img_url": item["large_img_url"]})
-			if not doc:
-				doubanDB.album.update(spec, {"$push": {"photos": item}})
+        item = dict(single.item)
+        if not doc:
+            new_item = {}
+            new_item["from_url"] = from_url
+            new_item["photos"] = item
+            doubanDB.album.save(new_item)
+        else:
+            spec = {"from_url": from_url}
+            doc = doubanDB.album.find_one({"photos.large_img_url": item["large_img_url"]})
+            if not doc:
+                doubanDB.album.update(spec, {"$push": {"photos": item}})
 
-		cp = CommentParser(response)
-		comments = cp.get_comments()
-		if not comments: return
-		large_img_url = item["large_img_url"]
-		spec = {"photos.large_img_url": large_img_url}
-		doubanDB.album.update(spec, {"$set": {"photos.$.comments": comments}}, upsert=True)
+        cp = CommentParser(response)
+        comments = cp.get_comments()
+        if not comments: return
+        large_img_url = item["large_img_url"]
+        spec = {"photos.large_img_url": large_img_url}
+        doubanDB.album.update(spec, {"$set": {"photos.$.comments": comments}}, upsert=True)
 
-	def parse_answers(self, response):
-		single = SinglePhotoParser(response)
-		from_url = single.from_url
-		if from_url is None: return
-		doc = doubanDB.album.find_one({"from_url": from_url}, {"from_url": True})
+    def parse_answers(self, response):
+        single = SinglePhotoParser(response)
+        from_url = single.from_url
+        if from_url is None: return
+        doc = doubanDB.album.find_one({"from_url": from_url}, {"from_url": True})
 
-		item = dict(single.item)
-		if not doc:
-			new_item = {}
-			new_item["from_url"] = from_url
-			new_item["photos"] = item
-			doubanDB.album.save(new_item)
-		else:
-			spec = {"from_url": from_url}
-			doc = doubanDB.album.find_one({"photos.large_img_url": item["large_img_url"]})
-			if not doc:
-				doubanDB.album.update(spec, {"$push": {"photos": item}})
+        item = dict(single.item)
+        if not doc:
+            new_item = {}
+            new_item["from_url"] = from_url
+            new_item["photos"] = item
+            doubanDB.album.save(new_item)
+        else:
+            spec = {"from_url": from_url}
+            doc = doubanDB.album.find_one({"photos.large_img_url": item["large_img_url"]})
+            if not doc:
+                doubanDB.album.update(spec, {"$push": {"photos": item}})
 
-		cp = CommentParser(response)
-		comments = cp.get_comments()
-		if not comments: return
-		large_img_url = item["large_img_url"]
-		spec = {"photos.large_img_url": large_img_url}
-		doubanDB.album.update(spec, {"$set": {"photos.$.comments": comments}}, upsert=True)
+        cp = CommentParser(response)
+        comments = cp.get_comments()
+        if not comments: return
+        large_img_url = item["large_img_url"]
+        spec = {"photos.large_img_url": large_img_url}
+        doubanDB.album.update(spec, {"$set": {"photos.$.comments": comments}}, upsert=True)
 
-	def parse_comments(self, response):
-		single = SinglePhotoParser(response)
-		from_url = single.from_url
-		if from_url is None: return
-		doc = doubanDB.album.find_one({"from_url": from_url}, {"from_url": True})
+    def parse_comments(self, response):
+        single = SinglePhotoParser(response)
+        from_url = single.from_url
+        if from_url is None: return
+        doc = doubanDB.album.find_one({"from_url": from_url}, {"from_url": True})
 
-		item = dict(single.item)
-		if not doc:
-			new_item = {}
-			new_item["from_url"] = from_url
-			new_item["photos"] = item
-			doubanDB.album.save(new_item)
-		else:
-			spec = {"from_url": from_url}
-			doc = doubanDB.album.find_one({"photos.large_img_url": item["large_img_url"]})
-			if not doc:
-				doubanDB.album.update(spec, {"$push": {"photos": item}})
+        item = dict(single.item)
+        if not doc:
+            new_item = {}
+            new_item["from_url"] = from_url
+            new_item["photos"] = item
+            doubanDB.album.save(new_item)
+        else:
+            spec = {"from_url": from_url}
+            doc = doubanDB.album.find_one({"photos.large_img_url": item["large_img_url"]})
+            if not doc:
+                doubanDB.album.update(spec, {"$push": {"photos": item}})
 
-		cp = CommentParser(response)
-		comments = cp.get_comments()
-		if not comments: return
-		large_img_url = item["large_img_url"]
-		spec = {"photos.large_img_url": large_img_url}
-		doubanDB.album.update(spec, {"$set": {"photos.$.comments": comments}}, upsert=True)
+        cp = CommentParser(response)
+        comments = cp.get_comments()
+        if not comments: return
+        large_img_url = item["large_img_url"]
+        spec = {"photos.large_img_url": large_img_url}
+        doubanDB.album.update(spec, {"$set": {"photos.$.comments": comments}}, upsert=True)
 
 
 import re
@@ -113,142 +119,142 @@ CREATE_DATE_RE = re.compile(ur"\d{4}-\d{2}-\d{2}")
 
 
 class ParentParser(object):
-	def __init__(self, response):
-		self.response = response
+    def __init__(self, response):
+        self.response = response
 
 
 class AlbumParser(ParentParser):
-	def __init__(self, response):
-		ParentParser.__init__(self, response)
-		self.next_page = False
-		self.item = AlbumItem()
+    def __init__(self, response):
+        ParentParser.__init__(self, response)
+        self.next_page = False
+        self.item = AlbumItem()
 
-		self.get_from_url()
-		if self.next_page: return
+        self.get_from_url()
+        if self.next_page: return
 
-		self.get_album_name()
-		self.get_author()
-		self.get_recommend_total()
-		self.get_like_total()
-		self.get_tags()
+        self.get_album_name()
+        self.get_author()
+        self.get_recommend_total()
+        self.get_like_total()
+        self.get_tags()
 
-		self.parse_short_info()
-		self.get_create_date()
-		self.get_photo_count()
-		self.get_follow_count()
-		self.get_desc()
+        self.parse_short_info()
+        self.get_create_date()
+        self.get_photo_count()
+        self.get_follow_count()
+        self.get_desc()
 
-	def get_from_url(self):
-		url = self.response.url.split("?", 1)
-		if len(url) > 1: self.next_page = True
-		self.item["from_url"] = url[0]
+    def get_from_url(self):
+        url = self.response.url.split("?", 1)
+        if len(url) > 1: self.next_page = True
+        self.item["from_url"] = url[0]
 
-	def get_album_name(self):
-		x_album_name = self.response.xpath("//h1/text()").extract()[0].split("-", 1)
-		if len(x_album_name) == 2:
-			self.item["album_name"] = x_album_name[1]
-			author = self.item.setdefault("author", {})
-			author["nickname"] = x_album_name[0].replace(u"的相册", "")
+    def get_album_name(self):
+        x_album_name = self.response.xpath("//h1/text()").extract()[0].split("-", 1)
+        if len(x_album_name) == 2:
+            self.item["album_name"] = x_album_name[1]
+            author = self.item.setdefault("author", {})
+            author["nickname"] = x_album_name[0].replace(u"的相册", "")
 
-	def get_author(self):
-		x_author = self.response.xpath("//div[@id='db-usr-profile']/div[@class='pic']/a")
-		if x_author:
-			author = self.item.setdefault("author", {})
-			author["home_page"] = x_author.xpath("@href").extract()[0]
-			author["avatar"] = x_author.xpath("img/@src").extract()[0]
+    def get_author(self):
+        x_author = self.response.xpath("//div[@id='db-usr-profile']/div[@class='pic']/a")
+        if x_author:
+            author = self.item.setdefault("author", {})
+            author["home_page"] = x_author.xpath("@href").extract()[0]
+            author["avatar"] = x_author.xpath("img/@src").extract()[0]
 
-	def get_recommend_total(self):
-		x_recommend_total = self.response.xpath("//span[@class='rec-num']").re("\d+")
-		if x_recommend_total: self.item["recommend_total"] = int(x_recommend_total[0])
+    def get_recommend_total(self):
+        x_recommend_total = self.response.xpath("//span[@class='rec-num']").re("\d+")
+        if x_recommend_total: self.item["recommend_total"] = int(x_recommend_total[0])
 
-	def get_like_total(self):
-		x_like_total = self.response.xpath("//span[@class='fav-num']/a/text()").re("\d+")
-		if x_like_total: self.item["like_total"] = int(x_like_total[0])
+    def get_like_total(self):
+        x_like_total = self.response.xpath("//span[@class='fav-num']/a/text()").re("\d+")
+        if x_like_total: self.item["like_total"] = int(x_like_total[0])
 
-	def get_tags(self):
-		x_tags = self.response.xpath("//div[@class='footer-tags']/a/text()").extract()
-		if x_tags: self.item["tags"] = x_tags
+    def get_tags(self):
+        x_tags = self.response.xpath("//div[@class='footer-tags']/a/text()").extract()
+        if x_tags: self.item["tags"] = x_tags
 
-	def parse_short_info(self):
-		self.short_info = "".join(self.response.xpath("//div[@class='wr']//text()").extract())
+    def parse_short_info(self):
+        self.short_info = "".join(self.response.xpath("//div[@class='wr']//text()").extract())
 
-	def get_create_date(self):
-		M = CREATE_DATE_RE.search(self.short_info)
-		if M is not None: self.item["create_date"] = M.group(0)
+    def get_create_date(self):
+        M = CREATE_DATE_RE.search(self.short_info)
+        if M is not None: self.item["create_date"] = M.group(0)
 
-	def get_photo_count(self):
-		M = PHOTO_COUNT_RE.search(self.short_info)
-		if M is not None: self.item["photo_count"] = int(M.group(1))
+    def get_photo_count(self):
+        M = PHOTO_COUNT_RE.search(self.short_info)
+        if M is not None: self.item["photo_count"] = int(M.group(1))
 
-	def get_follow_count(self):
-		M = FOLLOW_RE.search(self.short_info)
-		if M is not None: self.item["follow_count"] = int(M.group(1))
+    def get_follow_count(self):
+        M = FOLLOW_RE.search(self.short_info)
+        if M is not None: self.item["follow_count"] = int(M.group(1))
 
-	def get_desc(self):
-		x_desc = self.response.xpath("//div[@id='link-report']/text()").extract()
-		if x_desc: self.item["desc"] = x_desc[0]
+    def get_desc(self):
+        x_desc = self.response.xpath("//div[@id='link-report']/text()").extract()
+        if x_desc: self.item["desc"] = x_desc[0]
 
 
 class SinglePhotoParser(ParentParser):
-	def __init__(self, response):
-		ParentParser.__init__(self, response)
-		self.item = PhotoItem()
-		self.from_url = None
+    def __init__(self, response):
+        ParentParser.__init__(self, response)
+        self.item = PhotoItem()
+        self.from_url = None
 
-		self.get_from_url()
-		self.get_large_img_url()
-		self.get_like_count()
-		self.get_recommend_count()
-		self.get_desc()
+        self.get_from_url()
+        self.get_large_img_url()
+        self.get_like_count()
+        self.get_recommend_count()
+        self.get_desc()
 
-	def get_from_url(self):
-		x_from_url = self.response.xpath("//div[@id='image']/span[@class='rr']/a/@href").extract()
-		if x_from_url: self.from_url = x_from_url[0].split("?", 1)[0]
+    def get_from_url(self):
+        x_from_url = self.response.xpath("//div[@id='image']/span[@class='rr']/a/@href").extract()
+        if x_from_url: self.from_url = x_from_url[0].split("?", 1)[0]
 
-	def get_large_img_url(self):
-		x_large_img_url = self.response.xpath("//a[@class='mainphoto']/img/@src").extract()
-		if x_large_img_url: self.item["large_img_url"] = x_large_img_url[0]
+    def get_large_img_url(self):
+        x_large_img_url = self.response.xpath("//a[@class='mainphoto']/img/@src").extract()
+        if x_large_img_url: self.item["large_img_url"] = x_large_img_url[0]
 
-	def get_like_count(self):
-		x_like_count = self.response.xpath("//span[@class='fav-num']/a/text()").re("\d+")
-		if x_like_count: self.item["like_count"] = int(x_like_count[0])
+    def get_like_count(self):
+        x_like_count = self.response.xpath("//span[@class='fav-num']/a/text()").re("\d+")
+        if x_like_count: self.item["like_count"] = int(x_like_count[0])
 
-	def get_recommend_count(self):
-		x_rec_num = self.response.xpath("//span[@class='rec-num']/text()").re("\d+")
-		if x_rec_num: self.item["recommend_count"] = int(x_rec_num[0])
+    def get_recommend_count(self):
+        x_rec_num = self.response.xpath("//span[@class='rec-num']/text()").re("\d+")
+        if x_rec_num: self.item["recommend_count"] = int(x_rec_num[0])
 
-	def get_desc(self):
-		x_desc = self.response.xpath("//div[@class='edtext pl']/text()").extract()
-		if x_desc: self.item["desc"] = x_desc[0]
+    def get_desc(self):
+        x_desc = self.response.xpath("//div[@class='edtext pl']/text()").extract()
+        if x_desc: self.item["desc"] = x_desc[0]
 
 
 class CommentParser(ParentParser):
-	def __init__(self, response):
-		ParentParser.__init__(self, response)
+    def __init__(self, response):
+        ParentParser.__init__(self, response)
 
-	def get_comments(self):
-		comments = []
-		x_comments = self.response.xpath("//div[@class='comment-item']")
-		for comment in x_comments:
-			comment_dict = {}
+    def get_comments(self):
+        comments = []
+        x_comments = self.response.xpath("//div[@class='comment-item']")
+        for comment in x_comments:
+            comment_dict = {}
 
-			x_homepage = comment.xpath("div[@class='pic']/a/@href").extract()
-			if x_homepage: comment_dict["home_page"] = x_homepage[0]
+            x_homepage = comment.xpath("div[@class='pic']/a/@href").extract()
+            if x_homepage: comment_dict["home_page"] = x_homepage[0]
 
-			x_avatar = comment.xpath("div[@class='pic']/a/img/@src").extract()
-			if x_avatar: comment_dict["avatar"] = x_avatar[0]
+            x_avatar = comment.xpath("div[@class='pic']/a/img/@src").extract()
+            if x_avatar: comment_dict["avatar"] = x_avatar[0]
 
-			find_path = "div[@class='content report-comment']/div[@class='author']/span[1]/text()"
-			x_post_datetime = comment.xpath(find_path).extract()
-			if x_post_datetime: comment_dict["post_datetime"] = x_post_datetime[0]
+            find_path = "div[@class='content report-comment']/div[@class='author']/span[1]/text()"
+            x_post_datetime = comment.xpath(find_path).extract()
+            if x_post_datetime: comment_dict["post_datetime"] = x_post_datetime[0]
 
-			find_path = "div[@class='content report-comment']/div[@class='author']/a[1]/text()"
-			x_nickname = comment.xpath(find_path).extract()
-			if x_nickname: comment_dict["nickname"] = x_nickname[0]
+            find_path = "div[@class='content report-comment']/div[@class='author']/a[1]/text()"
+            x_nickname = comment.xpath(find_path).extract()
+            if x_nickname: comment_dict["nickname"] = x_nickname[0]
 
-			x_content = comment.xpath("div[@class='content report-comment']/p[1]/text()").extract()
-			if x_content: comment_dict["content"] = x_content[0]
+            x_content = comment.xpath("div[@class='content report-comment']/p[1]/text()").extract()
+            if x_content: comment_dict["content"] = x_content[0]
 
-			comments.append(comment_dict)
+            comments.append(comment_dict)
 
-		return comments
+        return comments

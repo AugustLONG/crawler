@@ -341,3 +341,6 @@ KAFKA_TOPIC_PREFIX = 'demo'
 # http://host3:port
 # ...
 # PROXY_LIST = '/path/to/proxy/list.txt'
+
+# 布隆过滤
+DUPEFILTER_CLASS = "crawler.utils.bloomfilter.BLOOMDupeFilter"
