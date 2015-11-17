@@ -1,4 +1,106 @@
 #encoding: utf-8
+import scrapy
+from scrapy.contrib.linkextractors import LinkExtractor
+from scrapy.contrib.spiders import CrawlSpider, Rule
+
+class StackoverflowSpider(CrawlSpider):
+	name = "stackoverflow"
+	allowed_domains = ["stackoverflow.com","stackexchange.com"]
+	start_urls = [
+	    "http://api.stackexchange.com/docs/questions",
+	]
+
+	rules = (
+	    #问题详情
+	    Rule(LinkExtractor(allow=r"^http://www\.stackoverflow\.com/questions/\d+/\w+"),
+	        callback="parse_questions",
+	        follow=True
+	    )
+	)
+
+	def parse_users(self, response):
+	    album_parser = AlbumParser(response)
+	    item = dict(album_parser.item)
+
+	    if album_parser.next_page: return None
+	    spec = dict(from_url = item["from_url"])
+	    doubanDB.album.update(spec, {"$set": item}, upsert=True)
+
+	def parse_questions(self, response):
+	    single = SinglePhotoParser(response)
+	    from_url = single.from_url
+	    if from_url is None: return
+	    doc = doubanDB.album.find_one({"from_url": from_url}, {"from_url":True})
+
+	    item = dict(single.item)
+	    if not doc:
+	        new_item = {}
+	        new_item["from_url"] = from_url
+	        new_item["photos"] = item
+	        doubanDB.album.save(new_item)
+	    else:
+	        spec = {"from_url": from_url}
+	        doc = doubanDB.album.find_one({"photos.large_img_url": item["large_img_url"]})
+	        if not doc:
+	            doubanDB.album.update(spec, {"$push": {"photos": item}})
+
+	    cp = CommentParser(response)
+	    comments = cp.get_comments()
+	    if not comments: return
+	    large_img_url = item["large_img_url"]
+	    spec = {"photos.large_img_url": large_img_url }
+	    doubanDB.album.update(spec, {"$set": {"photos.$.comments": comments} }, upsert=True)
+
+	def parse_answers(self, response):
+	    single = SinglePhotoParser(response)
+	    from_url = single.from_url
+	    if from_url is None: return
+	    doc = doubanDB.album.find_one({"from_url": from_url}, {"from_url":True})
+
+	    item = dict(single.item)
+	    if not doc:
+	        new_item = {}
+	        new_item["from_url"] = from_url
+	        new_item["photos"] = item
+	        doubanDB.album.save(new_item)
+	    else:
+	        spec = {"from_url": from_url}
+	        doc = doubanDB.album.find_one({"photos.large_img_url": item["large_img_url"]})
+	        if not doc:
+	            doubanDB.album.update(spec, {"$push": {"photos": item}})
+
+	    cp = CommentParser(response)
+	    comments = cp.get_comments()
+	    if not comments: return
+	    large_img_url = item["large_img_url"]
+	    spec = {"photos.large_img_url": large_img_url }
+	    doubanDB.album.update(spec, {"$set": {"photos.$.comments": comments} }, upsert=True)
+
+	def parse_comments(self, response):
+	    single = SinglePhotoParser(response)
+	    from_url = single.from_url
+	    if from_url is None: return
+	    doc = doubanDB.album.find_one({"from_url": from_url}, {"from_url":True})
+
+	    item = dict(single.item)
+	    if not doc:
+	        new_item = {}
+	        new_item["from_url"] = from_url
+	        new_item["photos"] = item
+	        doubanDB.album.save(new_item)
+	    else:
+	        spec = {"from_url": from_url}
+	        doc = doubanDB.album.find_one({"photos.large_img_url": item["large_img_url"]})
+	        if not doc:
+	            doubanDB.album.update(spec, {"$push": {"photos": item}})
+
+	    cp = CommentParser(response)
+	    comments = cp.get_comments()
+	    if not comments: return
+	    large_img_url = item["large_img_url"]
+	    spec = {"photos.large_img_url": large_img_url }
+	    doubanDB.album.update(spec, {"$set": {"photos.$.comments": comments} }, upsert=True)
+
 import re
 
 from items import AlbumItem, PhotoItem
@@ -39,7 +141,7 @@ class AlbumParser(ParentParser):
 
     def get_album_name(self):
         x_album_name = self.response.xpath("//h1/text()").extract()[0].split("-", 1)
-        if len(x_album_name) == 2: 
+        if len(x_album_name) == 2:
             self.item["album_name"] = x_album_name[1]
             author = self.item.setdefault("author", {})
             author["nickname"] = x_album_name[0].replace(u"的相册", "")
