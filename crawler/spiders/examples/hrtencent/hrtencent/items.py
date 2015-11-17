@@ -5,10 +5,11 @@
 
 from scrapy.item import Item, Field
 
+
 class PositionDetailItem(Item):
     title = Field()
     link = Field()
-    sharetitle  = Field()
+    sharetitle = Field()
     bottomline = Field()
     duty = Field()
     xxx = Field()

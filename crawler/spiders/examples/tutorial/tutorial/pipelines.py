@@ -15,7 +15,6 @@ class TutorialPipeline(object):
 
 
 class XmlExportPipeline(object):
-
     def __init__(self):
         self.files = {}
 
@@ -45,8 +44,8 @@ class XmlExportPipeline(object):
 import json
 import codecs
 
-class JsonWithEncodingPipeline(object):
 
+class JsonWithEncodingPipeline(object):
     def __init__(self):
         self.file = codecs.open('data_utf8.json', 'w', encoding='utf-8')
 

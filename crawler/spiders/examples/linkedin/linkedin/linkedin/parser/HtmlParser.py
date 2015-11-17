@@ -5,7 +5,7 @@ import random
 import LinkedinParser
 
 
-class HtmlParser:    
+class HtmlParser:
     @staticmethod
     def extract_person_profile(hxs):
         personProfile = PersonProfileItem()
@@ -25,7 +25,7 @@ class HtmlParser:
             personProfile['name'] = nameField
         else:
             return None
-        
+
         headline = hxs.select("//dl[@id='headline']")
         if headline and len(headline) == 1:
             headline = headline[0]
@@ -37,7 +37,7 @@ class HtmlParser:
             industry = headline.select("dd[@class='industry']/text()").extract()
             if industry and len(industry) == 1:
                 personProfile['industry'] = industry[0].strip()
-        
+
         ## overview
         overview = hxs.select("//dl[@id='overview']").extract()
         if overview and len(overview) == 1:
@@ -45,23 +45,24 @@ class HtmlParser:
             homepage = LinkedinParser.parse_homepage(overview[0])
             if homepage:
                 personProfile['homepage'] = homepage
-            
+
         ## summary
-        summary = hxs.select("//div[@id='profile-summary']/div[@class='content']/p[contains(@class,'summary')]/text()").extract()
+        summary = hxs.select(
+            "//div[@id='profile-summary']/div[@class='content']/p[contains(@class,'summary')]/text()").extract()
         if summary and len(summary) > 0:
             personProfile['summary'] = ''.join(x.strip() for x in summary)
-        
+
         ## specilities
         specilities = hxs.select("//div[@id='profile-specialties']/p/text()").extract()
         if specilities and len(specilities) == 1:
             specilities = specilities[0].strip()
             personProfile['specilities'] = specilities
-        
+
         ## skills
         skills = hxs.select("//ol[@id='skills-list']/li/span/a/text()").extract()
         if skills and len(skills) > 0:
             personProfile['skills'] = [x.strip() for x in skills]
-            
+
         additional = hxs.select("//div[@id='profile-additional']")
         if additional and len(additional) == 1:
             additional = additional[0]
@@ -85,7 +86,7 @@ class HtmlParser:
             honors = additional.select("div[@class='content']/dl/dd[@class='honors']/p/text()").extract()
             if honors and len(honors) > 0:
                 personProfile['honors'] = [x.strip() for x in honors]
-        
+
         ## education
         education = hxs.select("//div[@id='profile-education']")
         schools = []
@@ -117,9 +118,9 @@ class HtmlParser:
                     if len(desc) == 1:
                         s['desc'] = desc[0].strip()
                     schools.append(s)
-                personProfile['education'] = schools 
-        
-        ## experience
+                personProfile['education'] = schools
+
+                ## experience
         experience = hxs.select("//div[@id='profile-experience']")
         if experience and len(experience) == 1:
             es = []
@@ -131,7 +132,7 @@ class HtmlParser:
                     title = e.select("div[@class='postitle']//span[@class='title']/text()").extract()
                     if len(title) > 0:
                         je['title'] = title[0].strip()
-                    org = e.select("div[@class='postitle']//span[contains(@class,'org')]/text()").extract() 
+                    org = e.select("div[@class='postitle']//span[contains(@class,'org')]/text()").extract()
                     if len(org) > 0:
                         je['org'] = org[0].strip()
                     start = e.select("p[@class='period']/abbr[@class='dtstart']/text()").extract()
@@ -148,7 +149,7 @@ class HtmlParser:
                         je['desc'] = "".join(x.strip() for x in desc)
                     es.append(je)
             personProfile['experience'] = es
-                    
+
         ## Also view
         alsoViewProfileList = []
         divExtra = hxs.select("//div[@id='extra']")
@@ -170,19 +171,17 @@ class HtmlParser:
     def get_also_view_item(dirtyUrl):
         item = {}
         url = HtmlParser.remove_url_parameter(dirtyUrl)
-        item['linkedin_id'] = url 
+        item['linkedin_id'] = url
         item['url'] = HtmlParser.get_linkedin_id(url)
         return item
-        
-        
+
     @staticmethod
     def remove_url_parameter(url):
         return url_query_cleaner(url)
-    
+
     @staticmethod
     def get_linkedin_id(url):
         find_index = url.find("linkedin.com/")
         if find_index >= 0:
             return url[find_index + 13:].replace('/', '-')
         return None
-        

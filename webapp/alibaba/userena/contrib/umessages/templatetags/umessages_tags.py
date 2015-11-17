@@ -6,13 +6,15 @@ import re
 
 register = template.Library()
 
+
 class MessageCount(template.Node):
     def __init__(self, um_from_user, var_name, um_to_user=None):
         self.user = template.Variable(um_from_user)
         self.var_name = var_name
         if um_to_user:
             self.um_to_user = template.Variable(um_to_user)
-        else: self.um_to_user = um_to_user
+        else:
+            self.um_to_user = um_to_user
 
     def render(self, context):
         try:
@@ -35,6 +37,7 @@ class MessageCount(template.Node):
         context[self.var_name] = message_count
 
         return ''
+
 
 @register.tag
 def get_unread_message_count_for(parser, token):
@@ -59,6 +62,7 @@ def get_unread_message_count_for(parser, token):
         raise template.TemplateSyntaxError("%s tag had invalid arguments" % tag_name)
     user, var_name = m.groups()
     return MessageCount(user, var_name)
+
 
 @register.tag
 def get_unread_message_count_between(parser, token):

@@ -46,63 +46,63 @@ check = []
 
 
 class ctripSpider(BaseSpider):
-	name = 'check'
-	# allowed_domains = 'http://hotels.ctrip.com/'
+    name = 'check'
+    # allowed_domains = 'http://hotels.ctrip.com/'
 
-	start_urls = [
-		'http://hotels.ctrip.com/Domestic/tool/AjaxGetHotelDetailComment.aspx?MasterHotelID=-1&hotel=42900&card=0&property=0&currentPage=0']
+    start_urls = [
+        'http://hotels.ctrip.com/Domestic/tool/AjaxGetHotelDetailComment.aspx?MasterHotelID=-1&hotel=42900&card=0&property=0&currentPage=0']
 
 
-	# callback function when received response
-	def parse(self, response):
-		# init hotel
-		hotel = 0
-		# iterate the hotel url
-		while hotel < 1000:
-			if hotel < 10:
-				link = response.url.replace(urlparse(response.url)[4].split('&')[1], 'hotel=42900' + str(hotel))
-				yield Request(url=link, callback=self.parsePage, meta={'hotel': hotel})
-			elif hotel >= 10 and hotel < 100:
-				link = response.url.replace(urlparse(response.url)[4].split('&')[1], 'hotel=4290' + str(hotel))
-				yield Request(url=link, callback=self.parsePage, meta={'hotel': hotel})
-			elif hotel >= 100:
-				link = response.url.replace(urlparse(response.url)[4].split('&')[1], 'hotel=429' + str(hotel))
-				yield Request(url=link, callback=self.parsePage, meta={'hotel': hotel})
-			hotel += 1
-		# time.sleep(5)
-		print check
+    # callback function when received response
+    def parse(self, response):
+        # init hotel
+        hotel = 0
+        # iterate the hotel url
+        while hotel < 1000:
+            if hotel < 10:
+                link = response.url.replace(urlparse(response.url)[4].split('&')[1], 'hotel=42900' + str(hotel))
+                yield Request(url=link, callback=self.parsePage, meta={'hotel': hotel})
+            elif hotel >= 10 and hotel < 100:
+                link = response.url.replace(urlparse(response.url)[4].split('&')[1], 'hotel=4290' + str(hotel))
+                yield Request(url=link, callback=self.parsePage, meta={'hotel': hotel})
+            elif hotel >= 100:
+                link = response.url.replace(urlparse(response.url)[4].split('&')[1], 'hotel=429' + str(hotel))
+                yield Request(url=link, callback=self.parsePage, meta={'hotel': hotel})
+            hotel += 1
+        # time.sleep(5)
+        print check
 
-	def parsePage(self, response):
-		sel = Selector(response)
+    def parsePage(self, response):
+        sel = Selector(response)
 
-		try:
-			try:
-				# Number of pages per hotel
-				page_list = len(sel.xpath('/html/body/div/div/div/div[4]/div/div[1]/text()'))
-				page = str(sel.xpath(
-					'/html/body/div/div/div/div[4]/div/div[1]/a[' + str(page_list - 2) + ']/span/text()')).split(' ')[
-					2].split('\'')[1]
-				print "page_list!!!"
-				print page_list - 2
-				print page
-				if int(page) >= 74:
-					print "get!"
-					check.append(response.meta['hotel'])
-					con = json.dumps(check, ensure_ascii=False).encode('utf8')
-					print con
-					f = open('check', 'r+')
-					f.write(con)
+        try:
+            try:
+                # Number of pages per hotel
+                page_list = len(sel.xpath('/html/body/div/div/div/div[4]/div/div[1]/text()'))
+                page = str(sel.xpath(
+                    '/html/body/div/div/div/div[4]/div/div[1]/a[' + str(page_list - 2) + ']/span/text()')).split(' ')[
+                    2].split('\'')[1]
+                print "page_list!!!"
+                print page_list - 2
+                print page
+                if int(page) >= 74:
+                    print "get!"
+                    check.append(response.meta['hotel'])
+                    con = json.dumps(check, ensure_ascii=False).encode('utf8')
+                    print con
+                    f = open('check', 'r+')
+                    f.write(con)
 
-			except:
-				page = 0
-				print "let page == 0"
+            except:
+                page = 0
+                print "let page == 0"
 
-			print 'sleep 5 secs'
-			time.sleep(5)
-		except:
-			log.msg("Page Error !!!!! " + response.url, level=log.WARNING)
+            print 'sleep 5 secs'
+            time.sleep(5)
+        except:
+            log.msg("Page Error !!!!! " + response.url, level=log.WARNING)
 
-	def writeAppendFile(self, filename, con):
-		with open(os.path.join('reviews', str(filename)), 'a') as file:
-			content = str(con)
-			file.write(con)
+    def writeAppendFile(self, filename, con):
+        with open(os.path.join('reviews', str(filename)), 'a') as file:
+            content = str(con)
+            file.write(con)

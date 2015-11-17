@@ -105,10 +105,10 @@ USERENA_WITHOUT_USERNAMES = getattr(settings,
                                     False)
 
 USERENA_PROFILE_DETAIL_TEMPLATE = getattr(
-	settings, 'USERENA_PROFILE_DETAIL_TEMPLATE', 'userena/profile_detail.html')
+    settings, 'USERENA_PROFILE_DETAIL_TEMPLATE', 'userena/profile_detail.html')
 
 USERENA_PROFILE_LIST_TEMPLATE = getattr(
-	settings, 'USERENA_PROFILE_LIST_TEMPLATE', 'userena/profile_list.html')
+    settings, 'USERENA_PROFILE_LIST_TEMPLATE', 'userena/profile_list.html')
 
 USERENA_HIDE_EMAIL = getattr(settings, 'USERENA_HIDE_EMAIL', False)
 

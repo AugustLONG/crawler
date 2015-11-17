@@ -9,9 +9,9 @@ import scrapy
 
 
 class TutorialItem(scrapy.Item):
-	# define the fields for your item here like:
-	# name = scrapy.Field()
-	title = scrapy.Field()
-	price = scrapy.Field()
-	comment = scrapy.Field()
-	product_id = scrapy.Field()
+    # define the fields for your item here like:
+    # name = scrapy.Field()
+    title = scrapy.Field()
+    price = scrapy.Field()
+    comment = scrapy.Field()
+    product_id = scrapy.Field()

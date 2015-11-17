@@ -45,8 +45,8 @@ ITEM_PIPELINES = ['woaidu_crawler.pipelines.cover_image.WoaiduCoverImage',
 IMAGES_STORE = os.path.join(PROJECT_DIR, 'media/book_covor_image')
 IMAGES_EXPIRES = 30
 IMAGES_THUMBS = {
-	'small': (50, 50),
-	'big': (270, 270),
+    'small': (50, 50),
+    'big': (270, 270),
 }
 
 IMAGES_MIN_HEIGHT = 0
@@ -57,9 +57,9 @@ COOKIES_ENABLED = False
 # USER_AGENT = 'Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.43 Safari/537.31'
 
 DOWNLOADER_MIDDLEWARES = {
-	#    'woaidu_crawler.contrib.downloadmiddleware.google_cache.GoogleCacheMiddleware':50,
-	'scrapy.contrib.downloadermiddleware.useragent.UserAgentMiddleware': None,
-	'woaidu_crawler.contrib.downloadmiddleware.rotate_useragent.RotateUserAgentMiddleware': 400,
+    #    'woaidu_crawler.contrib.downloadmiddleware.google_cache.GoogleCacheMiddleware':50,
+    'scrapy.contrib.downloadermiddleware.useragent.UserAgentMiddleware': None,
+    'woaidu_crawler.contrib.downloadmiddleware.rotate_useragent.RotateUserAgentMiddleware': 400,
 }
 
 # GOOGLE_CACHE_DOMAINS = ['www.woaidu.org',]

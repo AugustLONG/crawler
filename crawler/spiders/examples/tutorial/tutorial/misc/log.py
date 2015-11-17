@@ -1,5 +1,5 @@
-
 from scrapy import log
+
 
 def warn(msg):
     log.msg(str(msg), level=log.WARNING)
@@ -11,4 +11,3 @@ def info(msg):
 
 def debug(msg):
     log.msg(str(msg), level=log.DEBUG)
-

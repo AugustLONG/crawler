@@ -22,10 +22,10 @@ class MessageListView(ListView):
     an imitation of the iPhone SMS functionality.
 
     """
-    page=1
-    paginate_by=50
-    template_name='umessages/message_list.html'
-    extra_context={}
+    page = 1
+    paginate_by = 50
+    template_name = 'umessages/message_list.html'
+    extra_context = {}
     context_object_name = 'message_list'
 
     def get_context_data(self, **kwargs):
@@ -43,7 +43,7 @@ class MessageDetailListView(MessageListView):
     Returns a conversation between two users
 
     """
-    template_name='umessages/message_detail.html'
+    template_name = 'umessages/message_detail.html'
 
     def get_context_data(self, **kwargs):
         context = super(MessageDetailListView, self).get_context_data(**kwargs)
@@ -53,17 +53,17 @@ class MessageDetailListView(MessageListView):
     def get_queryset(self):
         username = self.kwargs['username']
         self.recipient = get_object_or_404(get_user_model(),
-                                  username__iexact=username)
+                                           username__iexact=username)
         queryset = Message.objects.get_conversation_between(self.request.user,
-                                                        self.recipient)
+                                                            self.recipient)
         self._update_unread_messages(queryset)
         return queryset
 
     def _update_unread_messages(self, queryset):
         message_pks = [m.pk for m in queryset]
         unread_list = MessageRecipient.objects.filter(message__in=message_pks,
-                                                  user=self.request.user,
-                                                  read_at__isnull=True)
+                                                      user=self.request.user,
+                                                      read_at__isnull=True)
         now = get_datetime_now()
         unread_list.update(read_at=now)
 
@@ -129,8 +129,10 @@ def message_compose(request, recipients=None, compose_form=ComposeForm,
 
             # Redirect mechanism
             redirect_to = reverse('userena_umessages_list')
-            if requested_redirect: redirect_to = requested_redirect
-            elif success_url: redirect_to = success_url
+            if requested_redirect:
+                redirect_to = requested_redirect
+            elif success_url:
+                redirect_to = success_url
             elif len(recipients) == 1:
                 redirect_to = reverse('userena_umessages_detail',
                                       kwargs={'username': recipients[0].username})
@@ -140,6 +142,7 @@ def message_compose(request, recipients=None, compose_form=ComposeForm,
     extra_context["form"] = form
     extra_context["recipients"] = recipients
     return render(request, template_name, extra_context)
+
 
 @login_required
 @require_http_methods(["POST"])
@@ -169,8 +172,10 @@ def message_remove(request, undo=False):
         # Check that all values are integers.
         valid_message_pk_list = set()
         for pk in message_pks:
-            try: valid_pk = int(pk)
-            except (TypeError, ValueError): pass
+            try:
+                valid_pk = int(pk)
+            except (TypeError, ValueError):
+                pass
             else:
                 valid_message_pk_list.add(valid_pk)
 
@@ -213,5 +218,7 @@ def message_remove(request, undo=False):
 
             messages.success(request, message, fail_silently=True)
 
-    if redirect_to: return redirect(redirect_to)
-    else: return redirect(reverse('userena_umessages_list'))
+    if redirect_to:
+        return redirect(redirect_to)
+    else:
+        return redirect(reverse('userena_umessages_list'))

@@ -81,13 +81,12 @@ class MessagesViewsTests(TestCase):
     def test_message_detail(self):
         """ A ``GET`` to the detail view """
         self._test_login('userena_umessages_detail',
-                          kwargs={'message_id': 2})
+                         kwargs={'message_id': 2})
 
         # Sign in
         client = self.client.login(username='jane', password='blowfish')
         response = self.client.get(reverse('userena_umessages_detail',
-                                   kwargs={'message_id': 1}))
-
+                                           kwargs={'message_id': 1}))
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response,
@@ -157,7 +156,7 @@ class MessagesViewsTests(TestCase):
                              reverse('userena_umessages_list'))
 
         # Message #1 and #2 should be deleted
-        msg_list = Message.objects.filter(pk__in=['1','2'],
+        msg_list = Message.objects.filter(pk__in=['1', '2'],
                                           sender_deleted_at__isnull=False)
         self.assertEqual(msg_list.count(), 2)
 
@@ -167,14 +166,14 @@ class MessagesViewsTests(TestCase):
 
         # Delete a message as owner
         response = self.client.post(reverse('userena_umessages_unremove'),
-                                    data={'message_pks': [1,]})
+                                    data={'message_pks': [1, ]})
 
         self.assertRedirects(response,
                              reverse('userena_umessages_list'))
 
         # Delete the message as a recipient
         response = self.client.post(reverse('userena_umessages_unremove'),
-                                    data={'message_pks': [2,]})
+                                    data={'message_pks': [2, ]})
 
         self.assertRedirects(response,
                              reverse('userena_umessages_list'))

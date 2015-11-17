@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 from urllib2 import urlparse
 
+
 def parse_homepage(html):
     soup = BeautifulSoup(html)
     websites = soup.find_all('dd', 'websites')
@@ -18,4 +19,3 @@ def parse_homepage(html):
                     result[site_name] = query_parse['url']
             return result
     return None
-

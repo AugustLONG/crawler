@@ -5,33 +5,33 @@ from userena.contrib.umessages.models import Message, MessageContact, MessageRec
 
 
 class MessageRecipientInline(admin.TabularInline):
-	""" Inline message recipients """
-	model = MessageRecipient
+    """ Inline message recipients """
+    model = MessageRecipient
 
 
 class MessageAdmin(admin.ModelAdmin):
-	""" Admin message class with inline recipients """
-	inlines = [
-		MessageRecipientInline,
-	]
+    """ Admin message class with inline recipients """
+    inlines = [
+        MessageRecipientInline,
+    ]
 
-	fieldsets = (
-		(None, {
-			'fields': (
-				'sender', 'body',
-			),
-			'classes': ('monospace'),
-		}),
-		(_('Date/time'), {
-			'fields': (
-				'sender_deleted_at',
-			),
-			'classes': ('collapse', 'wide'),
-		}),
-	)
-	list_display = ('sender', 'body', 'sent_at')
-	list_filter = ('sent_at', 'sender')
-	search_fields = ('body',)
+    fieldsets = (
+        (None, {
+            'fields': (
+                'sender', 'body',
+            ),
+            'classes': ('monospace'),
+        }),
+        (_('Date/time'), {
+            'fields': (
+                'sender_deleted_at',
+            ),
+            'classes': ('collapse', 'wide'),
+        }),
+    )
+    list_display = ('sender', 'body', 'sent_at')
+    list_filter = ('sent_at', 'sender')
+    search_fields = ('body',)
 
 
 admin.site.register(Message, MessageAdmin)

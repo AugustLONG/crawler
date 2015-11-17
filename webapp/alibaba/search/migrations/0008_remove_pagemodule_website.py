@@ -5,13 +5,13 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-	dependencies = [
-		('search', '0007_pagemodule'),
-	]
+    dependencies = [
+        ('search', '0007_pagemodule'),
+    ]
 
-	operations = [
-		migrations.RemoveField(
-			model_name='pagemodule',
-			name='website',
-		),
-	]
+    operations = [
+        migrations.RemoveField(
+            model_name='pagemodule',
+            name='website',
+        ),
+    ]

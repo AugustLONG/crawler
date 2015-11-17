@@ -6,7 +6,6 @@ from django.conf import settings
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
@@ -31,8 +30,10 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('latest_message', models.ForeignKey(verbose_name='latest message', to='umessages.Message')),
-                ('um_from_user', models.ForeignKey(related_name='um_from_users', verbose_name='from user', to=settings.AUTH_USER_MODEL)),
-                ('um_to_user', models.ForeignKey(related_name='um_to_users', verbose_name='to user', to=settings.AUTH_USER_MODEL)),
+                ('um_from_user', models.ForeignKey(related_name='um_from_users', verbose_name='from user',
+                                                   to=settings.AUTH_USER_MODEL)),
+                ('um_to_user',
+                 models.ForeignKey(related_name='um_to_users', verbose_name='to user', to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'ordering': ['latest_message'],
@@ -57,7 +58,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='message',
             name='recipients',
-            field=models.ManyToManyField(related_name='received_messages', verbose_name='recipients', through='umessages.MessageRecipient', to=settings.AUTH_USER_MODEL),
+            field=models.ManyToManyField(related_name='received_messages', verbose_name='recipients',
+                                         through='umessages.MessageRecipient', to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
             model_name='message',

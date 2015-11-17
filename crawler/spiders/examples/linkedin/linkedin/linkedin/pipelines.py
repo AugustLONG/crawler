@@ -5,6 +5,7 @@
 from scrapy.conf import settings
 from scrapy import log
 
+
 class LinkedinPipeline(object):
     def process_item(self, item, spider):
         return item
@@ -37,12 +38,12 @@ class MongoDBPipeline(object):
             self.collection.insert(dict(item))
         else:
             self.collection.update(
-                            {self.__get_uniq_key(): item[self.__get_uniq_key()]},
-                            dict(item),
-                            upsert=True)  
+                {self.__get_uniq_key(): item[self.__get_uniq_key()]},
+                dict(item),
+                upsert=True)
         log.msg("Item wrote to MongoDB database %s/%s" %
-                    (settings['MONGODB_DB'], settings['MONGODB_COLLECTION']),
-                    level=log.DEBUG, spider=spider)  
+                (settings['MONGODB_DB'], settings['MONGODB_COLLECTION']),
+                level=log.DEBUG, spider=spider)
         return item
 
     def __get_uniq_key(self):

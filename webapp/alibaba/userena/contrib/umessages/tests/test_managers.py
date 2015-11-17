@@ -17,6 +17,7 @@ class MessageManagerTests(TestCase):
 
         messages = Message.objects.get_conversation_between(user_1, user_2)
 
+
 class MessageRecipientManagerTest(TestCase):
     fixtures = ['users', 'messages']
 
@@ -39,6 +40,7 @@ class MessageRecipientManagerTest(TestCase):
 
         self.failUnlessEqual(unread_messages, 1)
 
+
 class MessageContactManagerTest(TestCase):
     fixtures = ['users', 'messages']
 
@@ -53,4 +55,3 @@ class MessageContactManagerTest(TestCase):
         jane = User.objects.get(pk=2)
         self.failUnlessEqual(contacts[0].um_to_user,
                              jane)
-

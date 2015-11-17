@@ -13,15 +13,15 @@ import os
 TOP_DIR = os.path.dirname(__file__)
 
 if not TOP_DIR:
-	TOP_DIR = "."
+    TOP_DIR = "."
 
 log_path = os.path.join(TOP_DIR, 'logs')
 if not os.path.exists(log_path):
-	os.mkdir(log_path)
+    os.mkdir(log_path)
 
 IMAGES_STORE = os.path.join(TOP_DIR, 'imgLogo')
 if not os.path.exists(IMAGES_STORE):
-	os.mkdir(IMAGES_STORE)
+    os.mkdir(IMAGES_STORE)
 
 BOT_NAME = 'webSpider'
 
@@ -32,10 +32,10 @@ NEWSPIDER_MODULE = 'webSpider.spiders'
 # USER_AGENT = 'webSpider (+http://www.yourdomain.com)'
 
 ITEM_PIPELINES = {
-	'scrapy.contrib.pipeline.images.ImagesPipeline': 150,
-	'webSpider.pipelines.webImgePipeline': 550,
-	'webSpider.pipelines.WebspiderPipeline': 300,
-	'webSpider.pipelines.webMysqlPipeline': 455,
+    'scrapy.contrib.pipeline.images.ImagesPipeline': 150,
+    'webSpider.pipelines.webImgePipeline': 550,
+    'webSpider.pipelines.WebspiderPipeline': 300,
+    'webSpider.pipelines.webMysqlPipeline': 455,
 
 }
 
@@ -46,10 +46,10 @@ DEFAULT_REQUEST_HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.2; WOW64; rv
                            }
 
 DOWNLOADER_MIDDLEWARES = {
-	'scrapy.contrib.downloadermiddleware.retry.RetryMiddleware': 90,
-	# Fix path to this module
-	'webSpider.downMiddler.randomProxy.RandomProxy': 100,
-	'scrapy.contrib.downloadermiddleware.httpproxy.HttpProxyMiddleware': 110,
+    'scrapy.contrib.downloadermiddleware.retry.RetryMiddleware': 90,
+    # Fix path to this module
+    'webSpider.downMiddler.randomProxy.RandomProxy': 100,
+    'scrapy.contrib.downloadermiddleware.httpproxy.HttpProxyMiddleware': 110,
 
 }
 # DOWNLOAD

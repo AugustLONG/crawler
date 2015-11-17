@@ -1,4 +1,4 @@
-#coding:utf-8
+# coding:utf-8
 
 '''
 This tutorial include several spiders:
@@ -7,12 +7,11 @@ This tutorial include several spiders:
     douban_book
 '''
 
-
 import re
 from urlparse import urljoin
 
-
 from scrapy.selector import Selector
+
 try:
     from scrapy.spider import Spider
 except:
@@ -21,7 +20,6 @@ from scrapy.utils.response import get_base_url
 from scrapy import log
 from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor as sle
-
 
 from tutorial.items import TutorialItem
 from tutorial.misc.log import *
@@ -101,7 +99,7 @@ class DoubanBookTagSpider(Spider):
             relative_url = site.xpath('a/@href').extract()
             item['link'] = [urljoin(base_url, u) for u in relative_url]
             item['num'] = site.xpath('b/text()').extract()
-            #print repr(item).decode("unicode-escape")
+            # print repr(item).decode("unicode-escape")
 
             items.append(item)
         return items
@@ -115,8 +113,8 @@ class DoubanBookSpider(CrawlSpider):
     ]
 
     rules = (
-        Rule(sle(allow=("/tag/[^/]+/?$", )), callback="parse_1"),
-        Rule(sle(allow=("/tag/$", )), follow=True, process_request='_process_request'),
+        Rule(sle(allow=("/tag/[^/]+/?$",)), callback="parse_1"),
+        Rule(sle(allow=("/tag/$",)), follow=True, process_request='_process_request'),
     )
 
     # NOTE: depth index is hidden.

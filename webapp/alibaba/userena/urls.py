@@ -7,11 +7,11 @@ from userena.compat import auth_views_compat_quirks, password_reset_uid_kwarg
 
 
 def merged_dict(dict_a, dict_b):
-	"""Merges two dicts and returns output. It's purpose is to ease use of
-	``auth_views_compat_quirks``
-	"""
-	dict_a.update(dict_b)
-	return dict_a
+    """Merges two dicts and returns output. It's purpose is to ease use of
+    ``auth_views_compat_quirks``
+    """
+    dict_a.update(dict_b)
+    return dict_a
 
 
 urlpatterns = patterns('',
@@ -32,7 +32,7 @@ urlpatterns = patterns('',
                            merged_dict({'template_name': 'userena/password_reset_form.html',
                                         'email_template_name': 'userena/emails/password_reset_message.txt',
                                         'extra_context': {
-	                                        'without_usernames': userena_settings.USERENA_WITHOUT_USERNAMES}
+                                            'without_usernames': userena_settings.USERENA_WITHOUT_USERNAMES}
                                         }, auth_views_compat_quirks['userena_password_reset']),
                            name='userena_password_reset'),
                        url(r'^password/reset/done/$',
@@ -54,8 +54,8 @@ urlpatterns = patterns('',
                            userena_views.direct_to_user_template,
                            {'template_name': 'userena/signup_complete.html',
                             'extra_context': {
-	                            'userena_activation_required': userena_settings.USERENA_ACTIVATION_REQUIRED,
-	                            'userena_activation_days': userena_settings.USERENA_ACTIVATION_DAYS}},
+                                'userena_activation_required': userena_settings.USERENA_ACTIVATION_REQUIRED,
+                                'userena_activation_days': userena_settings.USERENA_ACTIVATION_DAYS}},
                            name='userena_signup_complete'),
 
                        # Activate

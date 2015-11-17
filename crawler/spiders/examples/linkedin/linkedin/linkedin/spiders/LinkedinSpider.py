@@ -12,14 +12,15 @@ import string
 from bs4 import UnicodeDammit
 from linkedin.db import MongoDBClient
 
+
 class LinkedinspiderSpider(CrawlSpider):
     name = 'LinkedinSpider'
     allowed_domains = ['linkedin.com']
-    start_urls = [ "http://www.linkedin.com/directory/people-%s" % s
-                   for s in "abcdefghijklmnopqrstuvwxyz" ]
+    start_urls = ["http://www.linkedin.com/directory/people-%s" % s
+                  for s in "abcdefghijklmnopqrstuvwxyz"]
 
     rules = (
-        #Rule(SgmlLinkExtractor(allow=r'Items/'), callback='parse_item', follow=True),
+        # Rule(SgmlLinkExtractor(allow=r'Items/'), callback='parse_item', follow=True),
     )
 
     def __init__(self):
@@ -124,4 +125,3 @@ class LinkedinspiderSpider(CrawlSpider):
     def create_path_if_not_exist(self, filePath):
         if not path.exists(path.dirname(filePath)):
             os.makedirs(path.dirname(filePath))
-

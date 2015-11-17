@@ -6,7 +6,6 @@ import random
 
 
 class CustomHttpProxyMiddleware(object):
-
     def process_request(self, request, spider):
         # TODO implement complex proxy providing algorithm
         if self.use_proxy(request):

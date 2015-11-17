@@ -25,14 +25,14 @@ from alibaba.views import HomePageView
 admin.autodiscover()
 
 urlpatterns = [
-	url(r'^wanglingling/', include(admin.site.urls)),
-	url(r'^$', HomePageView.as_view(), name='alibaba_home'),
-	url(r'^search/', include('search.urls')),
-	url(r'^category/(?P<slug>\w+)$', HomePageView.as_view(), name='alibaba_search_by_category'),
-	url(r'^messages/', include('userena.contrib.umessages.urls')),
-	url(r'^accounts/', include('userena.urls')),
-	url(r'^i18n/', include('django.conf.urls.i18n')),
-	url(r'^captcha/', include('captcha.urls')),
+    url(r'^wanglingling/', include(admin.site.urls)),
+    url(r'^$', HomePageView.as_view(), name='alibaba_home'),
+    url(r'^search/', include('search.urls')),
+    url(r'^category/(?P<slug>\w+)$', HomePageView.as_view(), name='alibaba_search_by_category'),
+    url(r'^messages/', include('userena.contrib.umessages.urls')),
+    url(r'^accounts/', include('userena.urls')),
+    url(r'^i18n/', include('django.conf.urls.i18n')),
+    url(r'^captcha/', include('captcha.urls')),
 
 ]
 
@@ -41,5 +41,5 @@ urlpatterns += patterns('', url(r'^silk/', include('silk.urls', namespace='silk'
 urlpatterns += patterns('', url(r'', include('social_auth.urls')))
 
 if settings.DEBUG:
-	urlpatterns += staticfiles_urlpatterns()
-	urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += staticfiles_urlpatterns()
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

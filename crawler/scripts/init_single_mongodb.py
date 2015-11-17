@@ -39,32 +39,32 @@ client = None
 DATABASE_HOST = "localhost"
 DATABASE_PORT = 27017
 INDEX = { \
-	# collection
-	'book_detail': \
-		{ \
-			(('book_name', ASCENDING), ('author', ASCENDING)): {'name': 'book_name_author', 'unique': True},
-			'book_name': {'name': 'book_name'},
-			'author': {'name': 'author'},
-			'alias_name': {'name': 'alias_name'},
-			} \
-	}
+    # collection
+    'book_detail': \
+        { \
+            (('book_name', ASCENDING), ('author', ASCENDING)): {'name': 'book_name_author', 'unique': True},
+            'book_name': {'name': 'book_name'},
+            'author': {'name': 'author'},
+            'alias_name': {'name': 'alias_name'},
+            } \
+    }
 
 
 def drop_database(name_or_database):
-	if name_or_database and client:
-		client.drop_database(name_or_database)
+    if name_or_database and client:
+        client.drop_database(name_or_database)
 
 
 def create_index():
-	"""
-		create index for books_fs.book_detail
-	"""
-	for k, v in INDEX.items():
-		for key, kwargs in v.items():
-			client[DATABASE_NAME][k].ensure_index(list(key) if type(key) == types.TupleType else key, **kwargs)
+    """
+        create index for books_fs.book_detail
+    """
+    for k, v in INDEX.items():
+        for key, kwargs in v.items():
+            client[DATABASE_NAME][k].ensure_index(list(key) if type(key) == types.TupleType else key, **kwargs)
 
 
 if __name__ == "__main__":
-	client = MongoClient(DATABASE_HOST, DATABASE_PORT)
-	drop_database(DATABASE_NAME)
-	create_index()
+    client = MongoClient(DATABASE_HOST, DATABASE_PORT)
+    drop_database(DATABASE_NAME)
+    create_index()

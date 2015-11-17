@@ -9,6 +9,7 @@
 import sys
 import os
 from os.path import dirname
+
 path = dirname(dirname(os.path.abspath(os.path.dirname(__file__))))
 sys.path.append(path)
 from misc.log import *
@@ -19,10 +20,10 @@ SPIDER_MODULES = ['zhihu.spiders']
 NEWSPIDER_MODULE = 'zhihu.spiders'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'zhihu (+http://www.yourdomain.com)'
+# USER_AGENT = 'zhihu (+http://www.yourdomain.com)'
 
 DOWNLOADER_MIDDLEWARES = {
-   # 'misc.middleware.CustomHttpProxyMiddleware': 400,
+    # 'misc.middleware.CustomHttpProxyMiddleware': 400,
     'misc.middleware.CustomUserAgentMiddleware': 401,
 }
 

@@ -3,8 +3,8 @@ import json
 from urlparse import urlparse
 import urllib
 
-
 from scrapy.selector import Selector
+
 try:
     from scrapy.spider import Spider
 except:
@@ -12,7 +12,6 @@ except:
 from scrapy.utils.response import get_base_url
 from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor as sle
-
 
 from alexa.items import *
 from misc.log import *
@@ -27,8 +26,8 @@ class alexaSpider(CrawlSpider):
     ]
     rules = [
         Rule(sle(allow=("/topsites/category;?[0-9]*/Top/[^/]*$")), callback='parse_category_top_xxx', follow=True),
-        Rule(sle(allow=("/topsites/category/Top$", )), callback='parse_category_top', follow=True),
-        #Rule(sle(allow=("/people/[^/]+$", )), callback='parse_people', follow=True),
+        Rule(sle(allow=("/topsites/category/Top$",)), callback='parse_category_top', follow=True),
+        # Rule(sle(allow=("/people/[^/]+$", )), callback='parse_people', follow=True),
     ]
 
     # www.alexa.com/topsites/category/Top/Computers
@@ -74,9 +73,11 @@ class alexaCNSpider(CrawlSpider):
         "http://www.alexa.com/topsites/category/World/Chinese_Simplified_CN",
     ]
     rules = [
-        Rule(sle(allow=("/topsites/category;?[0-9]*/Top/World/Chinese_Simplified_CN/.*$")), callback='parse_category_top_xxx', follow=True),
-        Rule(sle(allow=("/topsites/category/World/Chinese_Simplified_CN$", )), callback='parse_category_top_xxx', follow=True),
-        #Rule(sle(allow=("/people/[^/]+$", )), callback='parse_people', follow=True),
+        Rule(sle(allow=("/topsites/category;?[0-9]*/Top/World/Chinese_Simplified_CN/.*$")),
+             callback='parse_category_top_xxx', follow=True),
+        Rule(sle(allow=("/topsites/category/World/Chinese_Simplified_CN$",)), callback='parse_category_top_xxx',
+             follow=True),
+        # Rule(sle(allow=("/people/[^/]+$", )), callback='parse_people', follow=True),
     ]
 
     # www.alexa.com/topsites/category/Top/Computers
@@ -112,4 +113,3 @@ class alexaCNSpider(CrawlSpider):
             item['name'] = category.css('::text')[0].extract()
             items.append(item)
         return items
-

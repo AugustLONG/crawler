@@ -19,7 +19,7 @@ DOWNLOADER_MIDDLEWARES = {
 
 ########### Item pipeline
 ITEM_PIPELINES = [
-                  "linkedin.pipelines.MongoDBPipeline",
+    "linkedin.pipelines.MongoDBPipeline",
 ]
 
 MONGODB_SERVER = 'localhost'
@@ -30,7 +30,7 @@ MONGODB_UNIQ_KEY = '_id'
 ###########
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'linkedin (+http://www.yourdomain.com)'
+# USER_AGENT = 'linkedin (+http://www.yourdomain.com)'
 
 # Enable auto throttle
 AUTOTHROTTLE_ENABLED = True
@@ -39,5 +39,3 @@ COOKIES_ENABLED = False
 
 # Set your own download folder
 DOWNLOAD_FILE_FOLDER = os.path.join(os.path.dirname(os.path.realpath(__file__)), "download_file")
-
-

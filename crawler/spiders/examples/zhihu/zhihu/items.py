@@ -5,6 +5,7 @@
 
 from scrapy.item import Item, Field
 
+
 class ZhihuPeopleItem(Item):
     # define the fields for your item here like:
     id = Field()
@@ -27,4 +28,3 @@ class ZhihuPeopleItem(Item):
     followees = Field()
     followers = Field()
     follow_topics = Field()
-

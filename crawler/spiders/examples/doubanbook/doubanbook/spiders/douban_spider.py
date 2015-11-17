@@ -1,8 +1,8 @@
 import re
 import json
 
-
 from scrapy.selector import Selector
+
 try:
     from scrapy.spider import Spider
 except:
@@ -10,7 +10,6 @@ except:
 from scrapy.utils.response import get_base_url
 from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor as sle
-
 
 from doubanbook.items import *
 from misc.log import *
@@ -24,8 +23,8 @@ class DoubanBookSpider(CrawlSpider):
     ]
     rules = [
         Rule(sle(allow=("/subject/\d+/?$")), callback='parse_2'),
-        Rule(sle(allow=("/tag/[^/]+/?$", )), follow=True),
-        Rule(sle(allow=("/tag/$", )), follow=True),
+        Rule(sle(allow=("/tag/[^/]+/?$",)), follow=True),
+        Rule(sle(allow=("/tag/$",)), follow=True),
     ]
 
     def parse_2(self, response):

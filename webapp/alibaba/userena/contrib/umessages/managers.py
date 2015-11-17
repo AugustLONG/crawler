@@ -5,6 +5,7 @@ from userena.contrib.umessages import signals
 
 import datetime
 
+
 class MessageContactManager(models.Manager):
     """ Manager for the :class:`MessageContact` model """
 
@@ -55,6 +56,7 @@ class MessageContactManager(models.Manager):
         contacts = self.filter(Q(um_from_user=user) | Q(um_to_user=user))
         return contacts
 
+
 class MessageManager(models.Manager):
     """ Manager for the :class:`Message` model. """
 
@@ -79,7 +81,7 @@ class MessageManager(models.Manager):
         # Save the recipients
         msg.save_recipients(um_to_user_list)
         msg.update_contacts(um_to_user_list)
-        signals.email_sent.send(sender=None,msg=msg)
+        signals.email_sent.send(sender=None, msg=msg)
 
         return msg
 
@@ -90,6 +92,7 @@ class MessageManager(models.Manager):
                                Q(sender=um_to_user, recipients=um_from_user,
                                  messagerecipient__deleted_at__isnull=True))
         return messages
+
 
 class MessageRecipientManager(models.Manager):
     """ Manager for the :class:`MessageRecipient` model. """

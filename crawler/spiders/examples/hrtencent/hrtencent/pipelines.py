@@ -5,13 +5,11 @@
 
 from scrapy import signals
 
-
 import json
 import codecs
 
 
 class JsonWithEncodingPipeline(object):
-
     def __init__(self):
         self.file = codecs.open('data_utf8.json', 'w', encoding='utf-8')
 

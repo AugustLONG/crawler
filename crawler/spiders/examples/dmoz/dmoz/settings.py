@@ -9,6 +9,7 @@
 import sys
 import os
 from os.path import dirname
+
 path = dirname(dirname(os.path.abspath(os.path.dirname(__file__))))
 sys.path.append(path)
 from misc.log import *
@@ -19,16 +20,16 @@ SPIDER_MODULES = ['dmoz.spiders']
 NEWSPIDER_MODULE = 'dmoz.spiders'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'dmoz (+http://www.yourdomain.com)'
+# USER_AGENT = 'dmoz (+http://www.yourdomain.com)'
 
 DOWNLOADER_MIDDLEWARES = {
-   # 'misc.middleware.CustomHttpProxyMiddleware': 400,
+    # 'misc.middleware.CustomHttpProxyMiddleware': 400,
     'misc.middleware.CustomUserAgentMiddleware': 401,
 }
 
 ITEM_PIPELINES = {
     'dmoz.pipelines.JsonWithEncodingPipeline': 300,
-    #'dmoz.pipelines.RedisPipeline': 301,
+    # 'dmoz.pipelines.RedisPipeline': 301,
 }
 
 LOG_LEVEL = 'INFO'

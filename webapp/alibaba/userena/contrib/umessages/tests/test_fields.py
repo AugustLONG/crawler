@@ -1,4 +1,4 @@
-#encoding:utf-8
+# encoding:utf-8
 from __future__ import unicode_literals
 
 import re
@@ -7,6 +7,7 @@ from django.test import TestCase
 from django import forms
 
 from userena.contrib.umessages.fields import CommaSeparatedUserField
+
 
 class CommaSeparatedTestForm(forms.Form):
     users = CommaSeparatedUserField()
@@ -20,8 +21,9 @@ class CommaSeparatedTestForm(forms.Form):
             return False
         return True
 
+
 class CommaSeperatedFieldTests(TestCase):
-    fixtures = ['users',]
+    fixtures = ['users', ]
 
     def test_invalid_data(self):
         # Test invalid data supplied to the field.

@@ -18,10 +18,10 @@ class MessageContact(models.Model):
 
     """
     um_from_user = models.ForeignKey(user_model_label, verbose_name=_("from user"),
-                                  related_name=('um_from_users'))
+                                     related_name=('um_from_users'))
 
     um_to_user = models.ForeignKey(user_model_label, verbose_name=_("to user"),
-                                related_name=('um_to_users'))
+                                   related_name=('um_to_users'))
 
     latest_message = models.ForeignKey('Message',
                                        verbose_name=_("latest message"))
@@ -52,7 +52,8 @@ class MessageContact(models.Model):
         """
         if self.um_from_user == user:
             return self.um_to_user
-        else: return self.um_from_user
+        else:
+            return self.um_from_user
 
 
 @python_2_unicode_compatible

@@ -73,7 +73,7 @@ f = open('sample.sh', 'r')
 # print f.read()
 v = f.read()
 for item in bingo2:
-	# modify here
-	ff = open('bingo2.sh', 'a')
-	g = re.sub('123', item, v)
-	ff.write(g)
+    # modify here
+    ff = open('bingo2.sh', 'a')
+    g = re.sub('123', item, v)
+    ff.write(g)

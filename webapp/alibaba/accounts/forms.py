@@ -6,4 +6,4 @@ from captcha.fields import CaptchaField
 
 
 class CaptchaForm(forms.Form):
-	captcha = CaptchaField()
+    captcha = CaptchaField()

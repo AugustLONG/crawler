@@ -1,8 +1,8 @@
 import re
 import json
 
-
 from scrapy.selector import Selector
+
 try:
     from scrapy.spider import Spider
 except:
@@ -10,7 +10,6 @@ except:
 from scrapy.utils.response import get_base_url
 from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor as sle
-
 
 from hrtencent.items import *
 from misc.log import *
@@ -21,9 +20,9 @@ class HrtencentSpider(CrawlSpider):
     allowed_domains = ["tencent.com"]
     start_urls = [
         "http://hr.tencent.com/position.php?start=%d" % d for d in range(0, 20, 10)
-    ]
+        ]
     rules = [
-        Rule(sle(allow=("/position_detail.php\?id=\d*.*", )), callback='parse_2'),
+        Rule(sle(allow=("/position_detail.php\?id=\d*.*",)), callback='parse_2'),
         Rule(sle(allow=("/position.php\?&start=\d{,2}#a")), follow=True, callback='parse_1')
     ]
 

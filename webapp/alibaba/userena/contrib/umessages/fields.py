@@ -4,6 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from userena.utils import get_user_model
 
+
 class CommaSeparatedUserInput(widgets.Input):
     input_type = 'text'
 
@@ -13,6 +14,7 @@ class CommaSeparatedUserInput(widgets.Input):
         elif isinstance(value, (list, tuple)):
             value = (', '.join([user.username for user in value]))
         return super(CommaSeparatedUserInput, self).render(name, value, attrs)
+
 
 class CommaSeparatedUserField(forms.Field):
     """
@@ -54,6 +56,7 @@ class CommaSeparatedUserField(forms.Field):
 
         if unknown_names or invalid_users:
             humanized_usernames = ', '.join(list(unknown_names) + invalid_users)
-            raise forms.ValidationError(_("The following usernames are incorrect: %(users)s.") % {'users': humanized_usernames})
+            raise forms.ValidationError(
+                _("The following usernames are incorrect: %(users)s.") % {'users': humanized_usernames})
 
         return users

@@ -5,6 +5,7 @@ from userena.utils import get_user_model, truncate_words
 
 User = get_user_model()
 
+
 class MessageContactTests(TestCase):
     fixtures = ['users', 'messages']
 
@@ -28,6 +29,7 @@ class MessageContactTests(TestCase):
         self.failUnlessEqual(contact.opposite_user(jane),
                              john)
 
+
 class MessageModelTests(TestCase):
     fixtures = ['users', 'messages']
 
@@ -37,6 +39,7 @@ class MessageModelTests(TestCase):
         truncated_body = truncate_words(message.body, 10)
         self.failUnlessEqual(message.__str__(),
                              truncated_body)
+
 
 class MessageRecipientModelTest(TestCase):
     fixtures = ['users', 'messages']

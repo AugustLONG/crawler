@@ -5,18 +5,20 @@
 
 from scrapy.item import Item, Field
 
+
 class SisItem(Item):
     title = Field()
     link = Field()
     imgs = Field()
     torrents = Field()
-    sharetitle  = Field()
+    sharetitle = Field()
     bottomline = Field()
     duty = Field()
     xxx = Field()
 
+
 class SisForumListItem(Item):
-    content = Field() # raw content with all html
+    content = Field()  # raw content with all html
     title = Field()
     thread_type = Field()
     author = Field()
