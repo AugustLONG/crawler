@@ -1,261 +1,117 @@
 # encoding: utf-8
 from scrapy.contrib.linkextractors import LinkExtractor
 from scrapy.contrib.spiders import CrawlSpider, Rule
-import pymongo
+from scrapy import Request
+import re, json
+from pymongo import MongoClient
 
-HOST = "127.0.0.1"
-PORT = 27017
-
-client = pymongo.MongoClient(HOST, PORT)
-
-doubanDB = client.douban
+mongodb = MongoClient()
+stackoverflowdb = mongodb.stackoverflow
 
 
 class StackoverflowSpider(CrawlSpider):
     name = "stackoverflow"
     allowed_domains = ["stackoverflow.com", "stackexchange.com"]
     start_urls = [
-        "http://api.stackexchange.com/docs/questions",
+        "http://api.stackexchange.com/2.2/questions?page=1&pagesize=50&order=desc&sort=activity&site=stackoverflow&filter=!9YdnSQHvY",
+        "http://api.stackexchange.com/2.2/answers?order=desc&sort=reputation&site=stackoverflow&filter=!9YdnSQHvY",
+        "http://api.stackexchange.com/2.2/users?order=desc&sort=reputation&site=stackoverflow&filter=!9YdnSQHvY",
+        "http://api.stackexchange.com/2.2/comments?order=desc&sort=reputation&site=stackoverflow&filter=!9YdnSQHvY"
     ]
 
-    rules = (
-        # 问题详情
-        Rule(LinkExtractor(allow=r"^http://www\.stackoverflow\.com/questions/\d+/\w+"),
-             callback="parse_questions",
-             follow=True
-             )
-    )
+    def parse(self, response):
+        items = json.loads(response.content)
+        if "items" in items:
+            for item in items:
+                owner_id = item["owner"]["user_id"]
+                item["owner_id="] = owner_id
+                question_id = item["question_id"]
+                del item["owner"]
+                stackoverflowdb.question.update({"question_id": question_id}, {"$set": item}, upsert=True)
+                yield Request(
+                    "http://api.stackexchange.com/2.2/users/%s?order=desc&sort=reputation&site=stackoverflow&filter=!-*f(6q9aL0dv" % owner_id,
+                    callback=self.parse_users)
+                yield Request(
+                    "http://api.stackexchange.com/2.2/questions/%s?order=desc&sort=activity&site=stackoverflow&filter=!0Uv6ZT)teRUpIDUXg)eKBUB)K" % question_id,
+                    callback=self.parse_questions)
 
     def parse_users(self, response):
-        album_parser = AlbumParser(response)
-        item = dict(album_parser.item)
-
-        if album_parser.next_page: return None
-        spec = dict(from_url=item["from_url"])
-        doubanDB.album.update(spec, {"$set": item}, upsert=True)
+        items = json.loads(response.content)
+        if "items" in items:
+            for item in items:
+                user_id = item["user_id"]
+                stackoverflowdb.user.update({"user_id": user_id}, {"$set": item}, upsert=True)
+                if "answers" in item:
+                    for answer in item["answers"]:
+                        yield Request(
+                            "http://api.stackexchange.com/2.2/answers/%s?order=desc&sort=activity&site=stackoverflow&filter=!LUcFBIwXAv-E7rc11-bLO." %
+                            answer["answer_id"], callback=self.parse_answers)
+                    del item["answers"]
+                if "comments" in item:
+                    for comment in item["comments"]:
+                        yield Request(
+                            "http://api.stackexchange.com/2.2/comments/%s?order=desc&sort=creation&site=stackoverflow&filter=!b0OfN.wWgRBMab" %
+                            comment["comment_id"], callback=self.parse_comments)
+                    del item["comments"]
+                if "questions" in item:
+                    for question in item["questions"]:
+                        yield Request(
+                            "http://api.stackexchange.com/2.2/questions/%s?order=desc&sort=activity&site=stackoverflow&filter=!0Uv6ZT)teRUpIDUXg)eKBUB)K" %
+                            question["question_id"], callback=self.parse_questions)
+                    del item["questions"]
 
     def parse_questions(self, response):
-        single = SinglePhotoParser(response)
-        from_url = single.from_url
-        if from_url is None: return
-        doc = doubanDB.album.find_one({"from_url": from_url}, {"from_url": True})
-
-        item = dict(single.item)
-        if not doc:
-            new_item = {}
-            new_item["from_url"] = from_url
-            new_item["photos"] = item
-            doubanDB.album.save(new_item)
-        else:
-            spec = {"from_url": from_url}
-            doc = doubanDB.album.find_one({"photos.large_img_url": item["large_img_url"]})
-            if not doc:
-                doubanDB.album.update(spec, {"$push": {"photos": item}})
-
-        cp = CommentParser(response)
-        comments = cp.get_comments()
-        if not comments: return
-        large_img_url = item["large_img_url"]
-        spec = {"photos.large_img_url": large_img_url}
-        doubanDB.album.update(spec, {"$set": {"photos.$.comments": comments}}, upsert=True)
+        items = json.loads(response.content)
+        if "items" in items:
+            for item in items:
+                owner_id = item["owner"]["user_id"]
+                item["owner_id="] = owner_id
+                question_id = item["question_id"]
+                del item["owner"]
+                stackoverflowdb.question.update({"question_id": question_id}, {"$set": item}, upsert=True)
+                yield Request(
+                    "http://api.stackexchange.com/2.2/users/%s?order=desc&sort=reputation&site=stackoverflow&filter=!-*f(6q9aL0dv" % owner_id,
+                    callback=self.parse_users)
+                if "answers" in item:
+                    for answer in item["answers"]:
+                        yield Request(
+                            "http://api.stackexchange.com/2.2/answers/%s?order=desc&sort=activity&site=stackoverflow&filter=!LUcFBIwXAv-E7rc11-bLO." %
+                            answer["answer_id"], callback=self.parse_answers)
+                    del item["answers"]
+                if "comments" in item:
+                    for comment in item["comments"]:
+                        yield Request(
+                            "http://api.stackexchange.com/2.2/comments/%s?order=desc&sort=creation&site=stackoverflow&filter=!b0OfN.wWgRBMab" %
+                            comment["comment_id"], callback=self.parse_comments)
+                    del item["comments"]
 
     def parse_answers(self, response):
-        single = SinglePhotoParser(response)
-        from_url = single.from_url
-        if from_url is None: return
-        doc = doubanDB.album.find_one({"from_url": from_url}, {"from_url": True})
-
-        item = dict(single.item)
-        if not doc:
-            new_item = {}
-            new_item["from_url"] = from_url
-            new_item["photos"] = item
-            doubanDB.album.save(new_item)
-        else:
-            spec = {"from_url": from_url}
-            doc = doubanDB.album.find_one({"photos.large_img_url": item["large_img_url"]})
-            if not doc:
-                doubanDB.album.update(spec, {"$push": {"photos": item}})
-
-        cp = CommentParser(response)
-        comments = cp.get_comments()
-        if not comments: return
-        large_img_url = item["large_img_url"]
-        spec = {"photos.large_img_url": large_img_url}
-        doubanDB.album.update(spec, {"$set": {"photos.$.comments": comments}}, upsert=True)
+        items = json.loads(response.content)
+        if "items" in items:
+            for item in items:
+                owner_id = item["owner"]["user_id"]
+                item["owner_id="] = owner_id
+                answer_id = item["answer_id"]
+                stackoverflowdb.answer.update({"answer_id": answer_id}, {"$set": item}, upsert=True)
+                yield Request(
+                    "http://api.stackexchange.com/2.2/users/%s?order=desc&sort=reputation&site=stackoverflow&filter=!-*f(6q9aL0dv" % owner_id,
+                    callback=self.parse_users)
 
     def parse_comments(self, response):
-        single = SinglePhotoParser(response)
-        from_url = single.from_url
-        if from_url is None: return
-        doc = doubanDB.album.find_one({"from_url": from_url}, {"from_url": True})
-
-        item = dict(single.item)
-        if not doc:
-            new_item = {}
-            new_item["from_url"] = from_url
-            new_item["photos"] = item
-            doubanDB.album.save(new_item)
-        else:
-            spec = {"from_url": from_url}
-            doc = doubanDB.album.find_one({"photos.large_img_url": item["large_img_url"]})
-            if not doc:
-                doubanDB.album.update(spec, {"$push": {"photos": item}})
-
-        cp = CommentParser(response)
-        comments = cp.get_comments()
-        if not comments: return
-        large_img_url = item["large_img_url"]
-        spec = {"photos.large_img_url": large_img_url}
-        doubanDB.album.update(spec, {"$set": {"photos.$.comments": comments}}, upsert=True)
-
-
-import re
-
-from items import AlbumItem, PhotoItem
-
-FOLLOW_RE = re.compile(ur"(\d+)人关注")
-PHOTO_COUNT_RE = re.compile(ur"(\d+)张照片")
-CREATE_DATE_RE = re.compile(ur"\d{4}-\d{2}-\d{2}")
-
-
-class ParentParser(object):
-    def __init__(self, response):
-        self.response = response
-
-
-class AlbumParser(ParentParser):
-    def __init__(self, response):
-        ParentParser.__init__(self, response)
-        self.next_page = False
-        self.item = AlbumItem()
-
-        self.get_from_url()
-        if self.next_page: return
-
-        self.get_album_name()
-        self.get_author()
-        self.get_recommend_total()
-        self.get_like_total()
-        self.get_tags()
-
-        self.parse_short_info()
-        self.get_create_date()
-        self.get_photo_count()
-        self.get_follow_count()
-        self.get_desc()
-
-    def get_from_url(self):
-        url = self.response.url.split("?", 1)
-        if len(url) > 1: self.next_page = True
-        self.item["from_url"] = url[0]
-
-    def get_album_name(self):
-        x_album_name = self.response.xpath("//h1/text()").extract()[0].split("-", 1)
-        if len(x_album_name) == 2:
-            self.item["album_name"] = x_album_name[1]
-            author = self.item.setdefault("author", {})
-            author["nickname"] = x_album_name[0].replace(u"的相册", "")
-
-    def get_author(self):
-        x_author = self.response.xpath("//div[@id='db-usr-profile']/div[@class='pic']/a")
-        if x_author:
-            author = self.item.setdefault("author", {})
-            author["home_page"] = x_author.xpath("@href").extract()[0]
-            author["avatar"] = x_author.xpath("img/@src").extract()[0]
-
-    def get_recommend_total(self):
-        x_recommend_total = self.response.xpath("//span[@class='rec-num']").re("\d+")
-        if x_recommend_total: self.item["recommend_total"] = int(x_recommend_total[0])
-
-    def get_like_total(self):
-        x_like_total = self.response.xpath("//span[@class='fav-num']/a/text()").re("\d+")
-        if x_like_total: self.item["like_total"] = int(x_like_total[0])
-
-    def get_tags(self):
-        x_tags = self.response.xpath("//div[@class='footer-tags']/a/text()").extract()
-        if x_tags: self.item["tags"] = x_tags
-
-    def parse_short_info(self):
-        self.short_info = "".join(self.response.xpath("//div[@class='wr']//text()").extract())
-
-    def get_create_date(self):
-        M = CREATE_DATE_RE.search(self.short_info)
-        if M is not None: self.item["create_date"] = M.group(0)
-
-    def get_photo_count(self):
-        M = PHOTO_COUNT_RE.search(self.short_info)
-        if M is not None: self.item["photo_count"] = int(M.group(1))
-
-    def get_follow_count(self):
-        M = FOLLOW_RE.search(self.short_info)
-        if M is not None: self.item["follow_count"] = int(M.group(1))
-
-    def get_desc(self):
-        x_desc = self.response.xpath("//div[@id='link-report']/text()").extract()
-        if x_desc: self.item["desc"] = x_desc[0]
-
-
-class SinglePhotoParser(ParentParser):
-    def __init__(self, response):
-        ParentParser.__init__(self, response)
-        self.item = PhotoItem()
-        self.from_url = None
-
-        self.get_from_url()
-        self.get_large_img_url()
-        self.get_like_count()
-        self.get_recommend_count()
-        self.get_desc()
-
-    def get_from_url(self):
-        x_from_url = self.response.xpath("//div[@id='image']/span[@class='rr']/a/@href").extract()
-        if x_from_url: self.from_url = x_from_url[0].split("?", 1)[0]
-
-    def get_large_img_url(self):
-        x_large_img_url = self.response.xpath("//a[@class='mainphoto']/img/@src").extract()
-        if x_large_img_url: self.item["large_img_url"] = x_large_img_url[0]
-
-    def get_like_count(self):
-        x_like_count = self.response.xpath("//span[@class='fav-num']/a/text()").re("\d+")
-        if x_like_count: self.item["like_count"] = int(x_like_count[0])
-
-    def get_recommend_count(self):
-        x_rec_num = self.response.xpath("//span[@class='rec-num']/text()").re("\d+")
-        if x_rec_num: self.item["recommend_count"] = int(x_rec_num[0])
-
-    def get_desc(self):
-        x_desc = self.response.xpath("//div[@class='edtext pl']/text()").extract()
-        if x_desc: self.item["desc"] = x_desc[0]
-
-
-class CommentParser(ParentParser):
-    def __init__(self, response):
-        ParentParser.__init__(self, response)
-
-    def get_comments(self):
-        comments = []
-        x_comments = self.response.xpath("//div[@class='comment-item']")
-        for comment in x_comments:
-            comment_dict = {}
-
-            x_homepage = comment.xpath("div[@class='pic']/a/@href").extract()
-            if x_homepage: comment_dict["home_page"] = x_homepage[0]
-
-            x_avatar = comment.xpath("div[@class='pic']/a/img/@src").extract()
-            if x_avatar: comment_dict["avatar"] = x_avatar[0]
-
-            find_path = "div[@class='content report-comment']/div[@class='author']/span[1]/text()"
-            x_post_datetime = comment.xpath(find_path).extract()
-            if x_post_datetime: comment_dict["post_datetime"] = x_post_datetime[0]
-
-            find_path = "div[@class='content report-comment']/div[@class='author']/a[1]/text()"
-            x_nickname = comment.xpath(find_path).extract()
-            if x_nickname: comment_dict["nickname"] = x_nickname[0]
-
-            x_content = comment.xpath("div[@class='content report-comment']/p[1]/text()").extract()
-            if x_content: comment_dict["content"] = x_content[0]
-
-            comments.append(comment_dict)
-
-        return comments
+        items = json.loads(response.content)
+        if "items" in items:
+            for item in items:
+                owner_id = item["owner"]["user_id"]
+                item["owner_id="] = owner_id
+                item["reply_to_user_id"] = reply_to_user_id
+                reply_to_user_id = item["reply_to_user"]["user_id"]
+                comment_id = item["comment_id"]
+                del item["owner"]
+                del item["reply_to_user"]
+                stackoverflowdb.comment.update({"comment_id": comment_id}, {"$set": item}, upsert=True)
+                yield Request(
+                    "http://api.stackexchange.com/2.2/users/%s?order=desc&sort=reputation&site=stackoverflow&filter=!-*f(6q9aL0dv" % owner_id,
+                    callback=self.parse_users)
+                yield Request(
+                    "http://api.stackexchange.com/2.2/users/%s?order=desc&sort=reputation&site=stackoverflow&filter=!-*f(6q9aL0dv" % reply_to_user_id,
+                    callback=self.parse_users)
