@@ -6,8 +6,7 @@ import scrapy
 from scrapy.selector import Selector
 from scrapy.http import Request
 
-import pymssql
-from tutorial.items import DmozItem
+from crawler.items.dmoz import DmozItem
 
 
 def change_word(s):

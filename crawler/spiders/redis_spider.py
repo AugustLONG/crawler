@@ -2,7 +2,7 @@
 
 from scrapy import signals
 from scrapy.exceptions import DontCloseSpider
-from scrapy.spider import Spider
+from scrapy.spiders import Spider
 
 
 # from scrapy.conf import settings

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import scrapy
 
-from src.items import SrcItem
 
 
 class XroxySpider(scrapy.Spider):

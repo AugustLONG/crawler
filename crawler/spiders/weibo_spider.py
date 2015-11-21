@@ -2,10 +2,9 @@
 import time
 
 from scrapy.selector import HtmlXPathSelector
-from scrapy.contrib.spiders import CrawlSpider
+from scrapy.spiders import CrawlSpider
 from scrapy.http import Request
-
-from tutorial.items import DmozItem
+from crawler.items.dmoz import DmozItem
 
 
 class WeiboSpider(CrawlSpider):

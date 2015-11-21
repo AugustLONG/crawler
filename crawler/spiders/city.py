@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 import scrapy
 
-import pymssql
-from tutorial.items import DmozItem
+from crawler.items.dmoz import DmozItem
 
 
 class CitySpider(scrapy.Spider):

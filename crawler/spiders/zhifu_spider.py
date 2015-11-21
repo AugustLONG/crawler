@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
-from scrapy.contrib.spiders import CrawlSpider, Rule
+from scrapy.spiders import CrawlSpider, Rule
 from scrapy.selector import Selector
-from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
+from scrapy.linkextractors import LinkExtractor
 from scrapy.http import Request, FormRequest
-
-from tutorial.items import DmozItem
+from crawler.items.dmoz import DmozItem
 
 
 class ZhihuSipder(CrawlSpider):
@@ -15,8 +14,8 @@ class ZhihuSipder(CrawlSpider):
         "http://www.zhihu.com"
     ]
     rules = (
-        Rule(SgmlLinkExtractor(allow=('/question/\d+#.*?',)), callback='parse_page', follow=True),
-        Rule(SgmlLinkExtractor(allow=('/question/\d+',)), callback='parse_page', follow=True),
+        Rule(LinkExtractor(allow=('/question/\d+#.*?',)), callback='parse_page', follow=True),
+        Rule(LinkExtractor(allow=('/question/\d+',)), callback='parse_page', follow=True),
     )
     headers = {
         "Accept": "*/*",

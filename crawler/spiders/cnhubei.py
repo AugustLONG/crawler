@@ -5,8 +5,7 @@ import sys
 import scrapy
 from scrapy.selector import Selector
 
-import pymssql
-from tutorial.items import DmozItem
+from crawler.items.dmoz import DmozItem
 
 reload(sys)
 sys.setdefaultencoding('utf8')

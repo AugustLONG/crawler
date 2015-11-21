@@ -1,19 +1,10 @@
 # -*- coding: utf-8 -*-
-
-
-import json
-import urlparse
 import re
 
-from scrapy.contrib.spiders import CrawlSpider, Rule
-from scrapy.contrib.linkextractors import LinkExtractor
 import scrapy
-from scrapy.spider import BaseSpider
+from scrapy.spiders import BaseSpider
 from scrapy.selector import Selector
 from scrapy.http import Request
-
-from webSpider.items import webProxy
-
 
 class ProxySpider(scrapy.Spider):
     name = "proxy"

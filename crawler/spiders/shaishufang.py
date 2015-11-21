@@ -7,7 +7,7 @@ import scrapy
 from bs4 import BeautifulSoup
 
 import unirest
-from src.items import UserItem, BookItem
+# from crawler.items import UserItem, BookItem
 
 
 class ShaishufangSpider(scrapy.Spider):

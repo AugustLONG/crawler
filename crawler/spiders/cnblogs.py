@@ -1,13 +1,9 @@
 # coding=utf-8
 from scrapy.selector import Selector
 
-try:
-    from scrapy.spider import Spider
-except:
-    from scrapy.spider import BaseSpider as Spider
 from scrapy.utils.response import get_base_url
-from scrapy.contrib.spiders import CrawlSpider, Rule
-from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor as sle
+from scrapy.spiders import CrawlSpider, Rule
+from scrapy.linkextractors import LinkExtractor as sle
 from crawler.items.cnblogs import CnblogsItem
 
 
@@ -26,7 +22,6 @@ class CnblogsSpider(CrawlSpider):
              follow=True,
              callback='parse_item')
     ]
-    print "**********CnblogsSpider**********"
     # 定义回调函数
     # 提取数据到Items里面，主要用到XPath和CSS选择器提取网页数据
     def parse_item(self, response):

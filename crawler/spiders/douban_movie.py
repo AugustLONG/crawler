@@ -2,10 +2,10 @@
 import re
 
 import scrapy
-from scrapy.contrib.linkextractors import LinkExtractor
-from scrapy.contrib.spiders import CrawlSpider, Rule
+from scrapy.linkextractors import LinkExtractor
+from scrapy.spiders import CrawlSpider, Rule
 
-from items import MovieItem
+from crawler.items.douban import MovieItem
 
 TV_RUNTIME_RE = re.compile(ur'单集片长: (\d+)')
 LANGUAGES_RE = re.compile(ur"语言:</span> (.+?)<br>")

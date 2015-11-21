@@ -1,12 +1,12 @@
 import json
 
-from scrapy.spider import BaseSpider
+from scrapy.spiders import Spider
 from scrapy.selector import Selector
 
 from crawler.items.ctrip import hotelReview
 
 
-class ctripSpider(BaseSpider):
+class ctripSpider(Spider):
     name = 'ctrip'
     allowed_domains = 'http://www.ctrip.com/'
     start_urls = ['http://hotels.ctrip.com/hotel/dianping/441507_p1t0.html']

@@ -5,7 +5,7 @@ import re
 import scrapy
 from scrapy import Request
 
-from tutorial.items import TutorialItem
+from crawler.items.dmoz import DmozItem
 
 
 # ---------------------------------------------------------------------------

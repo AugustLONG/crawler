@@ -1,7 +1,7 @@
 from scrapy.item import Item, Field
 
 
-class DMOZ(Item):
+class DmozItem(Item):
     name = Field()
     description = Field()
     url = Field()

@@ -6,7 +6,7 @@ from scrapy.http import Request
 from scrapy.selector import Selector
 import MySQLdb
 
-from tutorial.items import DmozItem
+from crawler.items.dmoz import DmozItem
 
 reload(sys)
 sys.setdefaultencoding('utf8')

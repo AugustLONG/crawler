@@ -1,6 +1,6 @@
 # encoding: utf-8
-from scrapy.contrib.linkextractors import LinkExtractor
-from scrapy.contrib.spiders import CrawlSpider, Rule
+from scrapy.linkextractors import LinkExtractor
+from scrapy.spiders import CrawlSpider, Rule
 from scrapy import Request
 import re, json, time
 from pymongo import MongoClient

@@ -2,12 +2,12 @@ import json
 import uuid
 
 import scrapy
-from scrapy.log import INFO
+import logging
 from scrapy.http import Request
 from scrapy.conf import settings
 
 from lxmlhtml import LxmlLinkExtractor as LinkExtractor
-from crawling.items import RawResponseItem
+from crawler.items.rawresponse import RawResponseItem
 from redis_spider import RedisSpider
 
 
@@ -22,7 +22,7 @@ class LinkSpider(RedisSpider):
         super(LinkSpider, self).__init__(*args, **kwargs)
 
     def parse(self, response):
-        self.log("crawled url {}".format(response.request.url), level=INFO)
+        logging.info("crawled url {}".format(response.request.url))
 
         cur_depth = 0
         if 'curdepth' in response.meta:
@@ -48,11 +48,11 @@ class LinkSpider(RedisSpider):
 
         # determine whether to continue spidering
         if cur_depth >= response.meta['maxdepth']:
-            self.log("Not spidering links in '{}' because" \
+            logging.info("Not spidering links in '{}' because" \
                      " cur_depth={} >= maxdepth={}".format(
                 response.url,
                 cur_depth,
-                response.meta['maxdepth']), level=INFO)
+                response.meta['maxdepth']))
         else:
             # we are spidering -- yield Request for each discovered link
             link_extractor = LinkExtractor(
@@ -82,8 +82,7 @@ class LinkSpider(RedisSpider):
                               },
                               )
 
-                self.log("Trying to follow link '{}'".format(req.url),
-                         level=INFO)
+                logging.info("Trying to follow link '{}'".format(req.url),)
                 yield req
 
         # raw response has been processed, yield to item pipeline

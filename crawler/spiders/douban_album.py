@@ -1,10 +1,9 @@
 # encoding: utf-8
 import scrapy
-from scrapy.contrib.linkextractors import LinkExtractor
-from scrapy.contrib.spiders import CrawlSpider, Rule
+from scrapy.linkextractors import LinkExtractor
+from scrapy.spiders import CrawlSpider, Rule
 
-from misc.store import doubanDB
-from parsers import *
+# from parsers import *
 
 
 class AlbumSpider(CrawlSpider):

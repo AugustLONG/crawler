@@ -3,15 +3,14 @@
 import json
 import urlparse
 
-from scrapy.contrib.spiders import CrawlSpider, Rule
-from scrapy.contrib.linkextractors import LinkExtractor
+from scrapy.spiders import CrawlSpider, Rule
+from scrapy.linkextractors import LinkExtractor
 import scrapy
-from scrapy.spider import BaseSpider
+from scrapy.spiders import BaseSpider
 from scrapy.selector import Selector
 from scrapy.http import Request
-from scrapy import log
+import logging as log
 
-from webSpider.items import WebspiderItem
 
 
 class whereSpider(CrawlSpider):
@@ -26,11 +25,11 @@ class whereSpider(CrawlSpider):
     # http://piao.qunar.com/ticket/list.json?keyword=上海&from=mps_remdd&total=790&page=1
     # def start_requests(self):
     #    yield Request(url =u"http://piao.qunar.com/ticket/list.json?keyword=上海&from=mps_remdd&page=1",callback = self.barse )
-    {"score": "0.0", "tuan": false, "sightId": 1959588963, "intro": "公园闹中取静，让人感觉置身在大自然中。", "free": false,
-     "point": "121.475422,31.228764", "address": "上海市卢湾区成都南路长乐路路口", "foreign": false, "sightName": "广场公园",
-     "districts": "上海.上海.卢湾区", "childrenCount": 0, "saleCount": 0, "qunarPrice": 0, "marketPrice": 0,
-     "sightImgURL": "http://img1.qunarzz.com/sight/p0/201301/18/c943ae347883456693835fbb.jpg_280x200_6bcab18e.jpg",
-     "parentSightId": 0, "hasPromotion": false, "recommend": false, "recommendLevel": "0.0"}
+    # {"score": "0.0", "tuan": false, "sightId": 1959588963, "intro": "公园闹中取静，让人感觉置身在大自然中。", "free": false,
+    #  "point": "121.475422,31.228764", "address": "上海市卢湾区成都南路长乐路路口", "foreign": false, "sightName": "广场公园",
+    #  "districts": "上海.上海.卢湾区", "childrenCount": 0, "saleCount": 0, "qunarPrice": 0, "marketPrice": 0,
+    #  "sightImgURL": "http://img1.qunarzz.com/sight/p0/201301/18/c943ae347883456693835fbb.jpg_280x200_6bcab18e.jpg",
+    #  "parentSightId": 0, "hasPromotion": false, "recommend": false, "recommendLevel": "0.0"}
 
     def parse(self, response):
         urls = urlparse.urlsplit(response.url)

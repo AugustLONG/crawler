@@ -2,7 +2,7 @@
 import scrapy
 from scrapy.http import FormRequest
 
-from tutorial.items import DmozItem
+from crawler.items.dmoz import DmozItem
 
 
 def change_word(s):
