@@ -6,14 +6,17 @@ from scrapy.spiders import BaseSpider
 from scrapy.selector import Selector
 from scrapy.http import Request
 
+
 class ProxySpider(scrapy.Spider):
     name = "proxy"
-    allowed_domains = ["cn-proxy.com", "kuaidaili.com", "proxy-list.org", "vipiu.net"]
+    allowed_domains = ["cn-proxy.com", "kuaidaili.com", "proxy-list.org", "vipiu.net", "xrory.com", "ipcn.com"]
     start_urls = (
         'http://www.cn-proxy.com/',
         'http://www.kuaidaili.com/proxylist/1/'
         'http://proxy-list.org/english/index.php?p=1',
         'http://vipiu.net/free/mianfeidaili/2014/04/27/42417.html',
+        'http://www.xroxy.com/proxylist.htm',
+        'http://proxy.ipcn.org/proxylist.html',
     )
 
     def parse(self, response):
@@ -87,3 +90,20 @@ class ProxySpider(scrapy.Spider):
                 item['proxy'] = datas
 
         yield item
+
+    def parse_xproxy(self, response):
+        table = response.xpath('/html/body/div[1]/div[2]/table[1]')
+        self.log(table)
+        for tr in table:
+            item = SrcItem()
+            item['ip'] = tr.xpath('//table/tr/td[2]/a/text()').extract()
+            yield item
+
+    def parse_ipcny(self, response):
+        proxylist = response.xpath('//pre/text()').extract()
+        self.log(table)
+        for proxy in proxylist.split("\n"):
+            item = SrcItem()
+            yield item
+
+
