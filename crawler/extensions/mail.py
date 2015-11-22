@@ -12,13 +12,16 @@ EXTENSIONS = {'crawler.extensions.statstoslack.SlackStats': 100}
 """
 from scrapy.xlib.pydispatch import dispatcher
 from scrapy import signals
+import json
 # from slacker import Slacker
 from scrapy.exceptions import NotConfigured
+from scrapy.mail import MailSender
+mailer = MailSender()
 
-class SlackStats(object):
+class MailStats(object):
 
     def __init__(self, slack_api_token, channel, bot):
-        self.slack = Slacker(slack_api_token)
+        # self.slack = Slacker(slack_api_token)
         self.channel = channel
         self.bot = bot
 
@@ -30,8 +33,21 @@ class SlackStats(object):
         if (not slack_api_token or not channel or not bot):
             raise NotConfigured
         ext = cls(slack_api_token, channel, bot)
-        crawler.signals.connect(ext.start_stats, signal=signals.spider_opened)
+        crawler.signals.connect(ext.start_stats, signal=signals.stats_spider_opened)
         crawler.signals.connect(ext.finish_stats, signal=signals.stats_spider_closed)
+        # engine_started = object()
+        # engine_stopped = object()
+        # spider_opened = object()
+        # spider_idle = object()
+        # spider_closed = object()
+        # spider_error = object()
+        # request_scheduled = object()
+        # request_dropped = object()
+        # response_received = object()
+        # response_downloaded = object()
+        # item_scraped = object()
+        # item_dropped = object()
+
         return ext
 
     def start_stats(self, spider):
@@ -42,7 +58,8 @@ class SlackStats(object):
                     "color": "good",
                 }
             ]
-        self.slack.chat.post_message(channel='#'+str(self.channel[0]), text=None, icon_emoji=":+1:", username=self.bot[0], attachments=attachments)
+        mailer.send(to=["crawler@yueguangba.com"], subject='#'+str(self.channel[0]), body=json.dumps(attachments), cc=[])
+        # self.slack.chat.post_message(channel='#'+str(self.channel[0]), text=None, icon_emoji=":+1:", username=self.bot[0], attachments=attachments)
 
     def finish_stats(self, spider, spider_stats):
         if spider_stats['finish_reason'].encode('utf-8') == 'finished':
@@ -113,5 +130,6 @@ class SlackStats(object):
                     ],
             }
             ]
-        self.slack.chat.post_message(channel='#'+str(self.channel[0]), text=None, icon_emoji=emoji, username=self.bot[0], attachments=attachments)
+        mailer.send(to=["crawler@yueguangba.com"], subject='#'+str(self.channel[0]), body=json.dumps(attachments), cc=[])
+        # self.slack.chat.post_message(channel='#'+str(self.channel[0]), text=None, icon_emoji=emoji, username=self.bot[0], attachments=attachments)
         return

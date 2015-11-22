@@ -19,11 +19,15 @@ IMAGES_STORE = os.path.join(PROJECT_ROOT, '../static/upload/thumbnails')
 
 BOT_NAME = 'crawler'
 
+# A list of modules where Scrapy will look for spiders.
 SPIDER_MODULES = ['crawler.spiders']
+# Module where to create new spiders using the genspider command.
 NEWSPIDER_MODULE = 'crawler.spiders'
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-# CONCURRENT_REQUESTS=32
+CONCURRENT_REQUESTS = 16
+# Maximum number of concurrent items (per response) to process in parallel in the Item Processor
+CONCURRENT_ITEMS = 100
 
 # Configure a delay for requests for the same website (default: 0)
 # See http://scrapy.readthedocs.org/en/latest/topics/settings.html#download-delay
@@ -31,6 +35,22 @@ NEWSPIDER_MODULE = 'crawler.spiders'
 # The download delay setting will honor only one of:
 # CONCURRENT_REQUESTS_PER_DOMAIN=16
 # CONCURRENT_REQUESTS_PER_IP=16
+
+# The maximum depth that will be allowed to crawl for any site. If zero, no limit will be imposed.
+DEPTH_LIMIT = 0
+# An integer that is used to adjust the request priority based on its depth.If zero, no priority adjustment is made from depth.
+DEPTH_PRIORITY = 0
+# Whether to collect maximum depth stats.
+DEPTH_STATS = True
+# Whether to collect verbose depth stats. If this is enabled, the number of requests for each depth is collected in the stats.
+DEPTH_STATS_VERBOSE = False
+
+# Whether to enable DNS in-memory cache.
+DNSCACHE_ENABLED = True
+# DNS in-memory cache size.
+DNSCACHE_SIZE = 10000
+# Timeout for processing of DNS queries in seconds. Float is supported.
+DNS_TIMEOUT = 60
 
 # Disable cookies (enabled by default)
 # COOKIES_ENABLED=False
@@ -48,10 +68,36 @@ NEWSPIDER_MODULE = 'crawler.spiders'
 # Enable or disable extensions
 # See http://scrapy.readthedocs.org/en/latest/topics/extensions.html
 EXTENSIONS = {
+    # 'scrapy.extensions.corestats.CoreStats': 0,
+    # 'scrapy.telnet.TelnetConsole': 0,
+    # 'scrapy.extensions.memusage.MemoryUsage': 0,
+    # 'scrapy.extensions.memdebug.MemoryDebugger': 0,
+    # 'scrapy.extensions.closespider.CloseSpider': 0,
+    # 'scrapy.extensions.feedexport.FeedExporter': 0,
+    # 'scrapy.extensions.logstats.LogStats': 0,
+    # 'scrapy.extensions.spiderstate.SpiderState': 0,
+    # 'scrapy.extensions.throttle.AutoThrottle': 0,
     'scrapy.telnet.TelnetConsole': None,
 }
 
-STATS_DUMP=True
+# A boolean which specifies if the telnet console will be enabled (provided its extension is also enabled).
+TELNETCONSOLE_ENABLED = True
+# The port range to use for the telnet console. If set to None or 0, a dynamically assigned port is used. For more info see Telnet Console.
+#  http://doc.scrapy.org/en/latest/topics/telnetconsole.html#topics-telnetconsole
+TELNETCONSOLE_PORT = [6023, 6073]
+
+# Dump the Scrapy stats (to the Scrapy log) once the spider finishes.
+# http://doc.scrapy.org/en/latest/topics/stats.html#topics-stats
+STATS_DUMP = True
+# The class to use for collecting stats, who must implement theS tats Collector API
+# http://doc.scrapy.org/en/latest/topics/api.html#topics-api-stats
+# STATS_CLASS="scrapy.statscollectors.MemoryStatsCollector'"
+# Send Scrapy stats after spiders finish scraping. See StatsMailer for more info.
+# STATSMAILER_RCPTS=[]
+
+# The maximum URL length to allow for crawled URLs. For more information about the default value for this setting see: http://www.boutell.com/newfaq/misc/urllength.html
+# URLLENGTH_LIMIT=2083
+
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html
@@ -87,22 +133,48 @@ STATS_DUMP=True
 # DSCRAPER_LOG_LEVEL = 'INFO'
 # DSCRAPER_LOG_LIMIT = 5
 
-# Enable or disable spider middlewares
-# See http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
-# SPIDER_MIDDLEWARES = {
-#    'crawler.middlewares.MyCustomSpiderMiddleware': 543,
-# 'scrapy.contrib.spidermiddleware.depth.DepthMiddleware': None,
-# }
-
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 # DOWNLOADER_MIDDLEWARES = {
+# 'scrapy.downloadermiddlewares.robotstxt.RobotsTxtMiddleware': 100,
+# 'scrapy.downloadermiddlewares.httpauth.HttpAuthMiddleware': 300,
+# 'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware': 350,
+# 'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': 400,
+# 'scrapy.downloadermiddlewares.retry.RetryMiddleware': 500,
+# 'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware': 550,
+# 'scrapy.downloadermiddlewares.redirect.MetaRefreshMiddleware': 580,
+# 'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 590,
+# 'scrapy.downloadermiddlewares.redirect.RedirectMiddleware': 600,
+# 'scrapy.downloadermiddlewares.cookies.CookiesMiddleware': 700,
+# 'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 750,
+# 'scrapy.downloadermiddlewares.chunked.ChunkedTransferMiddleware': 830,
+# 'scrapy.downloadermiddlewares.stats.DownloaderStats': 850,
+# 'scrapy.downloadermiddlewares.httpcache.HttpCacheMiddleware': 900,
 # 'crawler.middlewares.useragent.RandomUserAgent': 1,  # 随机user agent
 # 'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 110, #代理需要用到
 # 'crawler.middlewares.ProxyMiddleware': 100, #代理需要用到
 # 'scrapy.contrib.downloadermiddleware.retry.RetryMiddleware' : None,
 # 'crawler.middlewares.redis_retry.RedisRetryMiddleware': 510,
 # }
+DOWNLOAD_HANDLERS = {
+    # 'file': 'scrapy.core.downloader.handlers.file.FileDownloadHandler',
+    # 'http': 'scrapy.core.downloader.handlers.http.HttpDownloadHandler',
+    # 'https': 'scrapy.core.downloader.handlers.http.HttpDownloadHandler',
+    # 's3': 'scrapy.core.downloader.handlers.s3.S3DownloadHandler',
+}
+
+RETRY_ENABLED = True
+RETRY_TIMES = 3
+RETRY_HTTP_CODES = [500, 502, 503, 504, 400, 408]
+DOWNLOAD_TIMEOUT = 20
+DOWNLOAD_DELAY = 10
+DOWNLOAD_WARNSIZE = 0  # The response size (in bytes) that downloader will start to warn.
+DOWNLOAD_MAXSIZE = 0
+
+# The class used to detect and filter duplicate requests.
+# DUPEFILTER_CLASS = "crawler.utils.bloomfilter.BLOOMDupeFilter"
+# DUPEFILTER_DEBUG=False
+
 SETTINGS_PRIORITIES = {
     'default': 0,
     'command': 10,
@@ -112,6 +184,26 @@ SETTINGS_PRIORITIES = {
 }
 # Don't cleanup redis queues, allows to pause/resume crawls.
 # SCHEDULER_PERSIST = True
+SCHEDULER = 'scrapy.core.scheduler.Scheduler'
+# A dict containing the scrapy contracts enabled in your project, used for testing spiders
+# SPIDER_CONTRACTS={
+#     'scrapy.contracts.default.UrlContract' : 1,
+#     'scrapy.contracts.default.ReturnsContract': 2,
+#     'scrapy.contracts.default.ScrapesContract': 3,
+# }
+# The class that will be used for loading spiders,
+# SPIDER_LOADER_CLASS="'scrapy.spiderloader.SpiderLoader'"
+# Enable or disable spider middlewares
+# See http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
+# SPIDER_MIDDLEWARES = {
+#    'crawler.middlewares.MyCustomSpiderMiddleware': 543,
+#    'scrapy.contrib.spidermiddleware.depth.DepthMiddleware': None,
+#     'scrapy.spidermiddlewares.httperror.HttpErrorMiddleware': 50,
+#     'scrapy.spidermiddlewares.offsite.OffsiteMiddleware': 500,
+#     'scrapy.spidermiddlewares.referer.RefererMiddleware': 700,
+#     'scrapy.spidermiddlewares.urllength.UrlLengthMiddleware': 800,
+#     'scrapy.spidermiddlewares.depth.DepthMiddleware': 900,
+# }
 
 # how long we want the duplicate timeout queues to stick around in seconds
 # DUPEFILTER_TIMEOUT = 60
@@ -122,17 +214,39 @@ SETTINGS_PRIORITIES = {
 LOG_LEVEL = 'INFO'  # CRITICAL, ERROR, WARNING, INFO, DEBUG
 # Disable the built in logging in production
 LOG_ENABLED = True
+# If True, all standard output (and error) of your process will be redirected to the log. For example if you print 'hello' it will appear in the Scrapy log.
 LOG_STDOUT = False
+# LOG_ENCODING="utf-8'"
 # LOG_FILE = "/var/log/scrapy.log"
+# LOG_DATEFORMAT = '%Y-%m-%d %H:%M:%S'
+# LOG_FORMAT = '%(asctime)s [%(name)s] %(levelname)s: %(message)s'
 
 # Allow all return codes
 # HTTPERROR_ALLOW_ALL = True
 
-RETRY_ENABLED = True
-RETRY_TIMES = 3
-DOWNLOAD_TIMEOUT = 20
-DOWNLOAD_DELAY = 10
-DOWNLOAD_WARNSIZE = 0  # The response size (in bytes) that downloader will start to warn.
+# Whether to enable memory debugging.
+MEMDEBUG_ENABLED = False
+# When memory debugging is enabled a memory report will be sent to the specified addresses if this setting is not empty, otherwise the report will be written to the log.
+MEMDEBUG_NOTIFY = ['admin@yueguangba.com']
+# Whether to enable the memory usage extension that will shutdown the Scrapy process when it exceeds a memory limit, and also notify by email when that happened.
+MEMUSAGE_ENABLED = False
+# The maximum amount of memory to allow (in megabytes) before shutting down Scrapy (if MEMUSAGE_ENABLED is True). If zero, no check will be performed.
+MEMUSAGE_LIMIT_MB = 0
+# A list of emails to notify if the memory limit has been reached.
+MEMUSAGE_NOTIFY_MAIL = ['admin@yueguangba.com']
+# Whether to send a memory usage report after each spider has been closed.
+MEMUSAGE_REPORT = False
+# The maximum amount of memory to allow (in megabytes) before sending a warning email notifying about it. If zero, no warning will be produced.
+MEMUSAGE_WARNING_MB = 0
+
+# Whether the Redirect middleware will be enabled.
+REDIRECT_ENABLED = True
+# The maximum number of redirections that will be follow for a single request.
+REDIRECT_MAX_TIMES = 1
+# Whether the Meta Refresh middleware will be enabled.
+METAREFRESH_ENABLED = True
+# The maximum meta-refresh delay (in seconds) to follow the redirection.
+REDIRECT_MAX_METAREFRESH_DELAY = 100
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 USER_AGENTS = [
@@ -189,6 +303,17 @@ USER_AGENT = random.choice(USER_AGENTS)
 #     {'ip_port': '122.224.249.122:8088', 'user_pass': ''},
 # ]
 
+# These settings define the default constructor values of the MailSender class,
+# and can be used to configure e-mail notifications in your project without writing any code
+# (for those extensions and code that uses MailSender).
+MAIL_FROM = "crawler@yueguangba.com"
+MAIL_HOST = "localhost"
+MAIL_PORT = 25
+MAIL_USER = "crawler"
+MAIL_PASS = "crawler"
+MAIL_TLS = False
+MAIL_SSL = False
+
 REDIS_UNIQUE_KEY = "alibaba.crawler.item.unique_key"
 
 LOCAL_HOST = "127.0.0.1"
@@ -210,6 +335,15 @@ ELASTICSEARCH_INDEX = 'scrapy'
 ELASTICSEARCH_TYPE = 'items'
 ELASTICSEARCH_UNIQ_KEY = 'url'
 
+# A boolean which specifies if the web service will be enabled (provided its extension is also enabled).
+JSONRPC_ENABLED = True
+# A file to use for logging HTTP requests made to the web service. If unset web the log is sent to standard scrapy log.
+JSONRPC_LOGFILE = None
+# The interface the web service should listen on.
+JSONRPC_HOST = '127.0.0.1'
+# The port range to use for the web service. If set to None or 0, a dynamically assigned port is used.
+JSONRPC_PORT = [6080, 7030]
+
 # Kafka server information
 KAFKA_HOSTS = ''
 KAFKA_TOPIC_PREFIX = 'demo'
@@ -224,9 +358,6 @@ IMAGES_THUMBS = {
     'medium': (200, 200),
     'small': (100, 100),
 }
-
-# 布隆过滤
-# DUPEFILTER_CLASS = "crawler.utils.bloomfilter.BLOOMDupeFilter"
 
 try:
     from local_settings import *
