@@ -1,8 +1,7 @@
-#!/usr/bin/python
 # -*-coding:utf-8-*-
 
-from woaidu_crawler.utils import color
-from woaidu_crawler.pipelines.bookfile import NofilesDrop
+from crawler.utils import color
+from crawler.pipelines.bookfile import NofilesDrop
 
 
 class DropNoneBookFile(object):

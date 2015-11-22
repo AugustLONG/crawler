@@ -12,9 +12,9 @@ from scrapy.utils.misc import arg_to_iter
 from twisted.internet.defer import Deferred, DeferredList
 from scrapy.exceptions import DropItem, NotConfigured
 
-from woaidu_crawler.utils import color
-from woaidu_crawler.utils.select_result import list_first_item
-from woaidu_crawler.pipelines.file import FilePipeline, FSFilesStore, FileException
+from crawler.utils import color
+from crawler.utils.select_result import list_first_item
+from crawler.pipelines.file import FilePipeline, FSFilesStore, FileException
 
 
 class NofilesDrop(DropItem):

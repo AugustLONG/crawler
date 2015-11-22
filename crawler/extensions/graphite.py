@@ -5,7 +5,7 @@ from socket import socket
 from time import time
 import redis
 import logging as log
-from scrapy.statscol import StatsCollector
+from scrapy.statscollectors import StatsCollector
 
 from crawler.utils import color
 

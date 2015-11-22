@@ -2,6 +2,7 @@
 """
 Created on 2015-11-22
 @author: 李飞飞
+desc:内置扩展介绍,记录基本的统计信息，比如爬取的页面和条目(items)。
 """
 """
 SLACK_API_TOKEN = 'your key'

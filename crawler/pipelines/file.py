@@ -15,11 +15,11 @@ from scrapy import log
 from twisted.internet import defer
 from scrapy.utils.misc import md5sum
 from scrapy.utils.misc import arg_to_iter
-from scrapy.contrib.pipeline.images import MediaPipeline
+from scrapy.contrib.pipeline.media import MediaPipeline
 from scrapy.exceptions import NotConfigured, IgnoreRequest
 
-from woaidu_crawler.utils import color
-from woaidu_crawler.utils.select_result import list_first_item
+from crawler.utils import color
+from crawler.utils.select_result import list_first_item
 
 
 class FileException(Exception):

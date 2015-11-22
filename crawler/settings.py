@@ -51,6 +51,8 @@ EXTENSIONS = {
     'scrapy.telnet.TelnetConsole': None,
 }
 
+STATS_DUMP=True
+
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html
 # NOTE: AutoThrottle will honour the standard settings for concurrency and delay
@@ -101,7 +103,13 @@ EXTENSIONS = {
 # 'scrapy.contrib.downloadermiddleware.retry.RetryMiddleware' : None,
 # 'crawler.middlewares.redis_retry.RedisRetryMiddleware': 510,
 # }
-
+SETTINGS_PRIORITIES = {
+    'default': 0,
+    'command': 10,
+    'project': 20,
+    'spider': 30,
+    'cmdline': 40,
+}
 # Don't cleanup redis queues, allows to pause/resume crawls.
 # SCHEDULER_PERSIST = True
 
@@ -219,3 +227,8 @@ IMAGES_THUMBS = {
 
 # 布隆过滤
 # DUPEFILTER_CLASS = "crawler.utils.bloomfilter.BLOOMDupeFilter"
+
+try:
+    from local_settings import *
+except:
+    pass
