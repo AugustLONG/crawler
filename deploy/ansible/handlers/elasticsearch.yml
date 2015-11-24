@@ -1,0 +1,25 @@
+#docker run -d --name elasticsearch -p 9300:9300  -p 9200:9200  -v /mnt/sda1/opt/elasticsearch/config:/usr/share/elasticsearch/config elasticsearch
+#docker run -d --name elasticsearch -p 9300:9300  -p 9200:9200 -v /mnt/sda1/opt/elasticsearch/data:/usr/share/elasticsearch/data  elasticsearch
+#docker run -d --name elasticsearch -p 9300:9300  -p 9200:9200 -v /mnt/sda1/opt/elasticsearch/plugins:/usr/share/elasticsearch/plugins elasticsearch
+#docker run -d --name elasticsearch -p 9300:9300  -p 9200:9200 -v /mnt/sda1/opt/elasticsearch/logs:/usr/share/elasticsearch/logs elasticsearch
+
+
+name: restart elasticsearch
+command: docker restart kibana
+
+name: stop elasticsearch
+command: docker stop kibana
+
+name: start elasticsearch
+command: docker start kibana
+
+name: rm elasticsearch
+command: docker rm kibana
+
+name: run elasticsearch
+command: docker run -d --name elasticsearch -p 9300:9300  -p 9200:9200 -v /mnt/sda1/opt/elasticsearch/data:/usr/share/elasticsearch/data  elasticsearch
+
+name: pull elasticsearch
+command: docker pull elasticsearch
+
+

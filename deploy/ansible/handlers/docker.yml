@@ -1,0 +1,8 @@
+name: restart docker
+command: service docker restart
+
+name: start docker
+command: service docker start
+
+name: stop docker
+command: service docker stop

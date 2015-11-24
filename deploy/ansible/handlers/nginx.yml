@@ -10,5 +10,11 @@
 - name: stop nginx
   command: docker stop nginx
 
+- name: rm nginx
+  command: docker rm nginx
+
+- name: pull nginx
+  command: docker pull nginx
+
 - name: run nginx
   command: docker run -v -p -d  nginx nginx

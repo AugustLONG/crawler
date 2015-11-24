@@ -1,0 +1,21 @@
+
+#docker run --name some-kibana -e ELASTICSEARCH_URL=http://some-elasticsearch:9200 -p 5601:5601 -d kibana
+
+name: restart kibana
+command: docker restart kibana
+
+name: stop kibana
+command: docker stop kibana
+
+name: start kibana
+command: docker start kibana
+
+name: rm kibana
+command: docker rm kibana
+
+name: run kibana
+command: docker run --name some-kibana --link elasticsearch:elasticsearch -p 5601:5601 -d kibana
+
+name: pull kibana
+command: docker pull kibana
+
