@@ -6,9 +6,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 <meta name="renderer" content="webkit"/>
-<title>{% block title %}月光吧搜索-最专业的互联网搜索定制平台{% endblock %}</title>
-<meta content="{% block description %}月光吧定制搜索网是中国互联网领域垂直定制搜索网站,定制你的个人搜索引擎尽在月光吧搜索网{% endblock %}" name="description">
-<meta content="{% block keywords %}月光吧搜索,月光吧搜索网,月光吧搜索搜索,拉钩, 拉钩网 ,互联网搜索,月光吧搜索互联网搜索, 移动互联网搜索, 垂直互联网搜索, 微信搜索, 微博搜索, 月光吧搜索官网, 月光吧搜索百科,跳槽, 高薪职位, 互联网圈子, IT搜索, 职场搜索, 猎头搜索,O2O搜索, LBS搜索, 社交搜索, 校园搜索, 校招,社会搜索,社招{% endblock %}" name="keywords">
+<title>{% block title %}月光吧搜索-最专业的IT搜索定制平台{% endblock %}</title>
+<meta content="{% block description %}月光吧搜索网是中国IT人定制搜索网站,定制你的个人搜索引擎尽在月光吧搜索网{% endblock %}" name="description">
+<meta content="{% block keywords %}大数据,云计算,java,python,go,.net,linux,php,c,c++,ruby{% endblock %}" name="keywords">
 <meta name="author" content="李飞飞 <admin@yueguangba.com>"/>
 {% block meta %}{% endblock %}
 <link rel="icon" href="/static/images/favicon.ico" type="image/x-icon" />
@@ -119,12 +119,27 @@
             <li class="active">
                 <a href="#">首页</a>
             </li>
-{#            <li>#}
-{#                <a href="#">列表1</a>#}
-{#            </li>#}
-{#            <li>#}
-{#                <a href="#">列表2</a>#}
-{#            </li>#}
+            <li>
+               <a href="/doc">文档</a>
+            </li>
+            <li>
+                <a href="/qa">问答</a>
+            </li>
+            <li>
+               <a href="/code" title="代码分享">CODE</a>
+            </li>
+            <li>
+               <a href="/library" title="下载和上传">文库</a>
+            </li>
+            <li>
+               <a href="/soft" title="推荐软件，但不提供下载">软件</a>
+            </li>
+            <li>
+               <a href="/news" title="新闻资讯">业界</a>
+            </li>
+            <li>
+               <a href="/git" title="提交文章连接">提交</a>
+            </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li>
@@ -176,11 +191,11 @@
     <p class="copyright"><a href="/" class="copyright" target="_blank">月光吧搜索</a>&nbsp;&nbsp;<span class="phone_large">yueguangba.com</span>&nbsp;&nbsp;<span>admin@yueguangba.com</span></p>
 </div>
 {% for js in js_path %}
-    <script type="text/javascript" src="/static/module/{{ js }}"></script>
+    <script type="text/javascript" src="/static/modules/{{ js }}.js"></script>
 {% endfor %}
 
 {% for style in style_path %}
-    <link rel="stylesheet" type="text/css" href="/static/module/{{ style }}"/>
+    <link rel="stylesheet" type="text/css" href="/static/modules/{{ style }}.css"/>
 {% endfor %}
     {% block css %}
 
