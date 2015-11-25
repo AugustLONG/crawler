@@ -2,12 +2,12 @@
 # coding=utf-8
 
 from django.conf import settings
-from elasticsearch_dsl import Search, Q
+from elasticsearch import Elasticsearch
 
 PAGE_SIZE = 10
 
 
-class Elasticsearch:
+class ES:
     def __init__(self):
         self.es = settings.ES
 
@@ -25,6 +25,8 @@ class Elasticsearch:
 
         for tag in response.aggregations.per_tag.buckets:
             print(tag.key, tag.max_lines.value)
+
+
 
     def page_search(self, query, page):
 

@@ -1,79 +1,57 @@
 # coding=utf-8
 import json
 
-from django.views.generic.base import TemplateView, View
 from django.core.cache import cache
 from django.conf import settings
+from django.shortcuts import render_to_response,RequestContext
+from django.template.defaultfilters import strip_tags,mark_safe
 from dateutil.parser import parse as parse_date
 from silk.profiling.profiler import silk_profile
-
-from search.models import Category, Link, Tag
-
 es = settings.ES
-from elasticsearch_dsl import Search, Q
 
 
-class HomePageView(TemplateView):
-    template_name = "index.html"
-    category_key = "all_category_list"
-    category_key_ttl = 3600
+def index(request):
+    return render_to_response('index.html', {},RequestContext(request))
 
-    def get_context_data(self, **kwargs):
-        context = super(HomePageView, self).get_context_data(**kwargs)
-        categories = cache.get(self.category_key, [])
-        if not categories:
-            for category in Category.objects.roots():
-                categories_dict = {"name": category.name, "url": category.get_absolute_url(), "children": [], "hot": []}
-                for children in Category.objects.chriden(category.pk):
-                    children_dict = {"name": children.name, "url": children.get_absolute_url(), "children": []}
-                    for child in Category.objects.chriden(children.pk):
-                        child_dict = {"name": child.name, "url": child.get_absolute_url()}
-                        children_dict["children"].append(child_dict)
-                        if child.hot >= 10:
-                            categories_dict["hot"].append(child_dict)
-                    categories_dict["children"].append(children_dict)
-                categories.append(categories_dict)
-            cache.set(self.category_key, json.dumps(categories), self.category_key_ttl)
-        else:
-            categories = json.loads(categories)
+@silk_profile(name='Search By Keywords')
+def search(request):
+    keywords=request.GET.get("keywords", None)
+    if keywords and keywords.strip():
+        keywords=strip_tags(keywords.strip())
+        with silk_profile(name='Search By Keywords #%s' % keywords):
+            page=request.GET.get("page", 1)
+            datas=es.search(index='it', doc_type='stackoverflow_questions', body={
+            "query": {
+                "filtered": {
+                    "query": {
+                        "match": {
+                            "title": keywords.lower()
+                        }
+                    }
+                }
+            },
+            "from": page,
+            "size": 50,
+            "highlight": {
+                "fields": {
+                    "light_title": {
 
-        print categories
-        context['categories'] = categories
-
-        links = Link.objects.all()
-        context['links'] = links
-
-        tags = Tag.objects.hot()[:10]
-        context['tags'] = tags
-
-        search = Search(using=es, index="tuangou", doc_type="meituan").sort('-@timestamp')[0:50]
-        try:
-            context["results"] = search.execute()
-        except:
-            context["results"] = {}
-        return context
-
-
-@silk_profile(name='View Blog Post')
-def post(request, post_id):
-    p = Post.objects.get(pk=post_id)
-    return render_to_response('post.html', {
-        'post': p
-    })
-
-
-class MyView(View):
-    @silk_profile(name='View Blog Post')
-    def get(self, request):
-        p = Post.objects.get(pk=post_id)
-        return render_to_response('post.html', {
-            'post': p
+                    },
+                }
+            }
         })
+        results = datas["hits"]
+        print results
+    else:
+        results=[]
+    return render_to_response('index.html', {"results":results},RequestContext(request))
 
 
-def post(request, post_id):
-    with silk_profile(name='View Blog Post #%d' % self.pk):
-        p = Post.objects.get(pk=post_id)
-        return render_to_response('post.html', {
-            'post': p
-        })
+#
+#
+# def post(request, post_id):
+#     with silk_profile(name='View Blog Post #%d' % self.pk):
+#         p = Post.objects.get(pk=post_id)
+#         return render_to_response('post.html', {
+#             'post': p
+#         })
