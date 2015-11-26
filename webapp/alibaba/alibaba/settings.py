@@ -288,11 +288,12 @@ USERENA_DISABLE_SIGNUP = False
 USERENA_HIDE_EMAIL = False
 USERENA_HTML_EMAIL = True
 
-# SILKY_PYTHON_PROFILER = True
-# SILKY_AUTHENTICATION = True  # User must login
-# SILKY_AUTHORISATION = True  # User must have permissions
+SILKY_PYTHON_PROFILER = True
+SILKY_AUTHENTICATION = True  # User must login
+SILKY_AUTHORISATION = True  # User must have permissions
+SILKY_PERMISSIONS = lambda user: user.is_superuser
 # SILKY_MAX_REQUEST_BODY_SIZE = -1  # Silk takes anything <0 as no limit
-# SILKY_MAX_RESPONSE_BODY_SIZE = 1024  # If response body>1024kb, ignore
+SILKY_MAX_RESPONSE_BODY_SIZE = 1024  # If response body>1024kb, ignore
 SILKY_META = True
 # SILKY_INTERCEPT_PERCENT = 50  # log only 50% of requests
 # def my_custom_logic(request):
