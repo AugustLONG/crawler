@@ -8,12 +8,17 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12" style="padding:108px 0px">
+                <div class="login-screen">
+                   <div class="login-icon">
+                    <!--<img src="img/login/icon.png" alt="Welcome to Mail App">-->
+                    <h4>欢迎 <small>登录</small></h4>
+                  </div>
+                    <div class="login-form">
                 <form action="" method="post">
                     {% csrf_token %}
-                    <fieldset>
-                        <legend>登录</legend>
                         {{ form.non_field_errors }}
                         {% for field in form %}
+                        <div class="form-group">
                             {{ field.errors }}
                             {% comment %} Displaying checkboxes differently {% endcomment %}
                             {% if field.name == 'remember_me' %}
@@ -26,13 +31,15 @@
                                     {{ field }}
                                 </p>
                             {% endif %}
+                        </div>
                         {% endfor %}
-                    </fieldset>
-                    <input type="submit" value="登录" class="btn btn-default"/>
-                    <button class='js-captcha-refresh btn btn-default'>更新</button>
-                    <p class="forgot-password"><a href="{% url 'userena_password_reset' %}" title="忘记密码？">忘记密码？</a></p>
+                    <button class='js-captcha-refresh btn btn-primary btn-lg btn-block'>更新</button>
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">登录</button>
+                    <p class="forgot-password login-link"><a href="{% url 'userena_password_reset' %}" title="忘记密码？">忘记密码？</a></p>
                     {% if next %}<input type="hidden" name="next" value="{{ next }}"/>{% endif %}
                 </form>
+                        </div>
+                </div>
             </div>
         </div>
     </div>
@@ -41,6 +48,7 @@
 {% block script %}
 <script>
     $(function() {
+      $("input").addClass("form-control login-field");
       $('.js-captcha-refresh').click(function () {
           var imgurl=$(".captcha").attr("src");
           $(".captcha").attr("src",imgurl+ "?r"+Math.random())
@@ -48,4 +56,8 @@
       });
     });
 </script>
+{% endblock %}
+{% block css %}
+<style>
+</style>
 {% endblock %}
