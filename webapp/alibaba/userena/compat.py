@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from collections import defaultdict
-
 import django
-
 
 
 # this default dict will store all compat quirks for parameters of
@@ -24,6 +22,11 @@ if django.VERSION >= (1, 6, 0):  # pragma: no cover
     auth_views_compat_quirks['userena_password_reset_confirm'] = {
         'post_reset_redirect': 'userena_password_reset_complete',
     }
+if django.VERSION >= (1, 7, 0):
+    # Django 1.7 added a new argument to django.contrib.auth.views.password_reset
+    # called html_email_template_name which allows us to pass it the html version
+    # of the email
+    auth_views_compat_quirks['html_email_template_name'] = 'userena/emails/password_reset_message.html'
 
 
 # below are backward compatibility fixes
@@ -33,14 +36,14 @@ if django.VERSION < (1, 6, 0):  # pragma: no cover
     password_reset_uid_kwarg = 'uidb36'
 
 if django.VERSION < (1, 5, 0):
-    pass
+    from django.utils.encoding import smart_unicode as smart_text
 else:
-    pass
+    from django.utils.encoding import smart_text
 
 
 # SiteProfileNotAvailable compatibility
 if django.VERSION < (1, 7, 0):  # pragma: no cover
-    pass
+    from django.contrib.auth.models import SiteProfileNotAvailable
 else:  # pragma: no cover
     class SiteProfileNotAvailable(Exception):
         pass
@@ -50,3 +53,9 @@ try:
     from hashlib import sha1 as sha_constructor, md5 as md5_constructor
 except ImportError:  # pragma: no cover
     from django.utils.hashcompat import sha_constructor, md5_constructor
+
+if django.VERSION < (1, 7, 0):
+    from django.db.models import get_model
+else:
+    from django.apps import apps
+    get_model = apps.get_model

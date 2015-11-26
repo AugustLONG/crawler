@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% block container %}
+<div class="background-gradient">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12" style="padding:18px 0px">
+                <form action="/search" method="get" id="search_form">
+                <div class="input-group form-group-lg" style="width:700px;margin:0 auto;border:none">
+                    <input type="text" class="form-control input-lg" name="keywords" placeholder="请输入您要搜索的内容" value="{{ keywords }}" style="border:none;" id="search_text">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" style="height:45px;padding-right:50px;padding-left:50px;background-color:#FF5454;border:none" id="search_button">搜索</button>
+                    </span>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            <ul class="content-title-1">
+                <li>
+                    为您找到相关资源<span class="tips">{{ total }}</span>个
+                </li>
+            </ul>
+            <ul>
+                {% for result in results %}
+                <li class="content">
+                    <div class="col-md-12 content-1-div-2">
+                        <ul>
+                            <li>
+                                <h6>
+                                    <a href="" title="{{ result.title }}"><span class="search-strong">{{ result.title }}</span></a>
+                                </h6>
+                                <p class="p1">
+                                    简介：{{ result.body|safe|striptags|slice:":300" }}
+                                </p>
+                                <p class="p2">
+                                    上传时间：2015-10-10&nbsp;|&nbsp;&nbsp;&nbsp;难度：初级
+                                </p>
+                                <p class="p3">
+                                    <span>
+                                    未学习
+                                    </span>
+                                </p>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-md-3">
+            <ul class="content-title-1" style="margin-bottom: 11px;">
+                <li>热门搜索</li>
+            </ul>
+            <ul class="list-inline">
+                <li>
+                    <a href="#">html</a>
+                </li>
+                <li>
+                    <a href="#">java</a>
+                </li>
+                <li>
+                    <a href="#">css</a>
+                </li>
+                <li>
+                    <a href="#">ExMobi</a>
+                </li>
+                <li>
+                    <a href="#">es</a>
+                </li>
+                <li>
+                    <a href="#">bootstrap</a>
+                </li>
+                <li>
+                    <a href="#">c</a>
+                </li>
+                <li>
+                    <a href="#">css3</a>
+                </li>
+                <li>
+                    <a href="#">html5</a>
+                </li>
+                <li>
+                    <a href="#">c</a>
+                </li>
+                <li>
+                    <a href="#">c</a>
+                </li>
+                <li>
+                    <a href="#">c</a>
+                </li>
+                <li>
+                    <a href="#">c</a>
+                </li>
+                <li>
+                    <a href="#">c</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="pagination-self">
+                <ul>
+                    <li>
+                        <a href="#">首页</a>
+                    </li>
+                    <li>
+                        <a href="#">上一页</a>
+                    </li>
+                    <li>
+                        <a href="#" class="active">
+                            1
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">2</a>
+                    </li>
+                    <li>
+                        <a href="#">3</a>
+                    </li>
+                    <li>
+                        <a href="#">4</a>
+                    </li>
+                    <li>
+                        <a href="#">5</a>
+                    </li>
+                    <li>
+                        <a href="#">6</a>
+                    </li>
+                    <li>
+                        <a href="#">7</a>
+                    </li>
+                    <li>
+                        <a href="#">下一页</a>
+                    </li>
+                    <li>
+                        <a href="#">尾页</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+<script>
+    $(document).ready(function(){
+    $("#search_button").click(function(){
+        var content=$("#search_text").val();
+        if(content!=""){
+            console.log(content);
+            $("#search_form").submit();
+        }
+    })})
+</script>
+{% endblock %}

@@ -21,32 +21,44 @@ def search(request):
         with silk_profile(name='Search By Keywords #%s' % keywords):
             page=request.GET.get("page", 1)
             datas=es.search(index='it', doc_type='stackoverflow_questions', body={
-            "query": {
-                "filtered": {
-                    "query": {
-                        "match": {
-                            "title": keywords.lower()
+                "query": {
+                    "filtered": {
+                        "query": {
+                            "match": {
+                                "title": keywords.lower()
+                            }
                         }
                     }
-                }
-            },
-            "from": page,
-            "size": 50,
-            "highlight": {
-                "fields": {
-                    "light_title": {
+                },
+                "from": page,
+                "size": 50,
+                "highlight": {
+                    "fields": {
+                        "light_title": {
 
-                    },
+                        },
+                    }
                 }
-            }
-        })
-        results = datas["hits"]
-        print results
+            })
+            print datas
+            hits, took = datas["hits"], datas["took"]
+            total=hits["total"]
+            results=[]
+            for h in hits["hits"]:
+                results.append({
+                    "body":h["_source"]["body"],
+                    "title":h["_source"]["title"]
+                })
     else:
-        results=[]
-    return render_to_response('index.html', {"results":results},RequestContext(request))
+        results = {"hits":{"hits":[]}}
+        total=0
+    return render_to_response('list.html', {"results": results, "total": total,"keywords":keywords},RequestContext(request))
 
 
+@silk_profile(name='Search By Keywords')
+def detail(request,slug,pk):
+    results=[]
+    return render_to_response('detail.html', {"results":results},RequestContext(request))
 #
 #
 # def post(request, post_id):
