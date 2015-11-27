@@ -107,41 +107,11 @@
         <div class="col-md-12">
             <div class="pagination-self">
                 <ul>
-                    <li>
-                        <a href="#">首页</a>
-                    </li>
-                    <li>
-                        <a href="#">上一页</a>
-                    </li>
-                    <li>
-                        <a href="#" class="active">
-                            1
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">2</a>
-                    </li>
-                    <li>
-                        <a href="#">3</a>
-                    </li>
-                    <li>
-                        <a href="#">4</a>
-                    </li>
-                    <li>
-                        <a href="#">5</a>
-                    </li>
-                    <li>
-                        <a href="#">6</a>
-                    </li>
-                    <li>
-                        <a href="#">7</a>
-                    </li>
-                    <li>
-                        <a href="#">下一页</a>
-                    </li>
-                    <li>
-                        <a href="#">尾页</a>
-                    </li>
+                    {% for p in page_list %}
+                        <li>
+                            <a href="/search/?keywords={{ keywords }}&page={{ p }}" {% ifequal p page %}class="active" {% endifequal %}>{{ p }}</a>
+                        </li>
+                    {% endfor %}
                 </ul>
             </div>
         </div>

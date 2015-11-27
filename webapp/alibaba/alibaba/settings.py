@@ -231,7 +231,6 @@ INSTALLED_APPS = (
     'guardian',
     'userena',
     'userena.contrib.umessages',
-    'accounts',
     'search',
     'scraper',
     "captcha",
@@ -280,7 +279,7 @@ SITE_ID = 1
 LOGIN_URL = '/accounts/%(username)s/'
 LOGIN_REDIRECT_URL = '/accounts/signin/'
 LOGOUT_URL = '/accounts/signout/'
-AUTH_PROFILE_MODULE = 'accounts.Profile'
+AUTH_PROFILE_MODULE = 'userena.Profile'
 USERENA_DISABLE_PROFILE_LIST = True
 USERENA_MUGSHOT_SIZE = 100
 USERENA_FORBIDDEN_USERNAMES = "('signup', 'signout', 'signin', 'activate', 'me', 'password')"
