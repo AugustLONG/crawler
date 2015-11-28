@@ -120,25 +120,25 @@
                 <a href="/">首页</a>
             </li>
             <li>
-               <a href="/doc">文档</a>
+               <a href="{% url 'doc_home' %}">文档</a>
             </li>
             <li>
-                <a href="/qa">问答</a>
+                <a href="{% url 'ask_home' %}">问答</a>
             </li>
             <li>
-               <a href="/code" title="代码分享">CODE</a>
+               <a href="{% url 'code_home' %}" title="代码分享">CODE</a>
             </li>
             <li>
-               <a href="/library" title="下载和上传">文库</a>
+               <a href="{% url 'library_home' %}" title="下载和上传">文库</a>
             </li>
             <li>
-               <a href="/soft" title="推荐软件，但不提供下载">软件</a>
+               <a href="{% url 'soft_home' %}" title="推荐软件，但不提供下载">软件</a>
             </li>
             <li>
-               <a href="/news" title="新闻资讯">业界</a>
+               <a href="{% url 'news_home' %}" title="新闻资讯">业界</a>
             </li>
             <li>
-               <a href="/git" title="提交文章连接">提交</a>
+               <a href="{% url 'git_home' %}" title="提交文章连接">提交</a>
             </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
