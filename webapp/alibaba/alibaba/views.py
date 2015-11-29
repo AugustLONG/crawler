@@ -1,5 +1,5 @@
 # coding=utf-8
-import json
+import time
 
 from django.core.cache import cache
 from django.conf import settings
@@ -24,8 +24,11 @@ def search(request):
         page = 1
     elif page>PAGE_COUNTER:
         page=PAGE_COUNTER
+    tags=set()
+    results = []
+    total = 0
     if keywords and keywords.strip():
-        keywords = strip_tags(keywords.strip())
+        keywords = strip_tags(keywords.strip()).replace("-"," ")
         with silk_profile(name='Search By Keywords #%s' % keywords):
             datas = es.search(index='it', doc_type='stackoverflow_questions', body={
                 "query": {
@@ -39,26 +42,23 @@ def search(request):
                 },
                 "from": (page-1)*PAGE_SIZE,
                 "size": PAGE_SIZE,
-                "highlight": {
-                    "fields": {
-                        "light_title": {
-
-                        },
-                    }
-                }
+                'sort': [
+                    {'creation_date': {'order': 'desc'}}
+                ],
             })
             hits, took = datas["hits"], datas["took"]
             total = hits["total"]
             results = []
             for h in hits["hits"]:
+                tags.update(h["_source"]["tags"])
                 results.append({
+                    "id": h["_id"],
                     "body": h["_source"]["body"],
-                    "title": h["_source"]["title"]
+                    "title": h["_source"]["title"],
+                    "tags": h["_source"]["tags"],
+                    "created": time.strftime('%Y-%m-%d',  time.localtime(h["_source"]["creation_date"]))
                 })
-    else:
-        results = []
-        total = 0
-    total_page = total / PAGE_SIZE
+    total_page = total / PAGE_SIZE + 2
     if total_page < PAGE_COUNTER:
         page_list = range(1, total_page)
     elif page + PAGE_COUNTER < total_page:
@@ -73,7 +73,8 @@ def search(request):
                                             "page": page,
                                             "keywords": keywords,
                                             "page_list":page_list,
-                                            "next_page":next_page
+                                            "next_page":next_page,
+                                            "tags":tags
                                             },
                               RequestContext(request))
 

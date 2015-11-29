@@ -1,4 +1,5 @@
 {% load url from future %}
+{% load static %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" dir="ltr">
 <head lang="zh-CN">
@@ -11,10 +12,10 @@
 <meta content="{% block keywords %}大数据,云计算,java,python,go,.net,linux,php,c,c++,ruby{% endblock %}" name="keywords">
 <meta name="author" content="李飞飞 <admin@yueguangba.com>"/>
 {% block meta %}{% endblock %}
-<link rel="icon" href="/static/images/favicon.ico" type="image/x-icon" />
-<link rel="shortcut icon" href="/static/images/favicon.ico" type="image/x-icon" />
-<link rel="stylesheet" href="/static/resources/bootstrap-3.3.5/css/bootstrap.min.css" />
-<link rel="stylesheet" href="/static/resources/flat-ui-2.2.2/css/flat-ui.min.css"/>
+<link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon" />
+<link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon" />
+<link rel="stylesheet" href="{% static 'resources/bootstrap-3.3.5/css/bootstrap.min.css' %}" />
+<link rel="stylesheet" href="{% static 'resources/flat-ui-2.2.2/css/flat-ui.min.css' %}"/>
 <style>
 	.footer { margin:0px; background-color: #2a2a2a; text-align: center;padding:30px;margin-top:40px; clear: both;}
     .footer_nav_out {display:inline-block;border-bottom: 1px solid #4d4d4d;padding:0px 50px;}
@@ -104,6 +105,27 @@
     .list-inline>li>a{
         border:1px solid #ddd;padding:2px 15px;background-color: #fff;color:#969696;border-radius:16px;font-size:14px;
     }
+    .post-tag {
+        color: #566e76;
+        font-size: 12px;
+        white-space: nowrap;
+        background: #e4edf4;
+        border: 1px solid #e4edf4;
+        display: inline-block;
+        margin: 2px 2px 2px 0;
+        border-radius: 0;
+        padding: .4em .5em;
+        text-decoration: none;
+        text-align: center;
+        line-height: 1;
+    }
+    .tags {
+        line-height: 18px;
+        float: left;
+    }
+    .tags a {
+        color: #07c;
+    }
 </style>
 </head>
 
@@ -158,52 +180,42 @@
     <div class="footer_nav_out">
         <ul class="footer_nav">
             <li class="title">首页</li>
-{#            <li><a href="http://www.exmobi.cn/console/main.html">控制台</a></li>#}
-{#            <li><a href="http://www.exmobi.cn/open/index.html">开放平台</a></li>#}
-{#            <li><a href="http://www.exmobi.cn/sitemap.xml">网站地图</a></li>#}
+{#            <li><a href="/console/main.html">控制台</a></li>#}
         </ul>
 
         <ul class="footer_nav">
             <li class="title">分类</li>
-{#            <li><a href="http://www.exmobi.cn/product.html">产品介绍</a></li>#}
-{#            <li><a href="http://www.exmobi.cn/quote.html">产品类型</a></li>#}
-{#            <li><a href="http://www.exmobi.cn/resources/product/exmobi-white-paper.pdf">白皮书</a></li>#}
+{#            <li><a href="/product.html">产品介绍</a></li>#}
         </ul>
         <ul class="footer_nav">
             <li class="title">API</li>
-{#            <li><a href="http://www.exmobi.cn/get-start.html">新手入门</a></li>#}
-{#            <li><a href="http://docs.exmobi.cn/">文档中心</a></li>#}
-{#            <li><a href="http://www.exmobi.cn/agile-lite/index.html">Agile Lite</a></li>#}
+{#            <li><a href="/get-start.html">新手入门</a></li>#}
         </ul>
         <ul class="footer_nav">
             <li class="title">定制</li>
-{#            <li><a href="http://bbs.exmobi.cn/forum.php?mod=guide&view=new">查看新贴</a></li>#}
-{#            <li><a href="http://bbs.exmobi.cn/portal.php">论坛导读</a></li>#}
-{#            <li><a href="http://bbs.exmobi.cn/plugin.php?id=auction">插件商城</a></li>#}
+{#            <li><a href="">查看新贴</a></li>#}
         </ul>
         <ul class="footer_nav">
             <li class="title">关于</li>
-{#            <li><a href="http://www.fhss.com.cn/aboutus.htm">关于我们</a></li>#}
-{#            <li><a href="http://www.fhss.com.cn/contactus.htm">联系我们</a></li>#}
-{#            <li><a href="http://www.exmobi.cn/recruitment/index.html">招贤纳士</a></li>#}
+{#            <li><a href="/aboutus.htm">关于我们</a></li>#}
         </ul>
     </div>
     <p class="copyright"><a href="/" class="copyright" target="_blank">月光吧搜索</a>&nbsp;&nbsp;<span class="phone_large">yueguangba.com</span>&nbsp;&nbsp;<span>admin@yueguangba.com</span></p>
 </div>
 {% for js in js_path %}
-    <script type="text/javascript" src="/static/modules/{{ js }}.js"></script>
+    <script type="text/javascript" src="{% static ''%}modules/{{ js }}.js"></script>
 {% endfor %}
 
 {% for style in style_path %}
-    <link rel="stylesheet" type="text/css" href="/static/modules/{{ style }}.css"/>
+    <link rel="stylesheet" type="text/css" href="{% static ''%}modules/{{ style }}.css"/>
 {% endfor %}
     {% block css %}
 
     {% endblock %}
 
-<script src="/static/resources/flat-ui-2.2.2/js/vendor/jquery.min.js"></script>
-<script src="/static/resources/bootstrap-3.3.5/js/bootstrap.min.js"></script>
-<script src="/static/resources/flat-ui-2.2.2/js/flat-ui.min.js"></script>
+<script src="{% static 'resources/flat-ui-2.2.2/js/vendor/jquery.min.js' %}"></script>
+<script src="{% static 'resources/bootstrap-3.3.5/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'resources/flat-ui-2.2.2/js/flat-ui.min.js' %}"></script>
     {% block script %}
 
     {% endblock %}

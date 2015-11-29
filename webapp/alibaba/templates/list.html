@@ -1,10 +1,12 @@
 {% extends "base.html" %}
+{% load url from future %}
+{% load static %}
 {% block container %}
 <div class="background-gradient">
     <div class="container">
         <div class="row">
             <div class="col-lg-12" style="padding:18px 0px">
-                <form action="/search" method="get" id="search_form">
+                <form action="/search/" method="get" id="search_form">
                 <div class="input-group form-group-lg" style="width:700px;margin:0 auto;border:none">
                     <input type="text" class="form-control input-lg" name="keywords" placeholder="请输入您要搜索的内容" value="{{ keywords }}" style="border:none;" id="search_text">
                     <span class="input-group-btn">
@@ -31,13 +33,20 @@
                         <ul>
                             <li>
                                 <h6>
-                                    <a href="" title="{{ result.title }}"><span class="search-strong">{{ result.title }}</span></a>
+                                    <a href="{% url 'ask:question_detail' pk=result.id %}" title="{{ result.title }}"><span class="search-strong">{{ result.title }}</span></a>
                                 </h6>
                                 <p class="p1">
-                                    简介：{{ result.body|safe|striptags|slice:":300" }}
+                                    {{ result.body|safe|striptags|slice:":300" }}
                                 </p>
                                 <p class="p2">
-                                    上传时间：2015-10-10&nbsp;|&nbsp;&nbsp;&nbsp;难度：初级
+                                    <span class="tags">
+                                        {% for tag in result.tags %}
+                                            <a href="/search/?keywords={{ tag }}" class="post-tag" title="" rel="tag">{{ tag }}</a>
+                                        {% endfor %}
+                                    </span>
+                                    <span class="" style="float: right">
+                                    {{ result.created }}
+                                    </span>
                                 </p>
                             </li>
                         </ul>
@@ -51,48 +60,11 @@
                 <li>热门搜索</li>
             </ul>
             <ul class="list-inline">
+                {% for t in tags %}
                 <li>
-                    <a href="#">html</a>
+                    <a href="/search/?keywords={{ t }}">{{ t }}</a>
                 </li>
-                <li>
-                    <a href="#">java</a>
-                </li>
-                <li>
-                    <a href="#">css</a>
-                </li>
-                <li>
-                    <a href="#">ExMobi</a>
-                </li>
-                <li>
-                    <a href="#">es</a>
-                </li>
-                <li>
-                    <a href="#">bootstrap</a>
-                </li>
-                <li>
-                    <a href="#">c</a>
-                </li>
-                <li>
-                    <a href="#">css3</a>
-                </li>
-                <li>
-                    <a href="#">html5</a>
-                </li>
-                <li>
-                    <a href="#">c</a>
-                </li>
-                <li>
-                    <a href="#">c</a>
-                </li>
-                <li>
-                    <a href="#">c</a>
-                </li>
-                <li>
-                    <a href="#">c</a>
-                </li>
-                <li>
-                    <a href="#">c</a>
-                </li>
+                {% endfor %}
             </ul>
         </div>
     </div>
