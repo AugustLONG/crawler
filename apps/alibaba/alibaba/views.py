@@ -48,7 +48,6 @@ def search(request):
             })
             hits, took = datas["hits"], datas["took"]
             total = hits["total"]
-            results = []
             for h in hits["hits"]:
                 tags.update(h["_source"]["tags"])
                 results.append({
