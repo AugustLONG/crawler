@@ -22,7 +22,7 @@ from django.conf.urls.static import static
 
 admin.autodiscover()
 
-urlpatterns = [
+urlpatterns = patterns('',
     url(r'^wanglingling/', include(admin.site.urls)),
     url(r'^$', "alibaba.views.index", name='alibaba_home'),
     url(r'^search/',  "alibaba.views.search", name='alibaba_search'),
@@ -38,7 +38,7 @@ urlpatterns = [
     url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^captcha/', include('captcha.urls')),
 
-]
+    )
 
 urlpatterns += patterns('', url(r'^silk/', include('silk.urls', namespace='silk')))
 
