@@ -252,10 +252,12 @@ SUIT_CONFIG = {
     'LIST_PER_PAGE': 50
 }
 
+SITE_ID = 1
+ANONYMOUS_USER_ID = -1
+
+
 import djcelery
-
 djcelery.setup_loader()
-
 BROKER_HOST = "localhost"
 BROKER_PORT = 5672
 BROKER_BACKEND = "alibaba"
@@ -264,17 +266,6 @@ BROKER_PASSWORD = "guest"
 BROKER_VHOST = "/"
 CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
 
-LOCAL_HOST = "192.168.234.139"
-MONGO_HOST = LOCAL_HOST
-MONGO_PORT = 27017
-
-import pymongo
-
-MONGO_CLIENT = pymongo.MongoClient(MONGO_HOST, MONGO_PORT)
-
-ANONYMOUS_USER_ID = -1
-
-SITE_ID = 1
 
 LOGIN_URL = '/accounts/%(username)s/'
 LOGIN_REDIRECT_URL = '/accounts/signin/'
@@ -370,8 +361,11 @@ CAPTCHA_DICTIONARY_MIN_LENGTH = CAPTCHA_DICTIONARY_MAX_LENGTH = 6
 CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.word_challenge'
 
 from elasticsearch import Elasticsearch
-
 ES = Elasticsearch(ES_HOST, timeout=50)
+
+from pymongo import MongoClient
+MONGODB = MongoClient(MONGO_HOST, MONGO_PORT)
+
 from django_redis import get_redis_connection
 
 REDIS = get_redis_connection("default")
