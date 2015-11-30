@@ -1,0 +1,31 @@
+﻿{% extends "base.html" %}
+{% block container %}
+<div class="background-gradient">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12" style="padding:108px 0px">
+                <form action="/search/" method="get" id="search_form">
+                <div class="input-group form-group-lg" style="width:700px;margin:0 auto;border:none">
+                    <input type="text" class="form-control input-lg" name="keywords" placeholder="请输入您要搜索的内容" style="border:none;" id="search_text">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" style="height:45px;padding-right:50px;padding-left:50px;background-color:#FF5454;border:none" id="search_button">搜索</button>
+                    </span>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+<script>
+    $(document).ready(function(){
+    $("#search_button").click(function(){
+        var content=$("#search_text").val();
+        if(content!=""){
+            console.log(content);
+            $("#search_form").submit();
+        }
+    })})
+</script>
+{% endblock %}
