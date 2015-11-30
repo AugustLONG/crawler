@@ -40,11 +40,19 @@ def search(request):
                         }
                     }
                 },
-                "from": (page-1)*PAGE_SIZE,
+                "from": (page-1) * PAGE_SIZE,
                 "size": PAGE_SIZE,
                 'sort': [
                     {'creation_date': {'order': 'desc'}}
                 ],
+                "facets": {
+                    "tag_stats": {
+                        "terms": {
+                            "field": "tags",
+                            "size": 10
+                        }
+                    }
+                }
             })
             hits, took = datas["hits"], datas["took"]
             total = hits["total"]
