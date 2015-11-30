@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% load url from future %}
+{% block container %}
+<div class="background-gradient">
+    <div class="container">
+        <div class="row">
+            <ol class="breadcrumb">
+                {% for t in question.tags %}
+                <li><a href="#" title="{{ t }}">{{ t }}</a></li>
+                {% endfor %}
+            </ol>
+        </div>
+        <div class="row padding ">
+            <h4>{{ question.title }}</h4>
+        </div>
+        <div class="row row-nav-margin">
+            <div class="col-xs-4 col-md-2 edit">
+                <h6>初级</h6>
+                <span class="span-title">回答</span>
+            </div>
+            <div class="col-xs-4 col-md-2 edit">
+                <h6>186</h6>
+                <span class="span-title">访问</span>
+            </div>
+            <div class="col-xs-4 col-md-2 edit">
+                <h6>1小时30分钟</h6>
+                <span class="span-title">回复</span>
+            </div>
+            <div class="col-xs-12 col-md-6">
+                <a href="#" class="pull-right button-self">开始回答</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-9" style=";padding-right:15px;">
+            <div class="col-md-12 content-1-div">
+                <p>{{ question.body|safe }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-9" style=";padding-right:15px;">
+            <ul class="content-title-1">
+               <li>
+                   <a href="#">查看全部{{ answers|length }}个回答</a>
+               </li>
+            </ul>
+            <ul class="content-1">
+                {% for answer in answers %}
+                <li class="clearfix">
+                    <div class="col-md-12 content-1-div">
+                        <!--<a href="{% url 'ask_question_detail' pk=answer.answer_id %}" title="{{ answer.title }}"><span class="search-strong">{{ answer.title|safe }}</span></a>-->
+                        <p>{{ answer.body|safe }}</p>
+                        <p class="p2">
+                            <span class="tags">
+                                {% for tag in answer.tags %}
+                                    <a href="/search/?keywords={{ tag }}" class="post-tag" title="" rel="tag">{{ tag }}</a>
+                                {% endfor %}
+                            </span>
+                            <span class="" style="float: right">
+                            {{ answer.created }}
+                            </span>
+                        </p>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-md-3" style=";padding-right:15px;">
+            <ul class="content-title-1">
+               <li>
+                   <a href="#">相关</a>
+               </li>
+            </ul>
+            <ul class="content-1">
+                {% for q in relate_questions %}
+                <li class="clearfix">
+                    <div class="col-md-12 content-1-div">
+                        <a href="{% url 'ask_question_detail' pk=q.id %}" title="{{ q.title }}"><span style="font-size:16px;">{{ q.title|safe }}</span></a>
+                        <p class="p2">
+                            <span class="tags">
+                                {% for tag in q.tags %}
+                                    <a href="/search/?keywords={{ tag }}" class="post-tag" title="" rel="tag">{{ tag }}</a>
+                                {% endfor %}
+                            </span>
+                        </p>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block style %}
+<style>
+        .background-gradient{
+            background:-webkit-linear-gradient(90deg, rgb(21, 37, 53),rgb(60, 175, 170));
+            background:linear-gradient(90deg, rgb(21, 37, 53),rgb(60, 175, 170));
+            color:#fff;
+            font-size:14px;
+            padding-top:7px;
+        }
+
+        .breadcrumb{
+            background: inherit;
+            margin-bottom: 0px;
+        }
+        .breadcrumb >li>a{
+            color:#fff;
+        }
+        .navbar{
+            margin-bottom: 0px;
+        }
+        .padding{
+            padding:8px 15px;
+        }
+        h4{
+            font-weight:normal;
+            margin-top:0px;
+        }
+        .button-self{
+            border-radius:22px;
+            padding:10px 65px;
+            background-color:#FF3333;
+            color:#fff;
+            font-size:16px;
+        }
+        .button-self:hover,.button-self:active,.button-self:focus{
+            color:#fff;
+            background-color: #FF5454
+        }
+        .edit{
+
+            border-left:1px solid rgba(114,177,177,0.5);
+            padding-top:15px;
+            padding-bottom:15px;
+        }
+        h6{
+            font-size:22px;
+            margin-bottom:1px;
+            margin-top:1px;
+            font-family: "Arial";
+        }
+        .span-title{
+            padding-left:2px;
+            color:#bbb;
+        }
+</style>
+{% endblock %}

@@ -12,6 +12,7 @@ es = settings.ES
 PAGE_SIZE=50
 PAGE_COUNTER=10
 
+
 def index(request):
     return render_to_response('index.html', {}, RequestContext(request))
 
@@ -35,7 +36,11 @@ def search(request):
                     "filtered": {
                         "query": {
                             "match": {
-                                "title": keywords.lower()
+                                "title": {
+                                    "query":keywords.lower(),
+                                    "minimum_should_match": "75%",
+                                    "operator": "and"
+                                }
                             }
                         }
                     }
@@ -45,19 +50,20 @@ def search(request):
                 'sort': [
                     {'creation_date': {'order': 'desc'}}
                 ],
-                "facets": {
-                    "tag_stats": {
+                "aggs": {
+                    "tags_stats": {
                         "terms": {
                             "field": "tags",
-                            "size": 10
+                            "size": 50,
+                            "min_doc_count": 1,
+                            "order": {"_count": "desc"}
                         }
                     }
                 }
             })
-            hits, took = datas["hits"], datas["took"]
+            hits, took, tags = datas["hits"], datas["took"], datas["aggregations"]["tags_stats"]["buckets"]
             total = hits["total"]
             for h in hits["hits"]:
-                tags.update(h["_source"]["tags"])
                 results.append({
                     "id": h["_id"],
                     "body": h["_source"]["body"],

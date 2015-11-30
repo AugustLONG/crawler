@@ -33,7 +33,7 @@
                         <ul>
                             <li>
                                 <h6>
-                                    <a href="{% url 'ask:question_detail' pk=result.id %}" title="{{ result.title }}"><span class="search-strong">{{ result.title }}</span></a>
+                                    <a href="{% url 'ask_question_detail' pk=result.id %}" title="{{ result.title }}"><span class="search-strong">{{ result.title|safe }}</span></a>
                                 </h6>
                                 <p class="p1">
                                     {{ result.body|safe|striptags|slice:":300" }}
@@ -62,7 +62,7 @@
             <ul class="list-inline">
                 {% for t in tags %}
                 <li>
-                    <a href="/search/?keywords={{ t }}">{{ t }}</a>
+                    <a href="/search/?keywords={{ t.key }}">{{ t.key }}({{ t.doc_count }})</a>
                 </li>
                 {% endfor %}
             </ul>
