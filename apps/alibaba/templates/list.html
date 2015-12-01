@@ -62,7 +62,7 @@
             <ul class="list-inline">
                 {% for t in tags %}
                 <li>
-                    <a href="/search/?keywords={{ t.key }}">{{ t.key }}({{ t.doc_count }})</a>
+                    <a href="/search/?keywords={{ t.key }}">{{ t.key }}&nbsp;<span class="badge">{{ t.doc_count }}</span></a>
                 </li>
                 {% endfor %}
             </ul>
